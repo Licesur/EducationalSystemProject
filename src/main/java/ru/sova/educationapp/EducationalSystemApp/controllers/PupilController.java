@@ -33,24 +33,24 @@ public class PupilController {
         return "pupils/index";
     }
     @GetMapping("/new")
-    public String newPupil(@ModelAttribute("person") Pupil pupil){
-        return "pupil/new";
+    public String newPupil(@ModelAttribute("pupil") Pupil pupil){
+        return "pupils/new";
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("pupil") @Valid Pupil person, BindingResult bindingResult){
+    public String create(@ModelAttribute("pupil") @Valid Pupil pupil, BindingResult bindingResult){
 //        personValidator.validate(person, bindingResult);//todo
 
         if (bindingResult.hasErrors()){
             return "pupils/new";
         }
-        pupilService.save(person);
+        pupilService.save(pupil);
         return "redirect:/pupils";
     }
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id){
-        model.addAttribute("person", pupilService.findById(id));
+        model.addAttribute("pupil", pupilService.findById(id));
         return "pupils/edit";
     }
 
