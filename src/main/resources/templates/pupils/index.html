@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Pupil index</title>
+</head>
+<body>
+<p th:text="${pupil.getFullName() + ', ' + pupil.getAge()}">VALUE</p>
+
+<div th:if="${tutors.size() > 0}">
+    <b th:each="tutor: ${tutors}"
+       th:text="'Tutors:' + ${tutor.getFullName() + ', ' + tutor.getEmail() + ', ' + tutor.getAge() + ', ' + tutor.getDiscipline()}"></b>
+
+</div>
+<div th:if="${tutors.isEmpty()}"
+     th:text="'This user didnt start his educational process'">if havent tutor</div>
+<br/>
+<a th:href="@{/pupils/{id}/edit(id=${pupil.getId()})}">Edit</a>
+
+<form th:method="DELETE" th:action="@{/pupils/{id}(id=${pupil.getId()})}">
+    <input type="submit" value="Delete">
+</form>
+</body>
+</html>

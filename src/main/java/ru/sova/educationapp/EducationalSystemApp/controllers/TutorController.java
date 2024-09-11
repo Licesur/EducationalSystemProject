@@ -7,8 +7,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.sova.educationapp.EducationalSystemApp.models.Pupil;
 import ru.sova.educationapp.EducationalSystemApp.models.Tutor;
 import ru.sova.educationapp.EducationalSystemApp.services.TutorService;
+
+import java.util.Collections;
 
 @Controller
 @RequestMapping("/tutors")
@@ -22,14 +25,16 @@ public class TutorController {
     }
 
     @GetMapping
-    public String getLibrary(Model model, HttpServletRequest request) {
-        model.addAttribute("library", tutorService.finAll());
+    public String getTutors(Model model, HttpServletRequest request) {
+        model.addAttribute("tutors", tutorService.finAll());
         return "tutors/show";
     }
     @GetMapping("/{id}")
     public String getTutorById(@PathVariable("id") int id, Model model,
-                              @ModelAttribute("tutor") Tutor tutor){
+                              @ModelAttribute("pupil") Pupil pupil){
         model.addAttribute("tutor", tutorService.findById(id));
+        model.addAttribute("pupils", tutorService.findById(id).getPupils());
+
         return "tutors/index";
     }
     @GetMapping("/new")

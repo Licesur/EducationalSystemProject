@@ -22,18 +22,18 @@ public class PupilController {
     }
 
     @GetMapping
-    public String getPeople(Model model) {
-        model.addAttribute("people", pupilService.finAll());
+    public String getPupils(Model model) {
+        model.addAttribute("pupils", pupilService.finAll());
         return "pupils/show";
     }
     @GetMapping("/{id}")
-    public String getPerson(@PathVariable("id") int id, Model model) {
+    public String getPupil(@PathVariable("id") int id, Model model) {
         model.addAttribute("pupil", pupilService.findById(id));
-//        model.addAttribute("tutors", pupilService.getBooksByPersonId(id));
+        model.addAttribute("tutors", pupilService.findById(id).getTutors());
         return "pupils/index";
     }
     @GetMapping("/new")
-    public String newPerson(@ModelAttribute("person") Pupil pupil){
+    public String newPupil(@ModelAttribute("person") Pupil pupil){
         return "pupil/new";
     }
 
@@ -66,7 +66,7 @@ public class PupilController {
         return "redirect:/pupils";
     }
     @DeleteMapping("/{id}")
-    public String deleteUser(@PathVariable("id") int id){
+    public String deletePupil(@PathVariable("id") int id){
         pupilService.deleteById(id);
         return "redirect:/pupils";
     }

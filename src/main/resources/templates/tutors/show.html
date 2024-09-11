@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tutors show page</title>
+</head>
+<body>
+<div th:each="tutor: ${tutors}">
+    <a th:href="@{/tutors/{id}(id=${tutor.getId()})}"
+       th:text="${tutor.getFullName() + ', ' + tutor.getDiscipline()}">tutor show
+    </a>
+</div>
+<br/>
+<hr/>
+<a href="/tutors/new">Create new book</a>
+</body>
+</html>
