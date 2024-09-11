@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New pupil</title>
+</head>
+<body>
+<form th:method="POST" th:action="@{/pupils}" th:object="${pupil}">
+    <label for="fullName">Enter full name:</label>
+    <input type="text" th:field="*{fullName}" id="fullName"/>
+    <div style="color:red" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}">name error</div>
+    <br/>
+    <label for="age">Enter age:</label>
+    <input type="text" th:field="*{age}" id="age"/>
+    <div style="color:red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">age error</div>
+    <br/>
+    <label for="email">Enter the email:</label>
+    <input type="email" th:field="*{email}" id="email"/>
+    <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email error</div>
+    <br/>
+    <label for="password">Enter the password:</label>
+    <input type="password" th:field="*{password}" id="password"/>
+    <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password error</div>
+
+    <br/>
+    <input type="submit" value="Create"/>
+
+
+</form>
+</body>
+</html>
