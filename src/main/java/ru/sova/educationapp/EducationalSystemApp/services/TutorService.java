@@ -1,0 +1,68 @@
+package ru.sova.educationapp.EducationalSystemApp.services;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.sova.educationapp.EducationalSystemApp.models.Tutor;
+import ru.sova.educationapp.EducationalSystemApp.repositories.TutorRepository;
+
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@Transactional(readOnly = true)
+public class TutorService {
+
+    private final TutorRepository tutorRepository;
+
+    @Autowired
+    public TutorService(TutorRepository tutorRepository) {
+        this.tutorRepository = tutorRepository;
+    }
+    public List<Tutor> finAll(){
+        return tutorRepository.findAll();
+    }
+
+    public Tutor findById(int id){
+        Optional<Tutor> foundBook = tutorRepository.findById(id);
+
+        return foundBook.orElse(null);
+    }
+
+    @Transactional(readOnly = false)
+    public Tutor save(Tutor tutor){
+        return tutorRepository.save(tutor);
+    }
+
+    @Transactional(readOnly = false)
+    public void deleteById(int id){
+        tutorRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = false)
+    public void update(int id, Tutor tutor){
+        Tutor tutorToBeUpdated = tutorRepository.findById(id).get();
+
+        tutor.setId(id);
+
+        //двухфакторная аунтификация!
+        tutor.setPupils(tutorToBeUpdated.getPupils());
+        tutorRepository.save(tutor); // соглашение - обновлять мтеодом сейв
+    }
+
+
+    //Pagination
+    public Page<Tutor> finAll(int page, int pageSize, boolean sortByYear) {
+        if (sortByYear) {
+            return tutorRepository.findAll(PageRequest.of(page, pageSize, Sort.by("publishYear")));
+        } else {
+            return tutorRepository.findAll(PageRequest.of(page, pageSize));
+
+        }
+    }
+}

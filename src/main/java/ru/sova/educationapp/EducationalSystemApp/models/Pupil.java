@@ -2,11 +2,17 @@ package ru.sova.educationapp.EducationalSystemApp.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
 @Table(name = "Pupil")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Pupil {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
