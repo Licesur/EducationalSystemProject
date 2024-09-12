@@ -5,6 +5,7 @@ import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class Pupil {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,9 +43,6 @@ public class Pupil {
     @Max(value = 120, message = "your age shouldnt be grater than 120")
     private int age;
 
-    @ManyToMany
-    @JoinTable(name = "Tutor_Pupil",
-            joinColumns = @JoinColumn(name = "pupil_id"),
-            inverseJoinColumns = @JoinColumn(name = "tutor_id"))
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "pupils")
     private List<Tutor> tutors;
 }

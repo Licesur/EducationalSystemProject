@@ -2,18 +2,16 @@ package ru.sova.educationapp.EducationalSystemApp.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
 @Table(name = "Tutor")
-@Getter
+@Getter()
 @Setter
 @NoArgsConstructor
+@ToString
 public class Tutor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,7 +44,10 @@ public class Tutor {
     @NotEmpty
     private String discipline;
 
-    @ManyToMany(mappedBy = "tutors")
+    @ManyToMany
+    @JoinTable(name = "Tutor_Pupil",
+            joinColumns = @JoinColumn(name = "tutor_id"),
+            inverseJoinColumns = @JoinColumn(name = "pupil_id"))
     private List<Pupil> pupils;
 
 

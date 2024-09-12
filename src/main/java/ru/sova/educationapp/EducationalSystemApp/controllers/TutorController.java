@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.sova.educationapp.EducationalSystemApp.models.Pupil;
 import ru.sova.educationapp.EducationalSystemApp.models.Tutor;
+import ru.sova.educationapp.EducationalSystemApp.services.PupilService;
 import ru.sova.educationapp.EducationalSystemApp.services.TutorService;
 
 import java.util.Collections;
@@ -18,10 +19,12 @@ import java.util.Collections;
 public class TutorController {
 
     private final TutorService tutorService;
+    private final PupilService pupilService;
 
     @Autowired
-    public TutorController(TutorService tutorService) {
+    public TutorController(TutorService tutorService, PupilService pupilService) {
         this.tutorService = tutorService;
+        this.pupilService = pupilService;
     }
 
     @GetMapping
@@ -34,6 +37,8 @@ public class TutorController {
                               @ModelAttribute("pupil") Pupil pupil){
         model.addAttribute("tutor", tutorService.findById(id));
         model.addAttribute("pupils", tutorService.findById(id).getPupils());
+        model.addAttribute("validPupils", pupilService.finAll());
+
 
         return "tutors/index";
     }
@@ -74,11 +79,12 @@ public class TutorController {
         tutorService.deleteById(id);
         return "redirect:/tutors";
     }
-//    @PatchMapping("/{id}/choose")
-//    public String choose(@PathVariable("id") int id, @ModelAttribute("person") Person person){
-//        tutorService.setOwner(id, person);
-//        return "redirect:/library/" + id;
-//    }
+    @PatchMapping("/{id}/choose")
+    public String choose(@PathVariable("id") int id, @ModelAttribute("tutor") Tutor tutor,
+                         @ModelAttribute("pupil") Pupil pupil){
+        tutorService.addPupil(pupilService.findById(pupil.getId()), tutorService.findById(id));
+        return "redirect:/tutors/" + id;
+    }
 //    @PatchMapping("/{id}/release")
 //    public String release(@PathVariable("id") int id){
 //        bookService.setOwner(id, null);

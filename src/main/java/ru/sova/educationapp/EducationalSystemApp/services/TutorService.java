@@ -6,11 +6,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.sova.educationapp.EducationalSystemApp.models.Pupil;
 import ru.sova.educationapp.EducationalSystemApp.models.Tutor;
 import ru.sova.educationapp.EducationalSystemApp.repositories.TutorRepository;
 
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,10 +22,12 @@ import java.util.Optional;
 public class TutorService {
 
     private final TutorRepository tutorRepository;
+    private final PupilService pupilService;
 
     @Autowired
-    public TutorService(TutorRepository tutorRepository) {
+    public TutorService(TutorRepository tutorRepository, PupilService pupilService) {
         this.tutorRepository = tutorRepository;
+        this.pupilService = pupilService;
     }
     public List<Tutor> finAll(){
         return tutorRepository.findAll();
@@ -53,6 +58,23 @@ public class TutorService {
         //двухфакторная аунтификация!
         tutor.setPupils(tutorToBeUpdated.getPupils());
         tutorRepository.save(tutor); // соглашение - обновлять мтеодом сейв
+    }
+
+    @Transactional(readOnly = false)
+    public void addPupil(Pupil pupil, Tutor tutor){
+        tutor = tutorRepository.findById(tutor.getId()).get();
+        if (tutor.getPupils() == null){
+            tutor.setPupils(Collections.singletonList(pupil));
+        } else if (!tutor.getPupils().contains(pupil)) {
+            tutor.getPupils().add(pupil);
+        }
+        if (pupil.getTutors() == null){
+            pupil.setTutors(Collections.singletonList(tutor));
+        } else if (!pupil.getTutors().contains(tutor)) {
+            pupil.getTutors().add(tutor);
+        }
+        pupilService.save(pupil);
+        tutorRepository.save(tutor);
     }
 
 

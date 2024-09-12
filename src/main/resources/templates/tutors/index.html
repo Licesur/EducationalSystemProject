@@ -15,16 +15,14 @@ tutor.getEmail() + ', ' + tutor.getDiscipline()}">VALUE</p>
     </a>
     </div>
 </div>
-<div th:if="${pupils.isEmpty()}">
-    <form th:method="PATCH" th:action="@{/tutors/{id}/choose(id=${pupil.getId()})}">
-        <label for="pupil">Choose pupil to start education</label>
-        <select th:object="${pupil}" th:field="*{id}" id="pupil">
-            <option th:each="pupil : ${pupils}" th:value="${pupil.getId()}" th:text="${pupil.getFullName()}">
-            </option>
-        </select>
-        <input type="submit" th:value="choose"/>
-    </form>
-</div>
+<form th:method="PATCH" th:action="@{/tutors/{id}/choose(id=${tutor.getId()})}">
+    <label for="pupil">Choose pupil to start education</label>
+    <select th:object="${pupil}" th:field="*{id}" id="pupil">
+        <option th:each="pupil : ${validPupils}" th:value="${pupil.getId()}" th:text="${pupil.getFullName()}">
+        </option>
+    </select>
+    <input type="submit" th:value="choose"/>
+</form>
 <form th:method="GET" th:action="@{/tutors/{id}/edit(id=${tutor.getId()})}">
     <input type="submit" th:value="edit"/>
 </form>
