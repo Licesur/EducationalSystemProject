@@ -7,18 +7,18 @@
 <body>
 <p th:text="${tutor.getFullName() + ', ' + tutor.getAge() + ', ' +
 tutor.getEmail() + ', ' + tutor.getDiscipline()}">VALUE</p>
-<div th:if="${!pupils.isEmpty()}">
+<div th:if="${!students.isEmpty()}">
     <span>Сейчас у преподавателя занимаются: </span>
-    <div th:each="pupil: ${pupils}">
-    <a th:href="@{/pupils/{id}(id=${pupil.getId()})}"
-       th:text="${pupil.getFullName() + ', ' + tutor.getDiscipline()}">tutor show
+    <div th:each="student: ${students}">
+    <a th:href="@{/students/{id}(id=${student.getId()})}"
+       th:text="${student.getFullName() + ', ' + tutor.getDiscipline()}">tutor show
     </a>
     </div>
 </div>
 <form th:method="PATCH" th:action="@{/tutors/{id}/choose(id=${tutor.getId()})}">
-    <label for="pupil">Choose pupil to start education</label>
-    <select th:object="${pupil}" th:field="*{id}" id="pupil">
-        <option th:each="pupil : ${validPupils}" th:value="${pupil.getId()}" th:text="${pupil.getFullName()}">
+    <label for="student">Choose student to start education</label>
+    <select th:object="${student}" th:field="*{id}" id="student">
+        <option th:each="student : ${validStudents}" th:value="${student.getId()}" th:text="${student.getFullName()}">
         </option>
     </select>
     <input type="submit" th:value="choose"/>

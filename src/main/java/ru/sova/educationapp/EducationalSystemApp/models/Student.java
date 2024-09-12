@@ -10,12 +10,12 @@ import lombok.ToString;
 import java.util.List;
 
 @Entity
-@Table(name = "Pupil")
+@Table(name = "Student")
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
-public class Pupil {
+public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -43,6 +43,6 @@ public class Pupil {
     @Max(value = 120, message = "your age shouldnt be grater than 120")
     private int age;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "pupils")
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "students")
     private List<Tutor> tutors;
 }

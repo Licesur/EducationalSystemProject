@@ -6,13 +6,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.sova.educationapp.EducationalSystemApp.models.Pupil;
+import ru.sova.educationapp.EducationalSystemApp.models.Student;
 import ru.sova.educationapp.EducationalSystemApp.models.Tutor;
 import ru.sova.educationapp.EducationalSystemApp.repositories.TutorRepository;
 
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -22,12 +20,12 @@ import java.util.Optional;
 public class TutorService {
 
     private final TutorRepository tutorRepository;
-    private final PupilService pupilService;
+    private final StudentService studentService;
 
     @Autowired
-    public TutorService(TutorRepository tutorRepository, PupilService pupilService) {
+    public TutorService(TutorRepository tutorRepository, StudentService studentService) {
         this.tutorRepository = tutorRepository;
-        this.pupilService = pupilService;
+        this.studentService = studentService;
     }
     public List<Tutor> finAll(){
         return tutorRepository.findAll();
@@ -56,35 +54,35 @@ public class TutorService {
         tutor.setId(id);
 
         //двухфакторная аунтификация!
-        tutor.setPupils(tutorToBeUpdated.getPupils());
+        tutor.setStudents(tutorToBeUpdated.getStudents());
         tutorRepository.save(tutor); // соглашение - обновлять мтеодом сейв
     }
 
     @Transactional(readOnly = false)
-    public void addPupil(Pupil pupil, Tutor tutor){
+    public void addPupil(Student student, Tutor tutor){
         tutor = tutorRepository.findById(tutor.getId()).get();
-        if (tutor.getPupils() == null){
-            tutor.setPupils(Collections.singletonList(pupil));
-        } else if (!tutor.getPupils().contains(pupil)) {
-            tutor.getPupils().add(pupil);
+        if (tutor.getStudents() == null){
+            tutor.setStudents(Collections.singletonList(student));
+        } else if (!tutor.getStudents().contains(student)) {
+            tutor.getStudents().add(student);
         }
-        if (pupil.getTutors() == null){
-            pupil.setTutors(Collections.singletonList(tutor));
-        } else if (!pupil.getTutors().contains(tutor)) {
-            pupil.getTutors().add(tutor);
+        if (student.getTutors() == null){
+            student.setTutors(Collections.singletonList(tutor));
+        } else if (!student.getTutors().contains(tutor)) {
+            student.getTutors().add(tutor);
         }
-        pupilService.save(pupil);
+        studentService.save(student);
         tutorRepository.save(tutor);
     }
 
 
     //Pagination
-    public Page<Tutor> finAll(int page, int pageSize, boolean sortByYear) {
-        if (sortByYear) {
-            return tutorRepository.findAll(PageRequest.of(page, pageSize, Sort.by("publishYear")));
-        } else {
-            return tutorRepository.findAll(PageRequest.of(page, pageSize));
-
-        }
-    }
+//    public Page<Tutor> finAll(int page, int pageSize, boolean sortByYear) {
+//        if (sortByYear) {
+//            return tutorRepository.findAll(PageRequest.of(page, pageSize, Sort.by("publishYear")));
+//        } else {
+//            return tutorRepository.findAll(PageRequest.of(page, pageSize));
+//
+//        }
+//    }
 }

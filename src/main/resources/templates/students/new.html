@@ -2,10 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>New pupil</title>
+    <title>New student</title>
 </head>
 <body>
-<form th:method="POST" th:action="@{/pupils}" th:object="${pupil}">
+<form th:method="POST" th:action="@{/students}" th:object="${student}">
     <label for="fullName">Enter full name:</label>
     <input type="text" th:field="*{fullName}" id="fullName"/>
     <div style="color:red" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}">name error</div>

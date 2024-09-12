@@ -2,10 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Pupil index</title>
+    <title>Student index</title>
 </head>
 <body>
-<p th:text="${pupil.getFullName() + ', ' + pupil.getAge()}">VALUE</p>
+<p th:text="${student.getFullName() + ', ' + student.getAge()}">VALUE</p>
 
 <div th:if="${tutors.size() > 0}">
     <b th:each="tutor: ${tutors}"
@@ -15,9 +15,9 @@
 <div th:if="${tutors.isEmpty()}"
      th:text="'This user didnt start his educational process'">if havent tutor</div>
 <br/>
-<a th:href="@{/pupils/{id}/edit(id=${pupil.getId()})}">Edit</a>
+<a th:href="@{/students/{id}/edit(id=${student.getId()})}">Edit</a>
 
-<form th:method="DELETE" th:action="@{/pupils/{id}(id=${pupil.getId()})}">
+<form th:method="DELETE" th:action="@{/students/{id}(id=${student.getId()})}">
     <input type="submit" value="Delete">
 </form>
 </body>

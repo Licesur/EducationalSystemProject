@@ -2,11 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Update pupil</title>
+  <title>Update student</title>
 </head>
 <body>
 
-<form th:method="PATCH" th:action="@{/pupils/{id}(id=${pupil.getId()})}" th:object="${pupil}">
+<form th:method="PATCH" th:action="@{/students/{id}(id=${student.getId()})}" th:object="${student}">
   <label for="fullName">Enter full name:</label>
   <input type="text" th:field="*{fullName}" id="fullName"/>
   <div style="color:red" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}">name error</div>

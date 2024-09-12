@@ -7,24 +7,22 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.sova.educationapp.EducationalSystemApp.models.Pupil;
+import ru.sova.educationapp.EducationalSystemApp.models.Student;
 import ru.sova.educationapp.EducationalSystemApp.models.Tutor;
-import ru.sova.educationapp.EducationalSystemApp.services.PupilService;
+import ru.sova.educationapp.EducationalSystemApp.services.StudentService;
 import ru.sova.educationapp.EducationalSystemApp.services.TutorService;
-
-import java.util.Collections;
 
 @Controller
 @RequestMapping("/tutors")
 public class TutorController {
 
     private final TutorService tutorService;
-    private final PupilService pupilService;
+    private final StudentService studentService;
 
     @Autowired
-    public TutorController(TutorService tutorService, PupilService pupilService) {
+    public TutorController(TutorService tutorService, StudentService studentService) {
         this.tutorService = tutorService;
-        this.pupilService = pupilService;
+        this.studentService = studentService;
     }
 
     @GetMapping
@@ -34,10 +32,10 @@ public class TutorController {
     }
     @GetMapping("/{id}")
     public String getTutorById(@PathVariable("id") int id, Model model,
-                              @ModelAttribute("pupil") Pupil pupil){
+                              @ModelAttribute("student") Student student){
         model.addAttribute("tutor", tutorService.findById(id));
-        model.addAttribute("pupils", tutorService.findById(id).getPupils());
-        model.addAttribute("validPupils", pupilService.finAll());
+        model.addAttribute("students", tutorService.findById(id).getStudents());
+        model.addAttribute("validStudents", studentService.finAll());
 
 
         return "tutors/index";
@@ -81,8 +79,8 @@ public class TutorController {
     }
     @PatchMapping("/{id}/choose")
     public String choose(@PathVariable("id") int id, @ModelAttribute("tutor") Tutor tutor,
-                         @ModelAttribute("pupil") Pupil pupil){
-        tutorService.addPupil(pupilService.findById(pupil.getId()), tutorService.findById(id));
+                         @ModelAttribute("student") Student student){
+        tutorService.addPupil(studentService.findById(student.getId()), tutorService.findById(id));
         return "redirect:/tutors/" + id;
     }
 //    @PatchMapping("/{id}/release")

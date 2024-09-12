@@ -45,10 +45,10 @@ public class Tutor {
     private String discipline;
 
     @ManyToMany
-    @JoinTable(name = "Tutor_Pupil",
+    @JoinTable(name = "Tutor_Student",
             joinColumns = @JoinColumn(name = "tutor_id"),
-            inverseJoinColumns = @JoinColumn(name = "pupil_id"))
-    private List<Pupil> pupils;
+            inverseJoinColumns = @JoinColumn(name = "student_id"))
+    private List<Student> students;
 
 
 }

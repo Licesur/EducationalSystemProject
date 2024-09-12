@@ -1,53 +1,49 @@
 package ru.sova.educationapp.EducationalSystemApp.services;
 
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.sova.educationapp.EducationalSystemApp.models.Pupil;
-import ru.sova.educationapp.EducationalSystemApp.repositories.PupilRepository;
-import ru.sova.educationapp.EducationalSystemApp.repositories.TutorRepository;
+import ru.sova.educationapp.EducationalSystemApp.models.Student;
+import ru.sova.educationapp.EducationalSystemApp.repositories.StudentRepository;
 
-import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
-public class PupilService {
+public class StudentService {
 
-    private final PupilRepository pupilRepository;
+    private final StudentRepository studentRepository;
 
     @Autowired
-    public PupilService(PupilRepository pupilRepository) {
-        this.pupilRepository = pupilRepository;
+    public StudentService(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
     }
 
-    public List<Pupil> finAll(){
-        return pupilRepository.findAll();
+    public List<Student> finAll(){
+        return studentRepository.findAll();
     }
 
-    public Pupil findById(int id){
-        Optional<Pupil> foundPerson = pupilRepository.findById(id);
+    public Student findById(int id){
+        Optional<Student> foundPerson = studentRepository.findById(id);
 
         return foundPerson.orElse(null);
     }
 
     @Transactional(readOnly = false)
-    public Pupil save(Pupil pupil){
-        return pupilRepository.save(pupil);
+    public Student save(Student student){
+        return studentRepository.save(student);
     }
 
     @Transactional(readOnly = false)
     public void deleteById(int id){
-        pupilRepository.deleteById(id);
+        studentRepository.deleteById(id);
     }
 
     @Transactional(readOnly = false)
-    public void update(int id, Pupil pupil){
-        pupil.setId(id);
-        pupilRepository.save(pupil); // соглашение - обновлять мтеодом сейв
+    public void update(int id, Student student){
+        student.setId(id);
+        studentRepository.save(student); // соглашение - обновлять мтеодом сейв
     }
 
 //    public List<Book> getBooksByPersonId(int id) {
