@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>task index</title>
+</head>
+<body>
+<p th:text="${task.getDefinition() }">VALUE</p>
+<br/>
+<div
+     th:text="'Answer:' + ${task.getAnswer()}"></div>
+<br/>
+<a th:href="@{/tasks/{id}/edit(id=${task.getId()})}">Edit</a>
+
+<form th:method="DELETE" th:action="@{/tasks/{id}(id=${task.getId()})}">
+    <input type="submit" value="Delete">
+</form>
+</body>
+</html>

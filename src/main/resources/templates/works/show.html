@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>works show page</title>
+</head>
+<body>
+<div th:each="work: ${works}">
+    <a th:href="@{/works/{id}(id=${work.getId()})}"
+       th:text="${work.getTitle() }">works show</a>
+</div>
+<br/>
+<hr/>
+<a href="/works/new">Create new work</a>
+
+
+</body>
+</html>

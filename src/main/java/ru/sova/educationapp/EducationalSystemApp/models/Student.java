@@ -43,6 +43,9 @@ public class Student {
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "students")
     private List<Tutor> tutors;
 
+    @ManyToMany(mappedBy = "students")
+    private List<VerificationWork> verificationWorks;
+
     @Override
     public String toString() {
         return "Student{" +

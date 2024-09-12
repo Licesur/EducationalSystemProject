@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Update work</title>
+</head>
+<body>
+
+<form th:method="PATCH" th:action="@{/works/{id}(id=${work.getId()})}" th:object="${work}">
+  <label for="title">Enter title:</label>
+  <input type="text" th:field="*{title}" id="title"/>
+  <div style="color:red" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">name error</div>
+  <br/>
+  <label>Выберите задачи:</label><br/>
+  <div th:each="task : ${tasks}">
+    <input type="checkbox"
+           th:id="${task.id}" th:name="selectedTasks" th:value="${task.id}"/>
+    <label th:for="${task.id}" th:text="${task.definition}"></label><br/>
+  </div>
+  <input type="submit" value="Update!"/>
+</form>
+
+</body>
+</html>

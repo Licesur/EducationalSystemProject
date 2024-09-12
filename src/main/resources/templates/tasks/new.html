@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New task</title>
+</head>
+<body>
+<form th:method="POST" th:action="@{/tasks}" th:object="${task}">
+    <label for="definition">Enter definition:</label>
+    <input type="text" th:field="*{definition}" id="definition"/>
+    <div style="color:red" th:if="${#fields.hasErrors('definition')}" th:errors="*{definition}">definition error</div>
+    <br/>
+    <label for="answer">Enter answer:</label>
+    <input type="text" th:field="*{answer}" id="answer"/>
+    <div style="color:red" th:if="${#fields.hasErrors('answer')}" th:errors="*{answer}">age error</div>
+    <br/>
+    <input type="submit" value="Create"/>
+
+
+</form>
+</body>
+</html>

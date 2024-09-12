@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>work index</title>
+</head>
+<body>
+<p th:text="${work.getTitle()}">Title</p>
+<hr/><br/>
+<b th:each="task: ${tasks}"
+   th:utext="${('Task:' + task.getDefinition()+ '\n').replace('\n', '<br/><br/>')}"></b>
+<div th:if="${!students.isEmpty()}">
+    <hr/><br/><br/>
+    <b th:each="student: ${students}"
+       th:utext="${(student.getFullName() + ' ' + work.getDeadline() + '\n').replace('\n', '<br/><br/>')}"></b>
+</div>
+
+<hr/><br/>
+<form th:method="PATCH" th:action="@{/works/{id}/choose(id=${work.getId()})}">
+    <label for="student">Choose student to assing this work</label>
+    <select th:object="${student}" th:field="*{id}" id="student">
+        <option th:each="student : ${validStudents}" th:value="${student.getId()}" th:text="${student.getFullName()}">
+        </option>
+    </select>
+    <input type="submit" th:value="choose"/>
+</form>
+<hr/><br/>
+<form th:method="GET" th:action="@{/works/{id}/edit(id=${work.getId()})}">
+    <input type="submit" th:value="edit"/>
+</form>
+<form th:method="DELETE" th:action="@{/works/{id}(id=${work.getId()})}">
+    <input type="submit" th:value="delete"/>
+</form>
+
+
+
+<!--<div th:if="${tutors.isEmpty()}"-->
+<!--     th:text="'This user didnt start his educational process'">if havent tutor</div>-->
+<!--<br/>-->
+<!--<a th:href="@{/students/{id}/edit(id=${student.getId()})}">Edit</a>-->
+
+<!--<form th:method="DELETE" th:action="@{/students/{id}(id=${student.getId()})}">-->
+<!--    <input type="submit" value="Delete">-->
+<!--</form>-->
+</body>
+</html>
