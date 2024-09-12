@@ -1,6 +1,8 @@
 package ru.sova.educationapp.EducationalSystemApp.services;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -71,6 +73,15 @@ public class TutorService {
         } else if (!student.getTutors().contains(tutor)) {
             student.getTutors().add(tutor);
         }
+        studentService.save(student);
+        tutorRepository.save(tutor);
+    }
+    @Transactional(readOnly = false)
+    public void excludeStudent(Student student, Tutor tutor) {
+        System.out.println(student);
+        System.out.println(tutor);
+        tutor.getStudents().remove(student);
+        student.getTutors().remove(tutor);
         studentService.save(student);
         tutorRepository.save(tutor);
     }

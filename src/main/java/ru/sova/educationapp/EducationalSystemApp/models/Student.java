@@ -2,10 +2,7 @@ package ru.sova.educationapp.EducationalSystemApp.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 
@@ -14,7 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
+@EqualsAndHashCode
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,4 +42,16 @@ public class Student {
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "students")
     private List<Tutor> tutors;
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + id +
+                ", fullName='" + fullName + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", age=" + age +
+                ", tutors=" + tutors +
+                '}';
+    }
 }

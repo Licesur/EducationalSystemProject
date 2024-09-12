@@ -11,7 +11,6 @@ import java.util.List;
 @Getter()
 @Setter
 @NoArgsConstructor
-@ToString
 public class Tutor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,5 +49,15 @@ public class Tutor {
             inverseJoinColumns = @JoinColumn(name = "student_id"))
     private List<Student> students;
 
-
+    @Override
+    public String toString() {
+        return "Tutor{" +
+                "id=" + id +
+                ", fullName='" + fullName + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", age=" + age +
+                ", discipline='" + discipline + '\'' +
+                '}';
+    }
 }

@@ -83,6 +83,11 @@ public class TutorController {
         tutorService.addPupil(studentService.findById(student.getId()), tutorService.findById(id));
         return "redirect:/tutors/" + id;
     }
+    @PatchMapping("/{id}/exclude")
+    public String excludeStudent(@PathVariable("id") int id, @ModelAttribute("student") Student student){
+        tutorService.excludeStudent(studentService.findById(student.getId()), tutorService.findById(id));
+        return "redirect:/tutors/" + id;
+    }
 //    @PatchMapping("/{id}/release")
 //    public String release(@PathVariable("id") int id){
 //        bookService.setOwner(id, null);

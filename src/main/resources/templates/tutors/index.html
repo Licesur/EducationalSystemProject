@@ -9,11 +9,10 @@
 tutor.getEmail() + ', ' + tutor.getDiscipline()}">VALUE</p>
 <div th:if="${!students.isEmpty()}">
     <span>Сейчас у преподавателя занимаются: </span>
-    <div th:each="student: ${students}">
-    <a th:href="@{/students/{id}(id=${student.getId()})}"
-       th:text="${student.getFullName() + ', ' + tutor.getDiscipline()}">tutor show
-    </a>
-    </div>
+        <div th:each="student: ${students}">
+        <a th:href="@{/students/{studId}(studId=${student.getId()})}"
+            th:text="${student.getFullName() + ', ' + tutor.getDiscipline()}"></a>
+        </div>
 </div>
 <form th:method="PATCH" th:action="@{/tutors/{id}/choose(id=${tutor.getId()})}">
     <label for="student">Choose student to start education</label>
@@ -23,6 +22,16 @@ tutor.getEmail() + ', ' + tutor.getDiscipline()}">VALUE</p>
     </select>
     <input type="submit" th:value="choose"/>
 </form>
+<div th:if="${!students.isEmpty()}">
+    <form th:method="PATCH" th:action="@{/tutors/{id}/exclude(id=${tutor.getId()})}">
+        <label for="studentToExclude">Choose student to exclude</label>
+        <select th:object="${student}" th:field="*{id}" id="studentToExclude">
+            <option th:each="student : ${tutor.getStudents()}" th:value="${student.getId()}" th:text="${student.getFullName()}">
+            </option>
+        </select>
+        <input type="submit" th:value="'Exclude Student'"/>
+    </form>
+</div>
 <form th:method="GET" th:action="@{/tutors/{id}/edit(id=${tutor.getId()})}">
     <input type="submit" th:value="edit"/>
 </form>

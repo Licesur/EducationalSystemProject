@@ -9,7 +9,8 @@
 
 <div th:if="${tutors.size() > 0}">
     <b th:each="tutor: ${tutors}"
-       th:text="'Tutors:' + ${tutor.getFullName() + ', ' + tutor.getEmail() + ', ' + tutor.getAge() + ', ' + tutor.getDiscipline()}"></b>
+       th:utext="${('Tutors:' + tutor.getFullName() + ', ' + tutor.getEmail() + ', '
+       + tutor.getAge() + ', ' + tutor.getDiscipline() + '\n').replace('\n', '<br/>')}"></b>
 
 </div>
 <div th:if="${tutors.isEmpty()}"
