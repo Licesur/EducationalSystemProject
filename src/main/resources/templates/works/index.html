@@ -12,7 +12,7 @@
 <div th:if="${!students.isEmpty()}">
     <hr/><br/><br/>
     <b th:each="student: ${students}"
-       th:utext="${(student.getFullName() + ' ' + work.getDeadline() + '\n').replace('\n', '<br/><br/>')}"></b>
+       th:utext="${(student.getFullName() + '\n').replace('\n', '<br/><br/>')}"></b>
 </div>
 
 <hr/><br/>

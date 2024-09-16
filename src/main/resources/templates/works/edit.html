@@ -13,9 +13,11 @@
   <br/>
   <label>Выберите задачи:</label><br/>
   <div th:each="task : ${tasks}">
-    <input type="checkbox"
-           th:id="${task.id}" th:name="selectedTasks" th:value="${task.id}"/>
-    <label th:for="${task.id}" th:text="${task.definition}"></label><br/>
+    <label>
+      <input type="checkbox"
+             th:id="${task.id}" th:name="selectedTasks" th:value="${task.id}"/>
+    </label>
+    <label th:for="${task.id}" th:text="${task.definition}" th:value="${task.id}"></label><br/>
   </div>
   <input type="submit" value="Update!"/>
 </form>

@@ -7,9 +7,9 @@
 <body>
 <p th:text="${tutor.getFullName() + ', ' + tutor.getAge() + ', ' +
 tutor.getEmail() + ', ' + tutor.getDiscipline()}">VALUE</p>
-<div th:if="${!students.isEmpty()}">
+<div th:if="${!studentsOfTheTutor.isEmpty()}">
     <span>Сейчас у преподавателя занимаются: </span>
-        <div th:each="student: ${students}">
+        <div th:each="student: ${studentsOfTheTutor}">
         <a th:href="@{/students/{studId}(studId=${student.getId()})}"
             th:text="${student.getFullName() + ', ' + tutor.getDiscipline()}"></a>
         </div>
@@ -22,7 +22,7 @@ tutor.getEmail() + ', ' + tutor.getDiscipline()}">VALUE</p>
     </select>
     <input type="submit" th:value="choose"/>
 </form>
-<div th:if="${!students.isEmpty()}">
+<div th:if="${!studentsOfTheTutor.isEmpty()}">
     <form th:method="PATCH" th:action="@{/tutors/{id}/exclude(id=${tutor.getId()})}">
         <label for="studentToExclude">Choose student to exclude</label>
         <select th:object="${student}" th:field="*{id}" id="studentToExclude">

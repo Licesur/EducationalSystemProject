@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.sova.educationapp.EducationalSystemApp.models.Student;
+import ru.sova.educationapp.EducationalSystemApp.models.Tutor;
 import ru.sova.educationapp.EducationalSystemApp.models.VerificationWork;
 import ru.sova.educationapp.EducationalSystemApp.repositories.StudentRepository;
 
@@ -75,6 +76,10 @@ public class StudentService {
     public List<Student> findByVerificationWorkNotContains(VerificationWork verificationWork) {
         List<Student> validStudents = studentRepository.findAllByVerificationWorksNotContains(verificationWork);
         return validStudents == null ? Collections.emptyList() : validStudents;
+    }
+
+    public Object findByTutorsNotContains(Tutor tutor) {
+        return studentRepository.findByTutorsNotContains(tutor);
     }
 
 //    public List<Book> getBooksByPersonId(int id) {

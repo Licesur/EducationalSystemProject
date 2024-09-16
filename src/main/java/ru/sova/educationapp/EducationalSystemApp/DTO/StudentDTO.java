@@ -1,57 +1,50 @@
-package ru.sova.educationapp.EducationalSystemApp.models;
+package ru.sova.educationapp.EducationalSystemApp.DTO;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.*;
 
 import java.util.List;
 import java.util.Objects;
 
-@Entity
-@Table(name = "Student")
-public class Student {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+public class StudentDTO {
+
     private int id;
 
-    @Column(name = "full_name")
     @NotEmpty(message = "please enter your full name")
     @Size(min = 2, message = "sorry, your name should have at least 2 symbols")
     @Size(max = 50, message = "sorry, you name should be shorter than 50 symbols")
     private String fullName;
 
-    @Column(name = "password")
     @NotEmpty(message = "please enter the pass")
     @Size(min = 2, message = "sorry, your password should have at least 6 symbols")
     @Size(max = 50, message = "sorry, you password should be shorter than 50 symbols")
     private String password;
 
-    @Column(name = "email")
     @Email(message = "invalid email format")
     @NotEmpty(message = "email cant be empty")
     private String email;
 
-    @Column(name = "age")
     @Min(value = 0, message = "your age should be greater then 0")
     @Max(value = 120, message = "your age shouldnt be grater than 120")
     private int age;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "students")
-    private List<Tutor> tutors;
+    private List<VerificationWorkDTO> verificationWorks;
 
-    @ManyToMany(mappedBy = "students")
-    private List<VerificationWork> verificationWorks;
 
     @Override
     public String toString() {
         return "Student{" +
-                "id=" + id +
-                ", fullName='" + fullName + '\'' +
-                ", password='" + password + '\'' +
+                "fullName='" + fullName + '\'' +
                 ", email='" + email + '\'' +
                 ", age=" + age +
-                ", tutors=" + tutors +
+                ", verificationWorks=" + verificationWorks +
                 '}';
+    }
+
+    public StudentDTO() {
     }
 
     @Override
@@ -59,8 +52,8 @@ public class Student {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Student student = (Student) o;
-        return id == student.id && age == student.age && fullName.equals(student.fullName) && password.equals(student.password) && email.equals(student.email) && Objects.equals(tutors, student.tutors) && Objects.equals(verificationWorks, student.verificationWorks);
+        StudentDTO that = (StudentDTO) o;
+        return id == that.id && age == that.age && fullName.equals(that.fullName) && password.equals(that.password) && email.equals(that.email) && Objects.equals(verificationWorks, that.verificationWorks);
     }
 
     @Override
@@ -70,24 +63,19 @@ public class Student {
         result = 31 * result + password.hashCode();
         result = 31 * result + email.hashCode();
         result = 31 * result + age;
-        result = 31 * result + Objects.hashCode(tutors);
         result = 31 * result + Objects.hashCode(verificationWorks);
         return result;
     }
 
-    public Student() {
-    }
-
-    public Student(int id, String fullName,
-                   String password, String email, int age,
-                   List<Tutor> tutors,
-                   List<VerificationWork> verificationWorks) {
+    public StudentDTO(int id, String fullName,
+                      String password,
+                      String email, int age,
+                      List<VerificationWorkDTO> verificationWorks) {
         this.id = id;
         this.fullName = fullName;
         this.password = password;
         this.email = email;
         this.age = age;
-        this.tutors = tutors;
         this.verificationWorks = verificationWorks;
     }
 
@@ -133,19 +121,11 @@ public class Student {
         this.age = age;
     }
 
-    public List<Tutor> getTutors() {
-        return tutors;
-    }
-
-    public void setTutors(List<Tutor> tutors) {
-        this.tutors = tutors;
-    }
-
-    public List<VerificationWork> getVerificationWorks() {
+    public List<VerificationWorkDTO> getVerificationWorks() {
         return verificationWorks;
     }
 
-    public void setVerificationWorks(List<VerificationWork> verificationWorks) {
+    public void setVerificationWorks(List<VerificationWorkDTO> verificationWorks) {
         this.verificationWorks = verificationWorks;
     }
 }

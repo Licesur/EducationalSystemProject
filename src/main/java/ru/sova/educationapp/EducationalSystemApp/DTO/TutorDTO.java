@@ -1,56 +1,44 @@
-package ru.sova.educationapp.EducationalSystemApp.models;
+package ru.sova.educationapp.EducationalSystemApp.DTO;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
 import java.util.List;
 import java.util.Objects;
 
-@Entity
-@Table(name = "Student")
-public class Student {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+public class TutorDTO {
+
     private int id;
 
-    @Column(name = "full_name")
     @NotEmpty(message = "please enter your full name")
     @Size(min = 2, message = "sorry, your name should have at least 2 symbols")
     @Size(max = 50, message = "sorry, you name should be shorter than 50 symbols")
     private String fullName;
 
-    @Column(name = "password")
     @NotEmpty(message = "please enter the pass")
     @Size(min = 2, message = "sorry, your password should have at least 6 symbols")
     @Size(max = 50, message = "sorry, you password should be shorter than 50 symbols")
     private String password;
 
-    @Column(name = "email")
     @Email(message = "invalid email format")
     @NotEmpty(message = "email cant be empty")
     private String email;
 
-    @Column(name = "age")
     @Min(value = 0, message = "your age should be greater then 0")
     @Max(value = 120, message = "your age shouldnt be grater than 120")
     private int age;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "students")
-    private List<Tutor> tutors;
+    @NotEmpty
+    private String discipline;
 
-    @ManyToMany(mappedBy = "students")
-    private List<VerificationWork> verificationWorks;
+    private List<StudentDTO> students;
 
     @Override
     public String toString() {
-        return "Student{" +
-                "id=" + id +
-                ", fullName='" + fullName + '\'' +
-                ", password='" + password + '\'' +
+        return "Tutor{" +
+                "fullName='" + fullName + '\'' +
                 ", email='" + email + '\'' +
                 ", age=" + age +
-                ", tutors=" + tutors +
+                ", discipline='" + discipline + '\'' +
                 '}';
     }
 
@@ -59,8 +47,8 @@ public class Student {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Student student = (Student) o;
-        return id == student.id && age == student.age && fullName.equals(student.fullName) && password.equals(student.password) && email.equals(student.email) && Objects.equals(tutors, student.tutors) && Objects.equals(verificationWorks, student.verificationWorks);
+        TutorDTO tutorDTO = (TutorDTO) o;
+        return id == tutorDTO.id && age == tutorDTO.age && fullName.equals(tutorDTO.fullName) && password.equals(tutorDTO.password) && email.equals(tutorDTO.email) && discipline.equals(tutorDTO.discipline) && students.equals(tutorDTO.students);
     }
 
     @Override
@@ -70,25 +58,26 @@ public class Student {
         result = 31 * result + password.hashCode();
         result = 31 * result + email.hashCode();
         result = 31 * result + age;
-        result = 31 * result + Objects.hashCode(tutors);
-        result = 31 * result + Objects.hashCode(verificationWorks);
+        result = 31 * result + discipline.hashCode();
+        result = 31 * result + students.hashCode();
         return result;
     }
 
-    public Student() {
-    }
-
-    public Student(int id, String fullName,
-                   String password, String email, int age,
-                   List<Tutor> tutors,
-                   List<VerificationWork> verificationWorks) {
+    public TutorDTO(String fullName,
+                    String password,
+                    String email, int age, int id,
+                    String discipline,
+                    List<StudentDTO> students) {
         this.id = id;
         this.fullName = fullName;
         this.password = password;
         this.email = email;
         this.age = age;
-        this.tutors = tutors;
-        this.verificationWorks = verificationWorks;
+        this.discipline = discipline;
+        this.students = students;
+    }
+
+    public TutorDTO() {
     }
 
     public int getId() {
@@ -133,19 +122,19 @@ public class Student {
         this.age = age;
     }
 
-    public List<Tutor> getTutors() {
-        return tutors;
+    public @NotEmpty String getDiscipline() {
+        return discipline;
     }
 
-    public void setTutors(List<Tutor> tutors) {
-        this.tutors = tutors;
+    public void setDiscipline(@NotEmpty String discipline) {
+        this.discipline = discipline;
     }
 
-    public List<VerificationWork> getVerificationWorks() {
-        return verificationWorks;
+    public List<StudentDTO> getStudents() {
+        return students;
     }
 
-    public void setVerificationWorks(List<VerificationWork> verificationWorks) {
-        this.verificationWorks = verificationWorks;
+    public void setStudents(List<StudentDTO> students) {
+        this.students = students;
     }
 }

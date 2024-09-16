@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>New student</title>
+    <title>New verification work</title>
 </head>
 <body>
 <form th:method="POST" th:action="@{/works}" th:object="${work}">
@@ -11,9 +11,11 @@
     <div style="color:red" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">name error</div>
     <br/>
     <label>Выберите задачи:</label><br/>
-    <div th:each="task : ${tasks}">
-        <input type="checkbox"
-               th:id="${task.id}" th:name="selectedTasks" th:value="${task.id}"/>
+    <div th:each="task : ${tasksDTO}">
+        <label>
+            <input type="checkbox"
+                   th:id="${task.id}" th:name="selectedTasks" th:value="${task.id}"/>
+        </label>
         <label th:for="${task.id}" th:text="${task.definition}"></label><br/>
     </div>
     <input type="submit"/>
