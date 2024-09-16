@@ -40,23 +40,26 @@ public class TutorService {
     }
 
     @Transactional(readOnly = false)
-    public void deleteById(int id){
+    public Boolean deleteById(int id){
         tutorRepository.deleteById(id);
+        return !tutorRepository.findById(id).isPresent();
     }
 
     @Transactional(readOnly = false)
-    public void update(int id, Tutor tutor){
+    public boolean update(int id, Tutor tutor){
         Tutor tutorToBeUpdated = tutorRepository.findById(id).get();
-
         tutor.setId(id);
-
         //двухфакторная аунтификация!
-        tutor.setStudents(tutorToBeUpdated.getStudents());
-        tutorRepository.save(tutor); // соглашение - обновлять мтеодом сейв
+        System.out.println(tutor.getStudents());
+        tutorToBeUpdated.setStudents(tutor.getStudents());
+        tutorRepository.save(tutor);
+        return tutorRepository.findById(id).isPresent() &&
+                tutorRepository.findById(id).get().toString()
+                        .equals(tutor.toString());// соглашение - обновлять мтеодом сейв
     }
 
     @Transactional(readOnly = false)
-    public void addPupil(Student student, Tutor tutor){
+    public Boolean addPupil(Student student, Tutor tutor){
         tutor = tutorRepository.findById(tutor.getId()).get();
         if (tutor.getStudents() == null){
             tutor.setStudents(Collections.singletonList(student));
@@ -70,15 +73,15 @@ public class TutorService {
         }
         studentService.save(student);
         tutorRepository.save(tutor);
+        return tutor.getStudents().contains(student);
     }
     @Transactional(readOnly = false)
-    public void excludeStudent(Student student, Tutor tutor) {
-        System.out.println(student);
-        System.out.println(tutor);
+    public Boolean excludeStudent(Student student, Tutor tutor) {
         tutor.getStudents().remove(student);
         student.getTutors().remove(tutor);
         studentService.save(student);
         tutorRepository.save(tutor);
+        return !tutor.getStudents().contains(student);
     }
 
 

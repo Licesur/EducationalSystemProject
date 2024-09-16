@@ -7,9 +7,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.sova.educationapp.EducationalSystemApp.DTO.StudentDTO;
+import ru.sova.educationapp.EducationalSystemApp.DTO.VerificationWorkDTO;
 import ru.sova.educationapp.EducationalSystemApp.mappers.StudentMapper;
 import ru.sova.educationapp.EducationalSystemApp.mappers.TutorMapper;
+import ru.sova.educationapp.EducationalSystemApp.mappers.VerificationWorkMapper;
 import ru.sova.educationapp.EducationalSystemApp.services.StudentService;
+import ru.sova.educationapp.EducationalSystemApp.services.VerificationWorkService;
 
 import java.util.stream.Collectors;
 
@@ -21,12 +24,16 @@ public class StudentController {
     private final StudentService studentService;
     private final StudentMapper studentMapper;
     private final TutorMapper tutorMapper;
+    private final VerificationWorkMapper verificationWorkMapper;
+    private final VerificationWorkService verificationWorkService;
 
     @Autowired
-    public StudentController(StudentService studentService, StudentMapper studentMapper, TutorMapper tutorMapper) {
+    public StudentController(StudentService studentService, StudentMapper studentMapper, TutorMapper tutorMapper, VerificationWorkMapper verificationWorkMapper, VerificationWorkService verificationWorkService) {
         this.studentService = studentService;
         this.studentMapper = studentMapper;
         this.tutorMapper = tutorMapper;
+        this.verificationWorkMapper = verificationWorkMapper;
+        this.verificationWorkService = verificationWorkService;
     }
 
     @GetMapping
@@ -35,7 +42,8 @@ public class StudentController {
         return "students/show";
     }
     @GetMapping("/{id}")
-    public String getStudent(@PathVariable("id") int id, Model model) {
+    public String getStudent(@PathVariable("id") int id, Model model,
+                             @ModelAttribute("work") VerificationWorkDTO verificationWorkDTO) {
         model.addAttribute("student", studentMapper.toStudentDTO(studentService.findById(id)));
         model.addAttribute("tutors",
                 studentService.findById(id).getTutors()
@@ -43,7 +51,7 @@ public class StudentController {
         return "students/index";
     }
     @GetMapping("/new")
-    public String newStudent(@ModelAttribute("student") StudentDTO studentDTOt){
+    public String newStudent(@ModelAttribute("student") StudentDTO studentDTO){
         return "students/new";
     }
 
@@ -79,5 +87,13 @@ public class StudentController {
     public String deleteStudent(@PathVariable("id") int id){
         studentService.deleteById(id);
         return "redirect:/students";
+    }
+
+    @PatchMapping("/{id}/excludeWork")
+    public String excludeWork(@PathVariable("id") int id,
+                              @ModelAttribute("workToExclude") VerificationWorkDTO verificationWorkDTO){
+        studentService.excludeWork(studentService.findById(id),
+                verificationWorkService.findById(verificationWorkMapper.toVerificationWork(verificationWorkDTO).getId()));
+        return "redirect:/students/" + id;
     }
 }

@@ -6,20 +6,37 @@
 </head>
 <body>
 <p th:text="${student.getFullName() + ', ' + student.getAge()}">VALUE</p>
-
 <div th:if="${tutors.size() > 0}">
+    <hr/>
     <b th:each="tutor: ${tutors}"
        th:utext="${('Tutors:' + tutor.getFullName() + ', ' + tutor.getEmail() + ', '
        + tutor.getAge() + ', ' + tutor.getDiscipline() + '\n').replace('\n', '<br/>')}"></b>
-
 </div>
+<div th:if="${student.getVerificationWorks().size() > 0}">
+    <hr/>
+    <b th:each="work: ${student.getVerificationWorks()}"
+       th:utext="${('Title:' + work.getTitle() + '\n').replace('\n', '<br/>')}"></b>
+</div>
+<hr/>
 <div th:if="${tutors.isEmpty()}"
-     th:text="'This user didnt start his educational process'">if havent tutor</div>
-<br/>
+     th:text="'This user didnt start his educational process'">if havent tutor
+</div>
 <a th:href="@{/students/{id}/edit(id=${student.getId()})}">Edit</a>
-
+<hr/>
 <form th:method="DELETE" th:action="@{/students/{id}(id=${student.getId()})}">
     <input type="submit" value="Delete">
 </form>
+<hr/>
+<div th:if="${!student.getVerificationWorks().isEmpty()}">
+    <form th:method="PATCH" th:action="@{/students/{id}/excludeWork(id=${student.getId()})}">
+        <label for="workToExclude">Choose work to exclude</label>
+        <select th:object="${work}" th:field="*{id}" id="workToExclude">
+            <option th:each="workToExclude : ${student.getVerificationWorks()}"
+                    th:value="${workToExclude.getId()}" th:text="${workToExclude.getTitle()}">
+            </option>
+        </select>
+        <input type="submit" th:value="'Exclude Work'"/>
+    </form>
+</div>
 </body>
 </html>

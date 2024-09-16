@@ -2,18 +2,28 @@ package ru.sova.educationapp.EducationalSystemApp.restControllers;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import ru.sova.educationapp.EducationalSystemApp.DTO.StudentDTO;
 import ru.sova.educationapp.EducationalSystemApp.DTO.TaskDTO;
+import ru.sova.educationapp.EducationalSystemApp.DTO.TutorDTO;
+import ru.sova.educationapp.EducationalSystemApp.DTO.VerificationWorkDTO;
+import ru.sova.educationapp.EducationalSystemApp.mappers.StudentMapper;
+import ru.sova.educationapp.EducationalSystemApp.mappers.VerificationWorkMapper;
 import ru.sova.educationapp.EducationalSystemApp.models.Student;
 import ru.sova.educationapp.EducationalSystemApp.models.Task;
 import ru.sova.educationapp.EducationalSystemApp.models.VerificationWork;
 import ru.sova.educationapp.EducationalSystemApp.services.StudentService;
 import ru.sova.educationapp.EducationalSystemApp.services.TaskService;
 import ru.sova.educationapp.EducationalSystemApp.services.VerificationWorkService;
+import ru.sova.educationapp.EducationalSystemApp.udtil.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/rest/works")
@@ -22,78 +32,93 @@ public class RestVerificationWorkController {
     private final VerificationWorkService verificationWorkService;
     private final TaskService taskService;
     private final StudentService studentService;
+    private final VerificationWorkMapper verificationWorkMapper;
+    private final StudentMapper studentMapper;
 
     @Autowired
-    public RestVerificationWorkController(VerificationWorkService verificationWorkService, TaskService taskService, StudentService studentService) {
+    public RestVerificationWorkController(VerificationWorkService verificationWorkService,
+                                          TaskService taskService, StudentService studentService,
+                                          VerificationWorkMapper verificationWorkMapper,
+                                          StudentMapper studentMapper) {
         this.verificationWorkService = verificationWorkService;
         this.taskService = taskService;
         this.studentService = studentService;
+        this.verificationWorkMapper = verificationWorkMapper;
+        this.studentMapper = studentMapper;
     }
 
     @GetMapping
-    public String getVerificationWorks(Model model) {
-        model.addAttribute("works", verificationWorkService.finAll());
-        return "works/show";
-    }
+    public ResponseEntity<List<VerificationWorkDTO>> getVerificationWorks() {
+        final List<VerificationWorkDTO> verificationWorks = verificationWorkService.finAll()
+                .stream().map(verificationWorkMapper::toVerificationWorkDTO).toList();
+        return !verificationWorks.isEmpty()
+                ? new ResponseEntity<>(verificationWorks, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);    }
+
     @GetMapping("/{id}")
-    public String getVerificationWork(@PathVariable("id") int id, Model model,
-                                      @ModelAttribute("student") Student student) {
-        model.addAttribute("tasks",
-                taskService.findByVerificationWork(verificationWorkService.findById(id)));
-        model.addAttribute("work", verificationWorkService.findById(id));
-        model.addAttribute("students",
-                studentService.findByVerificationWork(verificationWorkService.findById(id)));
-        model.addAttribute("validStudents",
-                studentService.findByVerificationWorkNotContains(verificationWorkService.findById(id)));
-        return "works/index";
-    }
-    @GetMapping("/new")
-    public String newVerificationWork(@ModelAttribute("work") VerificationWork verificationWork, Model model){
-        model.addAttribute("tasks", taskService.finAll());
-        return "works/new";
+    public ResponseEntity<VerificationWorkDTO> getVerificationWork(@PathVariable("id") int id) {
+        final VerificationWorkDTO verificationWorkDTO = verificationWorkMapper
+                .toVerificationWorkDTO(verificationWorkService.findById(id));
+        return verificationWorkDTO != null
+                ? new ResponseEntity<>(verificationWorkDTO, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("work") @Valid VerificationWork verificationWork,
-                         BindingResult bindingResult,
-                         @RequestParam List<Task> selectedTasksId){
+    public ResponseEntity<HttpStatus> create(@RequestBody @Valid VerificationWorkDTO verificationWorkDTO,
+                         BindingResult bindingResult){
 //        personValidator.validate(person, bindingResult);//todo
         if (bindingResult.hasErrors()){
-            return "works/new";
+            StringBuilder errorMesssage = new StringBuilder();
+            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+            for (FieldError fieldError : fieldErrors){
+                errorMesssage.append(fieldError.getField()).append(" - ")
+                        .append(fieldError.getDefaultMessage()).append(";");
+            }
+            throw new VerificationWorkNotCreateException(errorMesssage.toString());
         }
-        verificationWorkService.addTasks(verificationWork, selectedTasksId);
-        System.out.println(verificationWork.getTasks());
-        return "redirect:/works";
-    }
-
-    @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") int id){
-        model.addAttribute("work", verificationWorkService.findById(id));
-        model.addAttribute("tasks", taskService.finAll());
-        return "works/edit";
+        verificationWorkService.save(verificationWorkMapper.toVerificationWork(verificationWorkDTO));
+        return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("work") @Valid VerificationWork workToUpdate,
-                         BindingResult bindingResult, @PathVariable("id") int id,
-                         @RequestParam List<Task> selectedTasks){
+    public ResponseEntity<HttpStatus> update(@RequestBody @Valid VerificationWorkDTO workToUpdateDTO,
+                         BindingResult bindingResult, @PathVariable("id") int id) {
 //        personValidator.validate(person, bindingResult);//todo
-
         if (bindingResult.hasErrors()){
-            return "works/edit";
+            StringBuilder errorMesssage = new StringBuilder();
+            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+            for (FieldError fieldError : fieldErrors){
+                errorMesssage.append(fieldError.getField()).append(" - ")
+                        .append(fieldError.getDefaultMessage()).append(";");
+            }
+            throw new VerificationWorkNotUpdatedException(errorMesssage.toString());
         }
-        verificationWorkService.update(id, workToUpdate, selectedTasks);
-        return "redirect:/works";
+        final boolean updated = verificationWorkService.update(id, verificationWorkMapper
+                .toVerificationWork(workToUpdateDTO));
+        return updated ? new ResponseEntity<>(HttpStatus.OK): new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
+
     @DeleteMapping("/{id}")
-    public String deleteVerificationWork(@PathVariable("id") int id){
-        verificationWorkService.deleteById(id);
-        return "redirect:/works";
+    public ResponseEntity<?> deleteVerificationWork(@PathVariable("id") int id){
+        Boolean deleted = verificationWorkService.deleteById(id);
+        return deleted ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
+
     @PatchMapping("/{id}/choose")
-    public String choose(@PathVariable("id") int id, @ModelAttribute("work") VerificationWork verificationWork,
-                         @ModelAttribute("student") Student student){
-        studentService.addVerificationWork(verificationWorkService.findById(id), student);
-        return "redirect:/works/" + id;
+    public ResponseEntity<HttpStatus> choose(@PathVariable("id") int id,
+                         @RequestBody @Valid StudentDTO studentDTO, BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            StringBuilder errorMesssage = new StringBuilder();
+            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+            for (FieldError fieldError : fieldErrors){
+                errorMesssage.append(fieldError.getField()).append(" - ")
+                        .append(fieldError.getDefaultMessage()).append(";");
+            }
+            throw new VerificationWorkNotAssingedException(errorMesssage.toString());
+        }
+        Boolean added = studentService.addVerificationWork(verificationWorkService.findById(id),
+                studentMapper.toStudent(studentDTO));
+        return added ? new ResponseEntity<>(HttpStatus.OK): new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 }

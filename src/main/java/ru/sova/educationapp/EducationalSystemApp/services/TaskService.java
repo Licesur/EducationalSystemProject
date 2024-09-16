@@ -36,14 +36,19 @@ public class TaskService {
     }
 
     @Transactional(readOnly = false)
-    public void deleteById(int id){
+    public Boolean deleteById(int id){
         taskRepository.deleteById(id);
+        return !taskRepository.findById(id).isPresent();
     }
 
     @Transactional(readOnly = false)
-    public void update(int id, Task task){
+    public Boolean update(int id, Task task){
         task.setId(id);
         taskRepository.save(task); // соглашение - обновлять мтеодом сейв
+        return taskRepository.findById(id).isPresent() &&
+                taskRepository.findById(id).get().toString()
+                        .equals(task.toString());// соглашение - обновлять мтеодом сейв
+
     }
 
     public List<Task> findByVerificationWork(VerificationWork verificationWork) {

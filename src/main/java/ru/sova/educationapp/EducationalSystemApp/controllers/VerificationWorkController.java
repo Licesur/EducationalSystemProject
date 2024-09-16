@@ -108,8 +108,10 @@ public class VerificationWorkController {
             return "works/edit";
         }
         //costile as fuck, but it works
-        verificationWorkService.update(id, verificationWorkMapper.toVerificationWork(workToUpdateDTO),
-                selectedTasksDtoId.stream().map(Integer::parseInt).map(taskService::findById).toList());
+        workToUpdateDTO.setTasks(selectedTasksDtoId.stream().map(Integer::parseInt)
+                .map(taskService::findById).map(taskMapper::toTaskDTO).toList());
+        verificationWorkService.update(id, verificationWorkMapper.toVerificationWork(workToUpdateDTO));
+
         return "redirect:/works";
     }
     @DeleteMapping("/{id}")

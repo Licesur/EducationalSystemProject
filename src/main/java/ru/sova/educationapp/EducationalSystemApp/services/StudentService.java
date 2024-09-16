@@ -26,7 +26,7 @@ public class StudentService {
     }
 
     @Transactional(readOnly = false)
-    public void addVerificationWork(VerificationWork verificationWork, Student student) {
+    public Boolean addVerificationWork(VerificationWork verificationWork, Student student) {
         student = studentRepository.findById(student.getId()).get();
         if (student.getVerificationWorks() == null) {
             student.setVerificationWorks(Collections.singletonList(verificationWork));
@@ -40,6 +40,7 @@ public class StudentService {
         }
         studentRepository.save(student);
         verificationWorkService.save(verificationWork);
+        return student.getVerificationWorks().contains(verificationWork);
     }
 
     public List<Student> finAll(){
@@ -58,14 +59,17 @@ public class StudentService {
     }
 
     @Transactional(readOnly = false)
-    public void deleteById(int id){
+    public Boolean deleteById(int id){
         studentRepository.deleteById(id);
+        return !studentRepository.findById(id).isPresent();
     }
 
     @Transactional(readOnly = false)
-    public void update(int id, Student student){
+    public Boolean update(int id, Student student){
         student.setId(id);
-        studentRepository.save(student); // соглашение - обновлять мтеодом сейв
+        studentRepository.save(student);
+        //todo во имя света! реализуй здесь что-то человеческое а не это говно!
+        return studentRepository.findById(id).isPresent() && studentRepository.findById(id).get().toString().equals(student.toString());// соглашение - обновлять мтеодом сейв
     }
 
     public List<Student> findByVerificationWork(VerificationWork verificationWork) {
@@ -80,6 +84,14 @@ public class StudentService {
 
     public Object findByTutorsNotContains(Tutor tutor) {
         return studentRepository.findByTutorsNotContains(tutor);
+    }
+
+    @Transactional(readOnly = false)
+    public void excludeWork(Student student, VerificationWork verificationWork) {
+        student.getVerificationWorks().remove(verificationWork);
+        verificationWork.getStudents().remove(student);
+        studentRepository.save(student);
+        verificationWorkService.save(verificationWork);
     }
 
 //    public List<Book> getBooksByPersonId(int id) {

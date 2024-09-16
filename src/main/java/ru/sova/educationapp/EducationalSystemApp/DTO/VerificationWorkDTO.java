@@ -9,7 +9,7 @@ public class VerificationWorkDTO {
 
     private String title;
 
-    private List<Task> tasks;
+    private List<TaskDTO> tasks;
 
     private int id;
 
@@ -40,7 +40,7 @@ public class VerificationWorkDTO {
     public VerificationWorkDTO() {
     }
 
-    public VerificationWorkDTO(String title, int id, List<Task> tasks) {
+    public VerificationWorkDTO(String title, int id, List<TaskDTO> tasks) {
         this.title = title;
         this.tasks = tasks;
         this.id = id;
@@ -62,11 +62,11 @@ public class VerificationWorkDTO {
         this.title = title;
     }
 
-    public List<Task> getTasks() {
+    public List<TaskDTO> getTasks() {
         return tasks;
     }
 
-    public void setTasks(List<Task> tasks) {
+    public void setTasks(List<TaskDTO> tasks) {
         this.tasks = tasks;
     }
 }

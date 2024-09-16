@@ -1,0 +1,491 @@
+{
+	"info": {
+		"_postman_id": "36d3f5cc-f245-4b34-b67d-9a88225d6a0c",
+		"name": "REST api lessons",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37835657"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8080/rest/students",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"fullName\": \"testName6\",\n    \"password\": \"111111\",\n    \"email\": \"test6@mail.ru\",\n    \"age\": 30,\n    \"tutors\": [],\n    \"verificationWorks\": []\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/rest/students",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"rest",
+						"students"
+					]
+				},
+				"description": "request to create student"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/rest/students",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/rest/students",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"rest",
+						"students"
+					]
+				},
+				"description": "request to get list of students or student with /id"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/rest/students",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"fullName\": \"Bochkarev Arseny\",\n    \"password\": \"111111\",\n    \"email\": \"test5@mail.ru\",\n    \"age\": 18,\n    \"tutors\": [],\n    \"verificationWorks\": []\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/rest/students/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"rest",
+						"students",
+						"1"
+					]
+				},
+				"description": "request to update student"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/rest/students",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/rest/students/11",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"rest",
+						"students",
+						"11"
+					]
+				},
+				"description": "request to delete studetnt by id"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/rest/tasks",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/rest/tasks",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"rest",
+						"tasks"
+					]
+				},
+				"description": "request to get all tasks or one task by /id"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/rest/tasks",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"definition\": \"test task definition 1\",\n    \"answer\": \"test task answer 1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/rest/tasks",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"rest",
+						"tasks"
+					]
+				},
+				"description": "request to create the task"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/rest/tasks/14",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"definition\": \"test task definition 2\",\n    \"answer\": \"test task answer 2\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/rest/tasks/14",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"rest",
+						"tasks",
+						"14"
+					]
+				},
+				"description": "request to update task with /id"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/rest/tasks/14",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/rest/tasks/14",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"rest",
+						"tasks",
+						"14"
+					]
+				},
+				"description": "request to delete task by id"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/rest/tutors",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/rest/tutors",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"rest",
+						"tutors"
+					]
+				},
+				"description": "request to get list of tutors or one tutor by id using /id"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/rest/tutors",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"fullName\": \"testName1\",\n    \"password\": \"111111\",\n    \"email\": \"test1@mail.ru\",\n    \"age\": 30,\n    \"discipline\": \"math\",\n    \"students\": [\n        {\n        \"id\": 1,\n        \"fullName\": \"Bochkarev Arseny\",\n        \"password\": \"000003\",\n        \"email\": \"testmail3@mail.ru\",\n        \"age\": 18,\n        \"verificationWorks\": []\n    },    {\n        \"id\": 3,\n        \"fullName\": \"Korcev Ivan\",\n        \"password\": \"000005\",\n        \"email\": \"testmail5@mail.ru\",\n        \"age\": 18,\n        \"verificationWorks\": []\n    }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/rest/tutors",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"rest",
+						"tutors"
+					]
+				},
+				"description": "request to create tutor"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/rest/tutors/3",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n     \"fullName\": \"testName22\",\n    \"password\": \"1111112\",\n    \"email\": \"test12@mail.ru\",\n    \"age\": 32,\n    \"discipline\": \"math2\",\n    \"students\": [\n        {\n        \"id\": 1,\n        \"fullName\": \"Bochkarev Arseny\",\n        \"password\": \"000003\",\n        \"email\": \"testmail3@mail.ru\",\n        \"age\": 18,\n        \"verificationWorks\": []\n    },    {\n        \"id\": 3,\n        \"fullName\": \"Korcev Ivan\",\n        \"password\": \"000005\",\n        \"email\": \"testmail5@mail.ru\",\n        \"age\": 18,\n        \"verificationWorks\": []\n    }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/rest/tutors/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"rest",
+						"tutors",
+						"3"
+					]
+				},
+				"description": "request for updating tutor"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/rest/tutors/3",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/rest/tutors/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"rest",
+						"tutors",
+						"3"
+					]
+				},
+				"description": "request to delete tutor"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/rest/tutors/{id}/choose",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 2,\n    \"fullName\": \"Somesn Ekaterina\",\n    \"password\": \"000004\",\n    \"email\": \"testmail4@mail.ru\",\n    \"age\": 18,\n    \"verificationWorks\": []\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/rest/tutors/1/choose",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"rest",
+						"tutors",
+						"1",
+						"choose"
+					]
+				},
+				"description": "request to assing student to the tutor by id"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/rest/tutors/1/exclude",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 2,\n    \"fullName\": \"Somesn Ekaterina\",\n    \"password\": \"000004\",\n    \"email\": \"testmail4@mail.ru\",\n    \"age\": 18,\n    \"verificationWorks\": []\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/rest/tutors/1/exclude",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"rest",
+						"tutors",
+						"1",
+						"exclude"
+					]
+				},
+				"description": "request to exclude student form tutor"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/rest/works/{id}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/rest/works/{id}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"rest",
+						"works",
+						"{id}"
+					]
+				},
+				"description": "request to get list of verification works or one verification work by id"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/rest/works",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"test work title 1\",\n    \"tasks\": [\n        {\n        \"id\": 1,\n        \"definition\": \"solve the equation: x^2-5x+6=0; enter the sum of all the roots as answer\",\n        \"answer\": \"5\"\n    },\n    {\n        \"id\": 2,\n        \"definition\": \"solve the equation: x^2-x-6=0; enter the sum of all the roots as answer\",\n        \"answer\": \"1\"\n    }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/rest/works",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"rest",
+						"works"
+					]
+				},
+				"description": "request to create verification work"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/rest/works/3",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"test work title 1\",\n    \"tasks\": [\n        {\n        \"id\": 3,\n        \"definition\": \"solve the equation: x^2-6x+8=0; enter the sum of all the roots as answer\",\n        \"answer\": \"6\"\n    },\n    {\n        \"id\": 4,\n        \"definition\": \"solve the equation: x^2+2x-15=0; enter the sum of all the roots as answer\",\n        \"answer\": \"-2\"\n    }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/rest/works/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"rest",
+						"works",
+						"3"
+					]
+				},
+				"description": "request to update verification work"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/rest/works/{id}",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/rest/works/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"rest",
+						"works",
+						"3"
+					]
+				},
+				"description": "request to delete verification work by id"
+			},
+			"response": []
+		}
+	]
+}

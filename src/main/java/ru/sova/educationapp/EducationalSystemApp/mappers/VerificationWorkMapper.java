@@ -12,12 +12,8 @@ import ru.sova.educationapp.EducationalSystemApp.models.VerificationWork;
 public interface VerificationWorkMapper {
     VerificationWorkMapper INSTANCE = Mappers.getMapper(VerificationWorkMapper.class);
     @Mapping(source = "id", target = "id")
-    @Mapping(source = "title", target = "title")
-    @Mapping(source = "tasks", target = "tasks")
     VerificationWorkDTO toVerificationWorkDTO(VerificationWork verificationWork);
     @Mapping(source = "id", target = "id")
-    @Mapping(source = "title", target = "title")
-    @Mapping(source = "tasks", target = "tasks")
     VerificationWork toVerificationWork(VerificationWorkDTO verificationWorkDTO);
     @Mapping(source = "verificationWorkDTO.tasks", target = "verificationWorkDTOToBeUpdated.tasks")
     void updateDTO(VerificationWorkDTO verificationWorkDTO, @MappingTarget VerificationWorkDTO verificationWorkDTOToBeUpdated);

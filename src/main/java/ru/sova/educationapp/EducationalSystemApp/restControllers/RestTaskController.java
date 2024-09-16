@@ -2,69 +2,86 @@ package ru.sova.educationapp.EducationalSystemApp.restControllers;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-import ru.sova.educationapp.EducationalSystemApp.models.Task;
+import ru.sova.educationapp.EducationalSystemApp.DTO.TaskDTO;
+import ru.sova.educationapp.EducationalSystemApp.mappers.TaskMapper;
 import ru.sova.educationapp.EducationalSystemApp.services.TaskService;
+import ru.sova.educationapp.EducationalSystemApp.udtil.TaskNotCreatedException;
+import ru.sova.educationapp.EducationalSystemApp.udtil.TaskNotUpdatedException;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/rest/tasks")
 public class RestTaskController {
 
     private final TaskService taskService;
+    private final TaskMapper taskMapper;
 
     @Autowired
-    public RestTaskController(TaskService taskService) {
+    public RestTaskController(TaskService taskService, TaskMapper taskMapper) {
         this.taskService = taskService;
+        this.taskMapper = taskMapper;
     }
 
     @GetMapping
-    public String getTasks(Model model) {
-        model.addAttribute("tasks", taskService.finAll());
-        return "tasks/show";
+    public ResponseEntity<List<TaskDTO>> getTasks() {
+        final List<TaskDTO> tasks = taskService.finAll()
+                .stream().map(taskMapper::toTaskDTO).toList();
+        return !tasks.isEmpty()
+                ? new ResponseEntity<>(tasks, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     @GetMapping("/{id}")
-    public String getTask(@PathVariable("id") int id, Model model) {
-        model.addAttribute("task", taskService.findById(id));
-        return "tasks/index";
-    }
-    @GetMapping("/new")
-    public String newTask(@ModelAttribute("task") Task task){
-        return "tasks/new";
+    public ResponseEntity<TaskDTO> getTask(@PathVariable("id") int id) {
+        final TaskDTO taskDTO = taskMapper.toTaskDTO(taskService.findById(id));
+        return taskDTO != null
+                ? new ResponseEntity<>(taskDTO, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("task") @Valid Task task, BindingResult bindingResult){
+    public ResponseEntity<HttpStatus> create(@RequestBody @Valid TaskDTO taskDTO,
+                                             BindingResult bindingResult){
 //        personValidator.validate(person, bindingResult);//todo
-
         if (bindingResult.hasErrors()){
-            return "tasks/new";
+            StringBuilder errorMesssage = new StringBuilder();
+            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+            for (FieldError fieldError : fieldErrors){
+                errorMesssage.append(fieldError.getField()).append(" - ")
+                        .append(fieldError.getDefaultMessage()).append(";");
+            }
+            throw new TaskNotCreatedException(errorMesssage.toString());
         }
-        taskService.save(task);
-        return "redirect:/tasks";
-    }
-
-    @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") int id){
-        model.addAttribute("task", taskService.findById(id));
-        return "tasks/edit";
+        taskService.save(taskMapper.toTask(taskDTO));
+        return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("task") @Valid Task task,
-                         BindingResult bindingResult, @PathVariable("id") int id){
+    public ResponseEntity<HttpStatus> update(@RequestBody @Valid TaskDTO taskDTO,
+                                             BindingResult bindingResult, @PathVariable("id") int id){
 //        personValidator.validate(person, bindingResult);//todo
-
         if (bindingResult.hasErrors()){
-            return "tasks/edit";
+            StringBuilder errorMesssage = new StringBuilder();
+            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+            for (FieldError fieldError : fieldErrors){
+                errorMesssage.append(fieldError.getField()).append(" - ")
+                        .append(fieldError.getDefaultMessage()).append(";");
+            }
+            throw new TaskNotUpdatedException(errorMesssage.toString());
         }
-        taskService.update(id, task);
-        return "redirect:/tasks";
+        final boolean updated = taskService.update(id, taskMapper.toTask(taskDTO));
+        return updated ? new ResponseEntity<>(HttpStatus.OK): new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
+
     @DeleteMapping("/{id}")
-    public String deleteTask(@PathVariable("id") int id){
-        taskService.deleteById(id);
-        return "redirect:/tasks";
+    public ResponseEntity<?> deleteTask(@PathVariable("id") int id){
+        Boolean deleted = taskService.deleteById(id);
+        return deleted ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
+
 }
