@@ -1,6 +1,8 @@
 package ru.sova.educationapp.EducationalSystemApp.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 import java.util.List;
 import java.util.Objects;
@@ -15,9 +17,14 @@ public class Task {
     private int id;
 
     @Column(name = "definition")
+    @NotEmpty(message = "please enter the definition for the task")
+    @Size(min = 3, message = "sorry, your task should be at least 3 symbols length")
+    @Size(max = 500, message = "sorry, your definition is too large, please try to insert it in 500 symbols")
     private String definition;
-
+//todo check restrictions on db tables
     @Column(name = "answer")
+    @NotEmpty(message = "please enter thee answer for the task")
+    @Size(max = 100, message = "sorry, your answer should be shorter than 100 symbols")
     private String answer;
 
     @ManyToMany(mappedBy = "tasks")

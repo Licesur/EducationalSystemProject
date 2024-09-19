@@ -1,6 +1,8 @@
 package ru.sova.educationapp.EducationalSystemApp.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -16,6 +18,9 @@ public class VerificationWork {
     private int id;
 
     @Column(name = "title")
+    @NotEmpty(message = "please enter the title of the work")
+    @Size(min = 2, message = "sorry, your title should have at least 2 symbols")
+    @Size(max = 100, message = "sorry, your title should be shorter than 100 symbols")
     private String title;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -83,11 +88,17 @@ public class VerificationWork {
         this.id = id;
     }
 
-    public String getTitle() {
+    public      @NotEmpty(message = "please enter the title of the work")
+                @Size(min = 2, message = "sorry, your title should have at least 2 symbols")
+                @Size(max = 100, message = "sorry, your title should be shorter than 100 symbols")
+    String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(    @NotEmpty(message = "please enter the title of the work")
+                             @Size(min = 2, message = "sorry, your title should have at least 2 symbols")
+                             @Size(max = 100, message = "sorry, your title should be shorter than 100 symbols")
+                             String title) {
         this.title = title;
     }
 

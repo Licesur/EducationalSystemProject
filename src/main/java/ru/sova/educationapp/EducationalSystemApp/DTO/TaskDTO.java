@@ -1,11 +1,19 @@
 package ru.sova.educationapp.EducationalSystemApp.DTO;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
+
 public class TaskDTO {
 
     private int id;
 
+    @NotEmpty(message = "please enter the definition for the task")
+    @Size(min = 3, message = "sorry, your task should be at least 3 symbols length")
+    @Size(max = 500, message = "sorry, your definition is too large, please try to insert it in 500 symbols")
     private String definition;
 
+    @NotEmpty(message = "please enter thee answer for the task")
+    @Size(max = 100, message = "sorry, your answer should be shorter than 100 symbols")
     private String answer;
 
     @Override

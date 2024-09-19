@@ -15,12 +15,12 @@ public class StudentDTO {
 
     @NotEmpty(message = "please enter your full name")
     @Size(min = 2, message = "sorry, your name should have at least 2 symbols")
-    @Size(max = 50, message = "sorry, you name should be shorter than 50 symbols")
+    @Size(max = 50, message = "sorry, your name should be shorter than 50 symbols")
     private String fullName;
 
-    @NotEmpty(message = "please enter the pass")
-    @Size(min = 2, message = "sorry, your password should have at least 6 symbols")
-    @Size(max = 50, message = "sorry, you password should be shorter than 50 symbols")
+    @NotEmpty(message = "please enter the password")
+    @Size(min = 6, message = "sorry, your password should have at least 6 symbols")
+    @Size(max = 50, message = "sorry, your password should be shorter than 50 symbols")
     private String password;
 
     @Email(message = "invalid email format")
@@ -28,7 +28,7 @@ public class StudentDTO {
     private String email;
 
     @Min(value = 0, message = "your age should be greater then 0")
-    @Max(value = 120, message = "your age shouldnt be grater than 120")
+    @Max(value = 120, message = "your age shouldnt be greater than 120")
     private int age;
 
     private List<VerificationWorkDTO> verificationWorks;
@@ -87,37 +87,50 @@ public class StudentDTO {
         this.id = id;
     }
 
-    public @NotEmpty(message = "please enter your full name") @Size(min = 2, message = "sorry, your name should have at least 2 symbols") @Size(max = 50, message = "sorry, you name should be shorter than 50 symbols") String getFullName() {
+    public @NotEmpty(message = "please enter your full name")
+    @Size(min = 2, message = "sorry, your name should have at least 2 symbols")
+    @Size(max = 50, message = "sorry, your name should be shorter than 50 symbols") String getFullName() {
         return fullName;
     }
 
-    public void setFullName(@NotEmpty(message = "please enter your full name") @Size(min = 2, message = "sorry, your name should have at least 2 symbols") @Size(max = 50, message = "sorry, you name should be shorter than 50 symbols") String fullName) {
+    public void setFullName(@NotEmpty(message = "please enter your full name")
+                            @Size(min = 2, message = "sorry, your name should have at least 2 symbols")
+                            @Size(max = 50, message = "sorry, your name should be shorter than 50 symbols")
+                            String fullName) {
         this.fullName = fullName;
     }
 
-    public @NotEmpty(message = "please enter the pass") @Size(min = 2, message = "sorry, your password should have at least 6 symbols") @Size(max = 50, message = "sorry, you password should be shorter than 50 symbols") String getPassword() {
+    public @NotEmpty(message = "please enter the password")
+    @Size(min = 6, message = "sorry, your password should have at least 6 symbols")
+    @Size(max = 50, message = "sorry, your password should be shorter than 50 symbols") String getPassword() {
         return password;
     }
 
-    public void setPassword(@NotEmpty(message = "please enter the pass") @Size(min = 2, message = "sorry, your password should have at least 6 symbols") @Size(max = 50, message = "sorry, you password should be shorter than 50 symbols") String password) {
+    public void setPassword(@NotEmpty(message = "please enter the password")
+                            @Size(min = 6, message = "sorry, your password should have at least 6 symbols")
+                            @Size(max = 50, message = "sorry, your password should be shorter than 50 symbols")
+                            String password) {
         this.password = password;
     }
 
-    public @Email(message = "invalid email format") @NotEmpty(message = "email cant be empty") String getEmail() {
+    public @Email(message = "invalid email format")
+    @NotEmpty(message = "email cant be empty") String getEmail() {
         return email;
     }
 
-    public void setEmail(@Email(message = "invalid email format") @NotEmpty(message = "email cant be empty") String email) {
+    public void setEmail(@Email(message = "invalid email format")
+                         @NotEmpty(message = "email cant be empty") String email) {
         this.email = email;
     }
 
     @Min(value = 0, message = "your age should be greater then 0")
-    @Max(value = 120, message = "your age shouldnt be grater than 120")
+    @Max(value = 120, message = "your age shouldnt be greater than 120")
     public int getAge() {
         return age;
     }
 
-    public void setAge(@Min(value = 0, message = "your age should be greater then 0") @Max(value = 120, message = "your age shouldnt be grater than 120") int age) {
+    public void setAge(@Min(value = 0, message = "your age should be greater then 0")
+                       @Max(value = 120, message = "your age shouldnt be greater than 120") int age) {
         this.age = age;
     }
 

@@ -1,12 +1,17 @@
 package ru.sova.educationapp.EducationalSystemApp.DTO;
 
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import ru.sova.educationapp.EducationalSystemApp.models.Task;
 
 import java.util.List;
 
 public class VerificationWorkDTO {
 
+    @NotEmpty(message = "please enter the title of the work")
+    @Size(min = 2, message = "sorry, your title should have at least 2 symbols")
+    @Size(max = 100, message = "sorry, your title should be shorter than 100 symbols")
     private String title;
 
     private List<TaskDTO> tasks;
@@ -40,7 +45,7 @@ public class VerificationWorkDTO {
     public VerificationWorkDTO() {
     }
 
-    public VerificationWorkDTO(String title, int id, List<TaskDTO> tasks) {
+    public VerificationWorkDTO(int id, String title, List<TaskDTO> tasks) {
         this.title = title;
         this.tasks = tasks;
         this.id = id;
@@ -54,11 +59,16 @@ public class VerificationWorkDTO {
         this.id = id;
     }
 
-    public String getTitle() {
+    public      @NotEmpty(message = "please enter the title of the work")
+                @Size(min = 2, message = "sorry, your title should have at least 2 symbols")
+                @Size(max = 100, message = "sorry, your title should be shorter than 100 symbols") String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(    @NotEmpty(message = "please enter the title of the work")
+                             @Size(min = 2, message = "sorry, your title should have at least 2 symbols")
+                             @Size(max = 100, message = "sorry, your title should be shorter than 100 symbols")
+                             String title) {
         this.title = title;
     }
 

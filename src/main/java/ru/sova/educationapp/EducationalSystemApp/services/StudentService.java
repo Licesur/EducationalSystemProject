@@ -33,6 +33,7 @@ public class StudentService {
         } else if (!student.getVerificationWorks().contains(verificationWork)) {
             student.getVerificationWorks().add(verificationWork);
         }
+
         if (verificationWork.getStudents() == null) {
             verificationWork.setStudents(Collections.singletonList(student));
         } else if (!verificationWork.getStudents().contains(student)) {
@@ -82,7 +83,7 @@ public class StudentService {
         return validStudents == null ? Collections.emptyList() : validStudents;
     }
 
-    public Object findByTutorsNotContains(Tutor tutor) {
+    public List<Student> findByTutorsNotContains(Tutor tutor) {
         return studentRepository.findByTutorsNotContains(tutor);
     }
 
@@ -93,18 +94,4 @@ public class StudentService {
         studentRepository.save(student);
         verificationWorkService.save(verificationWork);
     }
-
-//    public List<Book> getBooksByPersonId(int id) {
-//        Optional<Person> person = personRepository.findById(id);
-//        if (person.isPresent()) {
-//            Hibernate.initialize(person.get().getBooks());
-//            person.get().getBooks().forEach(book -> {
-//                long daysDiff = LocalDate.now().getDayOfYear() - book.getGetDay().getDayOfYear();
-//                book.setTimeToGetBack(daysDiff > 10);
-//            });
-//            return person.get().getBooks();
-//        } else {
-//            return Collections.emptyList();
-//        }
-//    }
 }
