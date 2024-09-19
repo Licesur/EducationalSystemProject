@@ -16,14 +16,10 @@ import java.util.Optional;
 public class VerificationWorkService {
 
     private final VerificationWorkRepository verificationWorkRepository;
-    private final TaskService taskService;
-    private final TaskMapper taskMapper;
 
     @Autowired
-    public VerificationWorkService(VerificationWorkRepository verificationWorkRepository, TaskService taskService, TaskMapper taskMapper) {
+    public VerificationWorkService(VerificationWorkRepository verificationWorkRepository) {
         this.verificationWorkRepository = verificationWorkRepository;
-        this.taskService = taskService;
-        this.taskMapper = taskMapper;
     }
     public List<VerificationWork> finAll(){
         return verificationWorkRepository.findAll();

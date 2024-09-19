@@ -1,47 +1,38 @@
-package ru.sova.educationapp.EducationalSystemApp.restControllers;
+package ru.sova.educationapp.EducationalSystemApp.controllers.rest;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import ru.sova.educationapp.EducationalSystemApp.DTO.StudentDTO;
-import ru.sova.educationapp.EducationalSystemApp.DTO.TaskDTO;
-import ru.sova.educationapp.EducationalSystemApp.DTO.TutorDTO;
 import ru.sova.educationapp.EducationalSystemApp.DTO.VerificationWorkDTO;
 import ru.sova.educationapp.EducationalSystemApp.mappers.StudentMapper;
 import ru.sova.educationapp.EducationalSystemApp.mappers.VerificationWorkMapper;
-import ru.sova.educationapp.EducationalSystemApp.models.Student;
-import ru.sova.educationapp.EducationalSystemApp.models.Task;
-import ru.sova.educationapp.EducationalSystemApp.models.VerificationWork;
 import ru.sova.educationapp.EducationalSystemApp.services.StudentService;
 import ru.sova.educationapp.EducationalSystemApp.services.TaskService;
 import ru.sova.educationapp.EducationalSystemApp.services.VerificationWorkService;
 import ru.sova.educationapp.EducationalSystemApp.udtil.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/rest/works")
 public class RestVerificationWorkController {
 
     private final VerificationWorkService verificationWorkService;
-    private final TaskService taskService;
     private final StudentService studentService;
     private final VerificationWorkMapper verificationWorkMapper;
     private final StudentMapper studentMapper;
 
     @Autowired
     public RestVerificationWorkController(VerificationWorkService verificationWorkService,
-                                          TaskService taskService, StudentService studentService,
+                                          StudentService studentService,
                                           VerificationWorkMapper verificationWorkMapper,
                                           StudentMapper studentMapper) {
         this.verificationWorkService = verificationWorkService;
-        this.taskService = taskService;
         this.studentService = studentService;
         this.verificationWorkMapper = verificationWorkMapper;
         this.studentMapper = studentMapper;
@@ -75,7 +66,7 @@ public class RestVerificationWorkController {
                 errorMesssage.append(fieldError.getField()).append(" - ")
                         .append(fieldError.getDefaultMessage()).append(";");
             }
-            throw new VerificationWorkNotCreateException(errorMesssage.toString());
+            throw new NotCreatedException(errorMesssage.toString() + ": work wasn't created");
         }
         verificationWorkService.save(verificationWorkMapper.toVerificationWork(verificationWorkDTO));
         return ResponseEntity.ok(HttpStatus.CREATED);
@@ -92,7 +83,7 @@ public class RestVerificationWorkController {
                 errorMesssage.append(fieldError.getField()).append(" - ")
                         .append(fieldError.getDefaultMessage()).append(";");
             }
-            throw new VerificationWorkNotUpdatedException(errorMesssage.toString());
+            throw new NotUpdatedException(errorMesssage.toString() + ": the chosen work wasn't updated");
         }
         final boolean updated = verificationWorkService.update(id, verificationWorkMapper
                 .toVerificationWork(workToUpdateDTO));
@@ -106,7 +97,7 @@ public class RestVerificationWorkController {
     }
 
     @PatchMapping("/{id}/choose")
-    public ResponseEntity<HttpStatus> choose(@PathVariable("id") int id,
+    public ResponseEntity<HttpStatus> assignToStudent(@PathVariable("id") int id,
                          @RequestBody @Valid StudentDTO studentDTO, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             StringBuilder errorMesssage = new StringBuilder();
@@ -115,7 +106,7 @@ public class RestVerificationWorkController {
                 errorMesssage.append(fieldError.getField()).append(" - ")
                         .append(fieldError.getDefaultMessage()).append(";");
             }
-            throw new VerificationWorkNotAssingedException(errorMesssage.toString());
+            throw new NotAssignedException(errorMesssage.toString() + ": work wasn't assigned to the chosen student");
         }
         Boolean added = studentService.addVerificationWork(verificationWorkService.findById(id),
                 studentMapper.toStudent(studentDTO));

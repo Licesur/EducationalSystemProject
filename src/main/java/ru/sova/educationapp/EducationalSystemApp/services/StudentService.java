@@ -3,14 +3,14 @@ package ru.sova.educationapp.EducationalSystemApp.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.sova.educationapp.EducationalSystemApp.DTO.TaskDTO;
 import ru.sova.educationapp.EducationalSystemApp.models.Student;
+import ru.sova.educationapp.EducationalSystemApp.models.Task;
 import ru.sova.educationapp.EducationalSystemApp.models.Tutor;
 import ru.sova.educationapp.EducationalSystemApp.models.VerificationWork;
 import ru.sova.educationapp.EducationalSystemApp.repositories.StudentRepository;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -18,11 +18,13 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
     private final VerificationWorkService verificationWorkService;
+    private final TaskService taskService;
 
     @Autowired
-    public StudentService(StudentRepository studentRepository, VerificationWorkService verificationWorkService) {
+    public StudentService(StudentRepository studentRepository, VerificationWorkService verificationWorkService, TaskService taskService) {
         this.studentRepository = studentRepository;
         this.verificationWorkService = verificationWorkService;
+        this.taskService = taskService;
     }
 
     @Transactional(readOnly = false)
@@ -93,5 +95,29 @@ public class StudentService {
         verificationWork.getStudents().remove(student);
         studentRepository.save(student);
         verificationWorkService.save(verificationWork);
+    }
+
+    public Map<Integer, Boolean> checkAnswers(int workId, List<TaskDTO> answers) {
+        final List<Task> tasks = verificationWorkService.findById(workId).getTasks();
+        Map<Integer, Boolean> answersStatus = new HashMap<>();
+        for (TaskDTO task : answers) {
+            if(task.getAnswer().equals(taskService.findById(task.getId()).getAnswer())){
+                answersStatus.put(task.getId(), true);
+            } else {
+                answersStatus.put(task.getId(), false);
+            }
+        }
+        for(Task task : tasks ){
+            if (!answersStatus.containsKey(task.getId())){
+                answersStatus.put(task.getId(), false);
+            }
+        }
+        return answersStatus;
+    }
+
+    public List<Task> findTasksFromVerificationWork(int id, int workId) {
+        return studentRepository.findById(id).get().getVerificationWorks()
+                .stream().filter(s -> s.getId() == workId).findAny().get().getTasks()
+                .stream().toList();
     }
 }

@@ -1,4 +1,4 @@
-package ru.sova.educationapp.EducationalSystemApp.controllers;
+package ru.sova.educationapp.EducationalSystemApp.controllers.mvc;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,15 +7,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.sova.educationapp.EducationalSystemApp.DTO.StudentDTO;
-import ru.sova.educationapp.EducationalSystemApp.DTO.TaskDTO;
 import ru.sova.educationapp.EducationalSystemApp.DTO.VerificationWorkDTO;
 import ru.sova.educationapp.EducationalSystemApp.mappers.StudentMapper;
 import ru.sova.educationapp.EducationalSystemApp.mappers.TaskListMapper;
 import ru.sova.educationapp.EducationalSystemApp.mappers.TaskMapper;
 import ru.sova.educationapp.EducationalSystemApp.mappers.VerificationWorkMapper;
-import ru.sova.educationapp.EducationalSystemApp.models.Student;
-import ru.sova.educationapp.EducationalSystemApp.models.Task;
-import ru.sova.educationapp.EducationalSystemApp.models.VerificationWork;
 import ru.sova.educationapp.EducationalSystemApp.services.StudentService;
 import ru.sova.educationapp.EducationalSystemApp.services.TaskService;
 import ru.sova.educationapp.EducationalSystemApp.services.VerificationWorkService;

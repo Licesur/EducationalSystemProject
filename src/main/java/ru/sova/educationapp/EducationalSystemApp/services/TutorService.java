@@ -59,7 +59,7 @@ public class TutorService {
     }
 
     @Transactional(readOnly = false)
-    public Boolean addPupil(Student student, Tutor tutor){
+    public Boolean addStudent(Student student, Tutor tutor){
         tutor = tutorRepository.findById(tutor.getId()).get();
         if (tutor.getStudents() == null){
             tutor.setStudents(Collections.singletonList(student));
@@ -83,15 +83,4 @@ public class TutorService {
         tutorRepository.save(tutor);
         return !tutor.getStudents().contains(student);
     }
-
-
-    //Pagination
-//    public Page<Tutor> finAll(int page, int pageSize, boolean sortByYear) {
-//        if (sortByYear) {
-//            return tutorRepository.findAll(PageRequest.of(page, pageSize, Sort.by("publishYear")));
-//        } else {
-//            return tutorRepository.findAll(PageRequest.of(page, pageSize));
-//
-//        }
-//    }
 }

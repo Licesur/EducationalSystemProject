@@ -1,4 +1,4 @@
-package ru.sova.educationapp.EducationalSystemApp.controllers;
+package ru.sova.educationapp.EducationalSystemApp.controllers.mvc;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

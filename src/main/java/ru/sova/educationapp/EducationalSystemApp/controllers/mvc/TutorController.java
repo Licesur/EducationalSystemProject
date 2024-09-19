@@ -1,4 +1,4 @@
-package ru.sova.educationapp.EducationalSystemApp.controllers;
+package ru.sova.educationapp.EducationalSystemApp.controllers.mvc;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -95,7 +95,7 @@ public class TutorController {
     @PatchMapping("/{id}/choose")
     public String choose(@PathVariable("id") int id, @ModelAttribute("tutor") Tutor tutor,
                          @ModelAttribute("student") StudentDTO studentDTO){
-        tutorService.addPupil(studentService.findById(studentMapper.toStudent(studentDTO).getId()),
+        tutorService.addStudent(studentService.findById(studentMapper.toStudent(studentDTO).getId()),
                 tutorService.findById(id));
         return "redirect:/tutors/" + id;
     }

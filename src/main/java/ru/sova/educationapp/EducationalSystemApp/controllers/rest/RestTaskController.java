@@ -1,4 +1,4 @@
-package ru.sova.educationapp.EducationalSystemApp.restControllers;
+package ru.sova.educationapp.EducationalSystemApp.controllers.rest;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.sova.educationapp.EducationalSystemApp.DTO.TaskDTO;
 import ru.sova.educationapp.EducationalSystemApp.mappers.TaskMapper;
 import ru.sova.educationapp.EducationalSystemApp.services.TaskService;
-import ru.sova.educationapp.EducationalSystemApp.udtil.TaskNotCreatedException;
-import ru.sova.educationapp.EducationalSystemApp.udtil.TaskNotUpdatedException;
+import ru.sova.educationapp.EducationalSystemApp.udtil.NotCreatedException;
+import ru.sova.educationapp.EducationalSystemApp.udtil.NotUpdatedException;
 
 import java.util.List;
 
@@ -55,7 +55,7 @@ public class RestTaskController {
                 errorMesssage.append(fieldError.getField()).append(" - ")
                         .append(fieldError.getDefaultMessage()).append(";");
             }
-            throw new TaskNotCreatedException(errorMesssage.toString());
+            throw new NotCreatedException(errorMesssage.toString());
         }
         taskService.save(taskMapper.toTask(taskDTO));
         return ResponseEntity.ok(HttpStatus.CREATED);
@@ -72,7 +72,7 @@ public class RestTaskController {
                 errorMesssage.append(fieldError.getField()).append(" - ")
                         .append(fieldError.getDefaultMessage()).append(";");
             }
-            throw new TaskNotUpdatedException(errorMesssage.toString());
+            throw new NotUpdatedException(errorMesssage.toString());
         }
         final boolean updated = taskService.update(id, taskMapper.toTask(taskDTO));
         return updated ? new ResponseEntity<>(HttpStatus.OK): new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
