@@ -21,7 +21,8 @@ public class StudentService {
     private final TaskService taskService;
 
     @Autowired
-    public StudentService(StudentRepository studentRepository, VerificationWorkService verificationWorkService, TaskService taskService) {
+    public StudentService(StudentRepository studentRepository, VerificationWorkService verificationWorkService,
+                          TaskService taskService) {
         this.studentRepository = studentRepository;
         this.verificationWorkService = verificationWorkService;
         this.taskService = taskService;
@@ -46,33 +47,34 @@ public class StudentService {
         return student.getVerificationWorks().contains(verificationWork);
     }
 
-    public List<Student> finAll(){
-        return studentRepository.findAll();
+    public List<Student> findAll() {
+        List<Student> students = studentRepository.findAll();
+        return students;
     }
 
-    public Student findById(int id){
+    public Student findById(int id) {
         Optional<Student> foundPerson = studentRepository.findById(id);
 
         return foundPerson.orElse(null);
     }
 
     @Transactional(readOnly = false)
-    public Student save(Student student){
+    public Student save(Student student) {
         return studentRepository.save(student);
     }
 
     @Transactional(readOnly = false)
-    public Boolean deleteById(int id){
+    public Boolean deleteById(int id) {
         studentRepository.deleteById(id);
         return !studentRepository.findById(id).isPresent();
     }
 
     @Transactional(readOnly = false)
-    public Boolean update(int id, Student student){
+    public Boolean update(int id, Student student) {
         student.setId(id);
         studentRepository.save(student);
-        //todo во имя света! реализуй здесь что-то человеческое а не это говно!
-        return studentRepository.findById(id).isPresent() && studentRepository.findById(id).get().toString().equals(student.toString());// соглашение - обновлять мтеодом сейв
+
+        return studentRepository.findById(id).isPresent() && studentRepository.findById(id).get().equals(student);
     }
 
     public List<Student> findByVerificationWork(VerificationWork verificationWork) {
@@ -101,14 +103,14 @@ public class StudentService {
         final List<Task> tasks = verificationWorkService.findById(workId).getTasks();
         Map<Integer, Boolean> answersStatus = new HashMap<>();
         for (TaskDTO task : answers) {
-            if(task.getAnswer().equals(taskService.findById(task.getId()).getAnswer())){
+            if (task.getAnswer().equals(taskService.findById(task.getId()).getAnswer())) {
                 answersStatus.put(task.getId(), true);
             } else {
                 answersStatus.put(task.getId(), false);
             }
         }
-        for(Task task : tasks ){
-            if (!answersStatus.containsKey(task.getId())){
+        for (Task task : tasks) {
+            if (!answersStatus.containsKey(task.getId())) {
                 answersStatus.put(task.getId(), false);
             }
         }
@@ -116,8 +118,7 @@ public class StudentService {
     }
 
     public List<Task> findTasksFromVerificationWork(int id, int workId) {
-        return studentRepository.findById(id).get().getVerificationWorks()
-                .stream().filter(s -> s.getId() == workId).findAny().get().getTasks()
-                .stream().toList();
+        return studentRepository.findById(id).get().getVerificationWorks().stream()
+                .filter(s -> s.getId() == workId).findAny().get().getTasks().stream().toList();
     }
 }

@@ -20,35 +20,33 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
-    public List<Task> finAll(){
+    public List<Task> finAll() {
         return taskRepository.findAll();
     }
 
-    public Task findById(int id){
+    public Task findById(int id) {
         Optional<Task> foundTask = taskRepository.findById(id);
 
         return foundTask.orElse(null);
     }
 
     @Transactional(readOnly = false)
-    public Task save(Task task){
+    public Task save(Task task) {
         return taskRepository.save(task);
     }
 
     @Transactional(readOnly = false)
-    public Boolean deleteById(int id){
+    public Boolean deleteById(int id) {
         taskRepository.deleteById(id);
         return !taskRepository.findById(id).isPresent();
     }
 
     @Transactional(readOnly = false)
-    public Boolean update(int id, Task task){
+    public Boolean update(int id, Task task) {
         task.setId(id);
-        taskRepository.save(task); // соглашение - обновлять мтеодом сейв
-        return taskRepository.findById(id).isPresent() &&
-                taskRepository.findById(id).get().toString()
-                        .equals(task.toString());// соглашение - обновлять мтеодом сейв
+        taskRepository.save(task);
 
+        return taskRepository.findById(id).isPresent() && taskRepository.findById(id).get().equals(task);
     }
 
     public List<Task> findByVerificationWork(VerificationWork verificationWork) {

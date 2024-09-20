@@ -9,8 +9,10 @@ import ru.sova.educationapp.EducationalSystemApp.models.Tutor;
 @Mapper(uses = StudentMapper.class, componentModel = "spring")
 public interface TutorMapper {
     TutorMapper INSTANCE = Mappers.getMapper(TutorMapper.class);
+
     @Mapping(source = "id", target = "id")
     TutorDTO toTutorDTO(Tutor tutor);
+
     @Mapping(source = "id", target = "id")
     Tutor toTutor(TutorDTO tutorDTO);
 }

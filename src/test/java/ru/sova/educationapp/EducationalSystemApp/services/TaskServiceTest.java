@@ -33,6 +33,7 @@ public class TaskServiceTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this); // Инициализация моков
     }
+
     @Test
     public void testFindTaskById_shouldCallRepository() {
         final Optional<Task> expected = Optional.ofNullable(mock(Task.class));
@@ -44,6 +45,7 @@ public class TaskServiceTest {
         assertEquals(expected, actual);
         verify(taskRepository, times(1)).findById(ID);
     }
+
     @Test
     public void testFindAll_shouldCallRepository() {
         final Task task = mock(Task.class);
@@ -57,8 +59,9 @@ public class TaskServiceTest {
         assertEquals(actual, expected);
         verify(taskRepository, times(1)).findAll();
     }
+
     @Test
-    public void testSave_shouldCallRepository(){
+    public void testSave_shouldCallRepository() {
         final Task task = mock(Task.class);
         when(taskRepository.save(task)).thenReturn(task);
 
@@ -67,15 +70,17 @@ public class TaskServiceTest {
         assertNotNull(actual);
         verify(taskRepository, times(1)).save(task);
     }
+
     @Test
-    public void testDeleteById_shouldCallRepository(){
+    public void testDeleteById_shouldCallRepository() {
 
         taskRepository.deleteById(ID);
 
         verify(taskRepository, times(1)).deleteById(ID);
     }
+
     @Test
-    public void testUpdate_shouldCallRepository(){
+    public void testUpdate_shouldCallRepository() {
         final Task task = mock(Task.class);
         when(taskRepository.save(task)).thenReturn(task);
         when(taskRepository.findById(ID)).thenReturn(Optional.of(task));
@@ -89,7 +94,7 @@ public class TaskServiceTest {
     }
 
     @Test
-    public void testFindByVerificationWork_shouldCallRepository(){
+    public void testFindByVerificationWork_shouldCallRepository() {
         final VerificationWork verificationWork = mock(VerificationWork.class);
         final List<Task> tasks = new ArrayList<>();
         when(taskRepository.findAllByVerificationWorksContains(verificationWork)).thenReturn(tasks);

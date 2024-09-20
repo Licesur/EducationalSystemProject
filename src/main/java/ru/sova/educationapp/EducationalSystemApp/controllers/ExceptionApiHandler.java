@@ -23,12 +23,15 @@ public class ExceptionApiHandler {
                 .status(HttpStatus.NOT_MODIFIED)
                 .body(new ErrorMessage(e.getMessage()));
     }
+
     @ExceptionHandler(NotAssignedException.class)
     public ResponseEntity<ErrorMessage> handleNotAssignedException(NotAssignedException e) {
         return ResponseEntity
                 .status(HttpStatus.NOT_MODIFIED)
                 .body(new ErrorMessage(e.getMessage()));
-    }    @ExceptionHandler(NotExcludedException.class)
+    }
+
+    @ExceptionHandler(NotExcludedException.class)
     public ResponseEntity<ErrorMessage> handleNotExcludedException(NotExcludedException e) {
         return ResponseEntity
                 .status(HttpStatus.NOT_MODIFIED)

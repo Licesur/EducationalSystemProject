@@ -28,21 +28,23 @@ public class TaskController {
         model.addAttribute("tasks", taskService.finAll().stream().map(taskMapper::toTaskDTO));
         return "tasks/show";
     }
+
     @GetMapping("/{id}")
     public String getTask(@PathVariable("id") int id, Model model) {
         model.addAttribute("task", taskMapper.toTaskDTO(taskService.findById(id)));
         return "tasks/index";
     }
+
     @GetMapping("/new")
-    public String newTask(@ModelAttribute("task") TaskDTO taskDTO){
+    public String newTask(@ModelAttribute("task") TaskDTO taskDTO) {
         return "tasks/new";
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("task") @Valid TaskDTO taskDTO, BindingResult bindingResult){
+    public String create(@ModelAttribute("task") @Valid TaskDTO taskDTO, BindingResult bindingResult) {
 //        personValidator.validate(person, bindingResult);//todo
 
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "tasks/new";
         }
         taskService.save(taskMapper.toTask(taskDTO));
@@ -50,24 +52,25 @@ public class TaskController {
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") int id){
+    public String edit(Model model, @PathVariable("id") int id) {
         model.addAttribute("task", taskMapper.toTaskDTO(taskService.findById(id)));
         return "tasks/edit";
     }
 
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("task") @Valid TaskDTO taskDTO,
-                         BindingResult bindingResult, @PathVariable("id") int id){
+                         BindingResult bindingResult, @PathVariable("id") int id) {
 //        personValidator.validate(person, bindingResult);//todo
 
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "tasks/edit";
         }
         taskService.update(id, taskMapper.toTask(taskDTO));
         return "redirect:/tasks";
     }
+
     @DeleteMapping("/{id}")
-    public String deleteTask(@PathVariable("id") int id){
+    public String deleteTask(@PathVariable("id") int id) {
         taskService.deleteById(id);
         return "redirect:/tasks";
     }

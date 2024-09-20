@@ -41,6 +41,7 @@ public class VerificationWorkServiceTest {
         assertEquals(expected, actualVerificationWork);
         verify(verificationWorkRepository, times(1)).findById(ID);
     }
+
     @Test
     public void testFindAll_shouldCallRepository() {
         final VerificationWork verificationWork = mock(VerificationWork.class);
@@ -54,8 +55,9 @@ public class VerificationWorkServiceTest {
         assertEquals(actualVerificationWorks, expected);
         verify(verificationWorkRepository, times(1)).findAll();
     }
+
     @Test
-    public void testSave_shouldCallRepository(){
+    public void testSave_shouldCallRepository() {
         final VerificationWork verificationWork = mock(VerificationWork.class);
         when(verificationWorkRepository.save(verificationWork)).thenReturn(verificationWork);
 
@@ -65,15 +67,17 @@ public class VerificationWorkServiceTest {
         assertEquals(actualVerificationWork, verificationWork);
         verify(verificationWorkRepository, times(1)).save(verificationWork);
     }
+
     @Test
-    public void testDeleteById_shouldCallRepository(){
+    public void testDeleteById_shouldCallRepository() {
 
         verificationWorkRepository.deleteById(ID);
 
         verify(verificationWorkRepository, times(1)).deleteById(ID);
     }
+
     @Test
-    public void testUpdate_shouldCallRepository(){
+    public void testUpdate_shouldCallRepository() {
         final VerificationWork verificationWork = mock(VerificationWork.class);
         when(verificationWorkRepository.save(verificationWork)).thenReturn(verificationWork);
 
@@ -82,8 +86,9 @@ public class VerificationWorkServiceTest {
         assertEquals(updatedVerificationWork, verificationWork);
         verify(verificationWorkRepository, times(1)).save(verificationWork);
     }
+
     @Test
-    public void addTasks_shouldCallRepository(){
+    public void addTasks_shouldCallRepository() {
         final VerificationWork verificationWork = mock(VerificationWork.class);
         when(verificationWorkRepository.save(verificationWork)).thenReturn(verificationWork);
 

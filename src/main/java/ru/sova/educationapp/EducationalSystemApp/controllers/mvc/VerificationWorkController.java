@@ -32,7 +32,11 @@ public class VerificationWorkController {
     private final TaskListMapper taskListMapper;
 
     @Autowired
-    public VerificationWorkController(VerificationWorkService verificationWorkService, TaskService taskService, StudentService studentService, VerificationWorkMapper verificationWorkMapper, TaskMapper taskMapper, StudentMapper studentMapper, TaskListMapper taskListMapper) {
+    public VerificationWorkController(VerificationWorkService verificationWorkService,
+                                      TaskService taskService, StudentService studentService,
+                                      VerificationWorkMapper verificationWorkMapper,
+                                      TaskMapper taskMapper, StudentMapper studentMapper,
+                                      TaskListMapper taskListMapper) {
         this.verificationWorkService = verificationWorkService;
         this.taskService = taskService;
         this.studentService = studentService;
@@ -48,6 +52,7 @@ public class VerificationWorkController {
                 .map(verificationWorkMapper::toVerificationWorkDTO));
         return "works/show";
     }
+
     @GetMapping("/{id}")
     public String getVerificationWork(@PathVariable("id") int id, Model model,
                                       @ModelAttribute("student") StudentDTO studentDTO) {
@@ -64,8 +69,10 @@ public class VerificationWorkController {
                         .stream().map(studentMapper::toStudentDTO).collect(Collectors.toList()));
         return "works/index";
     }
+
     @GetMapping("/new")
-    public String newVerificationWork(@ModelAttribute("work") VerificationWorkDTO verificationWorkDTO, Model model){
+    public String newVerificationWork(@ModelAttribute("work") VerificationWorkDTO verificationWorkDTO,
+                                      Model model) {
         model.addAttribute("tasksDTO", taskListMapper.taskListToTaskDTOList(taskService.finAll()));
 //        taskService.finAll().stream()
 //                .map(taskMapper::toTaskDTO).forEach(s -> System.out.println(s.getId()));
@@ -75,10 +82,10 @@ public class VerificationWorkController {
     @PostMapping()
     public String create(@ModelAttribute("work") @Valid VerificationWorkDTO verificationWorkDTO,
                          BindingResult bindingResult,
-                         @RequestParam(name = "selectedTasks") List<String> selectedTasksDtoId){
+                         @RequestParam(name = "selectedTasks") List<String> selectedTasksDtoId) {
 //        personValidator.validate(person, bindingResult);//todo
 
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "works/new";
         }
         verificationWorkService.addTasks(verificationWorkMapper.toVerificationWork(verificationWorkDTO),
@@ -87,7 +94,7 @@ public class VerificationWorkController {
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") int id){
+    public String edit(Model model, @PathVariable("id") int id) {
         model.addAttribute("work", verificationWorkMapper
                 .toVerificationWorkDTO(verificationWorkService.findById(id)));
         model.addAttribute("tasks", taskService.finAll().stream()
@@ -98,9 +105,9 @@ public class VerificationWorkController {
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("work") @Valid VerificationWorkDTO workToUpdateDTO,
                          BindingResult bindingResult, @PathVariable("id") int id,
-                         @RequestParam(name = "selectedTasks") List<String> selectedTasksDtoId){
+                         @RequestParam(name = "selectedTasks") List<String> selectedTasksDtoId) {
 //        personValidator.validate(person, bindingResult);//todo
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "works/edit";
         }
         //costile as fuck, but it works
@@ -110,15 +117,17 @@ public class VerificationWorkController {
 
         return "redirect:/works";
     }
+
     @DeleteMapping("/{id}")
-    public String deleteVerificationWork(@PathVariable("id") int id){
+    public String deleteVerificationWork(@PathVariable("id") int id) {
         verificationWorkService.deleteById(id);
         return "redirect:/works";
     }
+
     @PatchMapping("/{id}/choose")
     public String choose(@PathVariable("id") int id,
                          @ModelAttribute("work") VerificationWorkDTO verificationWorkDTO,
-                         @ModelAttribute("student") StudentDTO studentDTO){
+                         @ModelAttribute("student") StudentDTO studentDTO) {
         studentService.addVerificationWork(verificationWorkService.findById(id),
                 studentMapper.toStudent(studentDTO));
         return "redirect:/works/" + id;

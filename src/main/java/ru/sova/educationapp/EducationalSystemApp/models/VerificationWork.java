@@ -1,8 +1,10 @@
 package ru.sova.educationapp.EducationalSystemApp.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -11,6 +13,12 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "verificationwork")
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
 public class VerificationWork {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,108 +48,9 @@ public class VerificationWork {
     private List<Task> tasks;
 
     @ManyToMany
+    @ToString.Exclude
     @JoinTable(name = "verificationwork_student",
             joinColumns = @JoinColumn(name = "verification_work_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id"))
     private List<Student> students;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        VerificationWork that = (VerificationWork) o;
-        return id == that.id && title.equals(that.title) && Objects.equals(assignationDatetime, that.assignationDatetime) && Objects.equals(deadline, that.deadline) && tasks.equals(that.tasks) && Objects.equals(students, that.students);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + title.hashCode();
-        result = 31 * result + Objects.hashCode(assignationDatetime);
-        result = 31 * result + Objects.hashCode(deadline);
-        result = 31 * result + tasks.hashCode();
-        result = 31 * result + Objects.hashCode(students);
-        return result;
-    }
-
-    public VerificationWork() {
-    }
-
-    public VerificationWork(int id, String title,
-                            LocalDateTime assignationDatetime,
-                            LocalDateTime deadline,
-                            List<Task> tasks, List<Student> students) {
-        this.id = id;
-        this.title = title;
-        this.assignationDatetime = assignationDatetime;
-        this.deadline = deadline;
-        this.tasks = tasks;
-        this.students = students;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public      @NotEmpty(message = "please enter the title of the work")
-                @Size(min = 2, message = "sorry, your title should have at least 2 symbols")
-                @Size(max = 100, message = "sorry, your title should be shorter than 100 symbols")
-    String getTitle() {
-        return title;
-    }
-
-    public void setTitle(    @NotEmpty(message = "please enter the title of the work")
-                             @Size(min = 2, message = "sorry, your title should have at least 2 symbols")
-                             @Size(max = 100, message = "sorry, your title should be shorter than 100 symbols")
-                             String title) {
-        this.title = title;
-    }
-
-    public LocalDateTime getAssignationDatetime() {
-        return assignationDatetime;
-    }
-
-    public void setAssignationDatetime(LocalDateTime assignationDatetime) {
-        this.assignationDatetime = assignationDatetime;
-    }
-
-    public LocalDateTime getDeadline() {
-        return deadline;
-    }
-
-    public void setDeadline(LocalDateTime deadline) {
-        this.deadline = deadline;
-    }
-
-    public List<Task> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
-    }
-
-    public List<Student> getStudents() {
-        return students;
-    }
-
-    public void setStudents(List<Student> students) {
-        this.students = students;
-    }
-
-    @Override
-    public String toString() {
-        return "VerificationWork{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", assignationDatetime=" + assignationDatetime +
-                ", deadline=" + deadline +
-                ", tasks=" + tasks +
-                '}';
-    }
 }

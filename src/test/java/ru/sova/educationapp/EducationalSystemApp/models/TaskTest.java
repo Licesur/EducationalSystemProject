@@ -67,6 +67,7 @@ public class TaskTest {
         assertEquals("sorry, your task should be at least 3 symbols length",
                 violations.iterator().next().getMessage());
     }
+
     @Test
     public void testInvalidTaskWithoutDefinition() {
         List<VerificationWork> verificationWorks = new ArrayList<>();
@@ -79,8 +80,9 @@ public class TaskTest {
         assertEquals("please enter the definition for the task",
                 violations.iterator().next().getMessage());
     }
+
     @Test
-    public void testInvalidTaskWithoutAnswer(){
+    public void testInvalidTaskWithoutAnswer() {
         List<VerificationWork> verificationWorks = new ArrayList<>();
 
         Task task = new Task(0, "test definition", "", verificationWorks);
@@ -91,8 +93,9 @@ public class TaskTest {
         assertEquals("please enter thee answer for the task",
                 violations.iterator().next().getMessage());
     }
+
     @Test
-    public void testInvalidTaskWithInvalidAnswer(){
+    public void testInvalidTaskWithInvalidAnswer() {
         List<VerificationWork> verificationWorks = new ArrayList<>();
 
         Task task = new Task(0, "test definition",

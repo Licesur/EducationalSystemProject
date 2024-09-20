@@ -24,49 +24,47 @@ public class TutorService {
         this.tutorRepository = tutorRepository;
         this.studentService = studentService;
     }
-    public List<Tutor> finAll(){
+
+    public List<Tutor> finAll() {
         return tutorRepository.findAll();
     }
 
-    public Tutor findById(int id){
+    public Tutor findById(int id) {
         Optional<Tutor> foundBook = tutorRepository.findById(id);
 
         return foundBook.orElse(null);
     }
 
     @Transactional(readOnly = false)
-    public Tutor save(Tutor tutor){
+    public Tutor save(Tutor tutor) {
         return tutorRepository.save(tutor);
     }
 
     @Transactional(readOnly = false)
-    public Boolean deleteById(int id){
+    public Boolean deleteById(int id) {
         tutorRepository.deleteById(id);
         return !tutorRepository.findById(id).isPresent();
     }
 
     @Transactional(readOnly = false)
-    public boolean update(int id, Tutor tutor){
+    public boolean update(int id, Tutor tutor) {
         Tutor tutorToBeUpdated = tutorRepository.findById(id).get();
         tutor.setId(id);
-        //двухфакторная аунтификация!
-        System.out.println(tutor.getStudents());
         tutorToBeUpdated.setStudents(tutor.getStudents());
         tutorRepository.save(tutor);
-        return tutorRepository.findById(id).isPresent() &&
-                tutorRepository.findById(id).get().toString()
-                        .equals(tutor.toString());// соглашение - обновлять мтеодом сейв
+
+        return tutorRepository.findById(id).isPresent() && tutorRepository.findById(id).get().equals(tutor);
     }
 
     @Transactional(readOnly = false)
-    public Boolean addStudent(Student student, Tutor tutor){
+    public Boolean addStudent(Student student, Tutor tutor) {
         tutor = tutorRepository.findById(tutor.getId()).get();
-        if (tutor.getStudents() == null){
+        if (tutor.getStudents() == null) {
             tutor.setStudents(Collections.singletonList(student));
         } else if (!tutor.getStudents().contains(student)) {
             tutor.getStudents().add(student);
         }
-        if (student.getTutors() == null){
+        if (student.getTutors() == null) {
             student.setTutors(Collections.singletonList(tutor));
         } else if (!student.getTutors().contains(tutor)) {
             student.getTutors().add(tutor);
@@ -75,6 +73,7 @@ public class TutorService {
         tutorRepository.save(tutor);
         return tutor.getStudents().contains(student);
     }
+
     @Transactional(readOnly = false)
     public Boolean excludeStudent(Student student, Tutor tutor) {
         tutor.getStudents().remove(student);

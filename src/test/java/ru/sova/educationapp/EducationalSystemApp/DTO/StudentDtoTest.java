@@ -40,39 +40,43 @@ public class StudentDtoTest {
         assertEquals(16, studentDTO.getAge());
         assertEquals(verificationWorkDTOS, studentDTO.getVerificationWorks());
     }
+
     @Test
     public void testInvalidStudentDTOWithoutName() {
         List<VerificationWorkDTO> verificationWorkDTOS = new ArrayList<>();
 
         StudentDTO studentDTO = new StudentDTO(0, null, "testStudentPassword1",
-                "testStudentEmail@email.ru", 16  , verificationWorkDTOS);
+                "testStudentEmail@email.ru", 16, verificationWorkDTOS);
         Set<ConstraintViolation<StudentDTO>> violations = validator.validate(studentDTO);
 
         assertFalse(violations.isEmpty());
         assertEquals("please enter your full name", violations.iterator().next().getMessage());
     }
+
     @Test
     public void testInvalidStudentDTOWithoutPassword() {
         List<VerificationWorkDTO> verificationWorkDTOS = new ArrayList<>();
 
         StudentDTO studentDTO = new StudentDTO(0, "testStudentName1", null,
-                "testStudentEmail@email.ru", 16  , verificationWorkDTOS);
+                "testStudentEmail@email.ru", 16, verificationWorkDTOS);
         Set<ConstraintViolation<StudentDTO>> violations = validator.validate(studentDTO);
 
         assertFalse(violations.isEmpty());
         assertEquals("please enter the password", violations.iterator().next().getMessage());
     }
+
     @Test
     public void testInvalidStudentDTOWithoutEmail() {
         List<VerificationWorkDTO> verificationWorkDTOS = new ArrayList<>();
 
         StudentDTO studentDTO = new StudentDTO(0, "testStudentName1", "testStudentPassword1",
-                null, 16  , verificationWorkDTOS);
+                null, 16, verificationWorkDTOS);
         Set<ConstraintViolation<StudentDTO>> violations = validator.validate(studentDTO);
 
         assertFalse(violations.isEmpty());
         assertEquals("email cant be empty", violations.iterator().next().getMessage());
     }
+
     @Test
     public void testInvalidStudentDTOWithInvalidEmail() {
         List<VerificationWorkDTO> verificationWorks = new ArrayList<>();
@@ -101,11 +105,12 @@ public class StudentDtoTest {
         assertEquals(violations.size(), emails.size());
         violations.forEach(violation -> assertEquals("invalid email format", violation.getMessage()));
     }
+
     @Test
     public void testInvalidStudentDTOWithInvalidName() {
         List<VerificationWorkDTO> verificationWorkDTOS = new ArrayList<>();
 
-        StudentDTO studentDTO = new StudentDTO(0,"t", "testStudentPassword1",
+        StudentDTO studentDTO = new StudentDTO(0, "t", "testStudentPassword1",
                 "testStudentEmail@email.ru", 16, verificationWorkDTOS);
         Set<ConstraintViolation<StudentDTO>> violations = validator.validate(studentDTO);
 
@@ -122,6 +127,7 @@ public class StudentDtoTest {
         assertEquals("sorry, your name should be shorter than 50 symbols",
                 violations.iterator().next().getMessage());
     }
+
     @Test
     public void testInvalidStudentDTOWithInvalidPassword() {
         List<VerificationWorkDTO> verificationWorkDTOS = new ArrayList<>();
@@ -143,11 +149,12 @@ public class StudentDtoTest {
         assertEquals("sorry, your password should be shorter than 50 symbols",
                 violations.iterator().next().getMessage());
     }
+
     @Test
     public void testInvalidStudentDTOtWithInvalidAge() {
         List<VerificationWorkDTO> verificationWorkDTOS = new ArrayList<>();
 
-        StudentDTO studentDTO = new StudentDTO(0,"testStudentName1", "testStudentPassword1",
+        StudentDTO studentDTO = new StudentDTO(0, "testStudentName1", "testStudentPassword1",
                 "testStudentEmail@email.ru", -17, verificationWorkDTOS);
         Set<ConstraintViolation<StudentDTO>> violations = validator.validate(studentDTO);
 

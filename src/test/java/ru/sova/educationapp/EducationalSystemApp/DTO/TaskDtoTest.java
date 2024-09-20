@@ -64,9 +64,10 @@ public class TaskDtoTest {
         assertEquals("sorry, your task should be at least 3 symbols length",
                 violations.iterator().next().getMessage());
     }
+
     @Test
     public void testInvalidTaskDTOWithoutDefinition() {
-        TaskDTO taskDTO = new TaskDTO(0, "", "test answer");
+        TaskDTO taskDTO = new TaskDTO(0, null, "test answer");
 
         Set<ConstraintViolation<TaskDTO>> violations = validator.validate(taskDTO);
 
@@ -74,8 +75,9 @@ public class TaskDtoTest {
         assertEquals("please enter the definition for the task",
                 violations.iterator().next().getMessage());
     }
+
     @Test
-    public void testInvalidTaskDTOWithoutAnswer(){
+    public void testInvalidTaskDTOWithoutAnswer() {
         TaskDTO taskDTO = new TaskDTO(0, "test definition", "");
 
         Set<ConstraintViolation<TaskDTO>> violations = validator.validate(taskDTO);
@@ -84,8 +86,9 @@ public class TaskDtoTest {
         assertEquals("please enter thee answer for the task",
                 violations.iterator().next().getMessage());
     }
+
     @Test
-    public void testInvalidTaskDTOWithInvalidAnswer(){
+    public void testInvalidTaskDTOWithInvalidAnswer() {
         TaskDTO taskDTO = new TaskDTO(0, "test definition",
                 "test answer with more than 100 symbols " +
                         "// test answer with more than 100 symbols " +

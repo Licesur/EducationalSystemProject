@@ -11,10 +11,13 @@ import ru.sova.educationapp.EducationalSystemApp.models.VerificationWork;
 @Mapper(uses = {TaskMapper.class}, componentModel = "spring")
 public interface VerificationWorkMapper {
     VerificationWorkMapper INSTANCE = Mappers.getMapper(VerificationWorkMapper.class);
+
     @Mapping(source = "id", target = "id")
     VerificationWorkDTO toVerificationWorkDTO(VerificationWork verificationWork);
+
     @Mapping(source = "id", target = "id")
     VerificationWork toVerificationWork(VerificationWorkDTO verificationWorkDTO);
+
     @Mapping(source = "verificationWorkDTO.tasks", target = "verificationWorkDTOToBeUpdated.tasks")
     void updateDTO(VerificationWorkDTO verificationWorkDTO, @MappingTarget VerificationWorkDTO verificationWorkDTOToBeUpdated);
 }

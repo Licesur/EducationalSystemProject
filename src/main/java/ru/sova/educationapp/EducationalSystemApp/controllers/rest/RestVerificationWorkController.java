@@ -44,7 +44,8 @@ public class RestVerificationWorkController {
                 .stream().map(verificationWorkMapper::toVerificationWorkDTO).toList();
         return !verificationWorks.isEmpty()
                 ? new ResponseEntity<>(verificationWorks, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);    }
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<VerificationWorkDTO> getVerificationWork(@PathVariable("id") int id) {
@@ -57,12 +58,12 @@ public class RestVerificationWorkController {
 
     @PostMapping()
     public ResponseEntity<HttpStatus> create(@RequestBody @Valid VerificationWorkDTO verificationWorkDTO,
-                         BindingResult bindingResult){
+                                             BindingResult bindingResult) {
 //        personValidator.validate(person, bindingResult);//todo
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             StringBuilder errorMesssage = new StringBuilder();
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-            for (FieldError fieldError : fieldErrors){
+            for (FieldError fieldError : fieldErrors) {
                 errorMesssage.append(fieldError.getField()).append(" - ")
                         .append(fieldError.getDefaultMessage()).append(";");
             }
@@ -74,12 +75,12 @@ public class RestVerificationWorkController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<HttpStatus> update(@RequestBody @Valid VerificationWorkDTO workToUpdateDTO,
-                         BindingResult bindingResult, @PathVariable("id") int id) {
+                                             BindingResult bindingResult, @PathVariable("id") int id) {
 //        personValidator.validate(person, bindingResult);//todo
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             StringBuilder errorMesssage = new StringBuilder();
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-            for (FieldError fieldError : fieldErrors){
+            for (FieldError fieldError : fieldErrors) {
                 errorMesssage.append(fieldError.getField()).append(" - ")
                         .append(fieldError.getDefaultMessage()).append(";");
             }
@@ -87,29 +88,31 @@ public class RestVerificationWorkController {
         }
         final boolean updated = verificationWorkService.update(id, verificationWorkMapper
                 .toVerificationWork(workToUpdateDTO));
-        return updated ? new ResponseEntity<>(HttpStatus.OK): new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        return updated ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteVerificationWork(@PathVariable("id") int id){
+    public ResponseEntity<?> deleteVerificationWork(@PathVariable("id") int id) {
         Boolean deleted = verificationWorkService.deleteById(id);
         return deleted ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
     @PatchMapping("/{id}/choose")
     public ResponseEntity<HttpStatus> assignToStudent(@PathVariable("id") int id,
-                         @RequestBody @Valid StudentDTO studentDTO, BindingResult bindingResult){
-        if (bindingResult.hasErrors()){
+                                                      @RequestBody @Valid StudentDTO studentDTO,
+                                                      BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
             StringBuilder errorMesssage = new StringBuilder();
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-            for (FieldError fieldError : fieldErrors){
+            for (FieldError fieldError : fieldErrors) {
                 errorMesssage.append(fieldError.getField()).append(" - ")
                         .append(fieldError.getDefaultMessage()).append(";");
             }
-            throw new NotAssignedException(errorMesssage.toString() + ": work wasn't assigned to the chosen student");
+            throw new NotAssignedException(errorMesssage.toString() +
+                    ": work wasn't assigned to the chosen student");
         }
         Boolean added = studentService.addVerificationWork(verificationWorkService.findById(id),
                 studentMapper.toStudent(studentDTO));
-        return added ? new ResponseEntity<>(HttpStatus.OK): new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        return added ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 }

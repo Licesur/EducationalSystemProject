@@ -34,6 +34,7 @@ public class TutorServiceTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this); // Инициализация моков
     }
+
     @Test
     public void testFindTutorById_shouldCallRepository() {
         final Optional<Tutor> expected = Optional.ofNullable(mock(Tutor.class));
@@ -45,6 +46,7 @@ public class TutorServiceTest {
         assertEquals(expected, actual);
         verify(tutorRepository, times(1)).findById(ID);
     }
+
     @Test
     public void testFindAll_shouldCallRepository() {
         final Tutor tutor = mock(Tutor.class);
@@ -58,8 +60,9 @@ public class TutorServiceTest {
         assertEquals(actual, expected);
         verify(tutorRepository, times(1)).findAll();
     }
+
     @Test
-    public void testSave_shouldCallRepository(){
+    public void testSave_shouldCallRepository() {
         final Tutor tutor = mock(Tutor.class);
         when(tutorRepository.save(tutor)).thenReturn(tutor);
 
@@ -68,15 +71,17 @@ public class TutorServiceTest {
         assertNotNull(actual);
         verify(tutorRepository, times(1)).save(tutor);
     }
+
     @Test
-    public void testDeleteById_shouldCallRepository(){
+    public void testDeleteById_shouldCallRepository() {
 
         tutorRepository.deleteById(ID);
 
         verify(tutorRepository, times(1)).deleteById(ID);
     }
+
     @Test
-    public void testUpdate_shouldCallRepository(){
+    public void testUpdate_shouldCallRepository() {
         final Tutor tutor = mock(Tutor.class);
         when(tutorRepository.save(tutor)).thenReturn(tutor);
         when(tutorRepository.findById(ID)).thenReturn(Optional.of(tutor));
@@ -90,7 +95,7 @@ public class TutorServiceTest {
     }
 
     @Test
-    public void testExcludeStudent_shouldCallRepository(){
+    public void testExcludeStudent_shouldCallRepository() {
         final Tutor tutor = mock(Tutor.class);
         final Student student = mock(Student.class);
         when(tutorRepository.save(tutor)).thenReturn(tutor);
@@ -100,14 +105,13 @@ public class TutorServiceTest {
         Tutor savedTutor = tutorRepository.save(tutor);
 
         assertEquals(savedStudent, student);
-        verify(tutorRepository, times(1))
-                .save(tutor);
+        verify(tutorRepository, times(1)).save(tutor);
         assertEquals(savedTutor, tutor);
-        verify(studentService, times(1))
-                .save(student);
+        verify(studentService, times(1)).save(student);
     }
+
     @Test
-    public void testAddStudent_shouldCallRepositoryAndVerificationWorkService(){
+    public void testAddStudent_shouldCallRepositoryAndVerificationWorkService() {
         final Student student = mock(Student.class);
         final Tutor tutor = mock(Tutor.class);
         when(tutorRepository.findById(ID)).thenReturn(Optional.of(tutor));

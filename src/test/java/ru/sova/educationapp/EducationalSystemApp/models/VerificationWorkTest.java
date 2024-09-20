@@ -32,18 +32,19 @@ public class VerificationWorkTest {
         List<Student> students = new ArrayList<>();
         List<Task> tasks = new ArrayList<>();
         VerificationWork verificationWork = new VerificationWork(1, "testVerificationWorkTitle1",
-                LocalDateTime.of(20001, 01, 01, 0,0,0),
-                LocalDateTime.of(20001, 01, 01, 0,0,0),
+                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
                 tasks, students);
 
         assertEquals("testVerificationWorkTitle1", verificationWork.getTitle());
         assertEquals(students, verificationWork.getStudents());
         assertEquals(tasks, verificationWork.getTasks());
-        assertEquals(LocalDateTime.of(20001, 01, 01, 0,0,0),
+        assertEquals(LocalDateTime.of(20001, 01, 01, 0, 0, 0),
                 verificationWork.getDeadline());
-        assertEquals(LocalDateTime.of(20001, 01, 01, 0,0,0),
+        assertEquals(LocalDateTime.of(20001, 01, 01, 0, 0, 0),
                 verificationWork.getAssignationDatetime());
     }
+
     @Test
     public void testInvalidVerificationWorkWithInvalidTitle() {
         List<Student> students = new ArrayList<>();
@@ -51,8 +52,8 @@ public class VerificationWorkTest {
 
         VerificationWork verificationWork = new VerificationWork(1, "test verification work title " +
                 "// test verification work title // test verification work title // test verification work title",
-                LocalDateTime.of(20001, 01, 01, 0,0,0),
-                LocalDateTime.of(20001, 01, 01, 0,0,0),
+                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
                 tasks, students);
         Set<ConstraintViolation<VerificationWork>> violations = validator.validate(verificationWork);
 
@@ -61,8 +62,8 @@ public class VerificationWorkTest {
                 violations.iterator().next().getMessage());
 
         verificationWork = new VerificationWork(1, "?",
-                LocalDateTime.of(20001, 01, 01, 0,0,0),
-                LocalDateTime.of(20001, 01, 01, 0,0,0),
+                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
                 tasks, students);
         violations = validator.validate(verificationWork);
 
@@ -71,14 +72,15 @@ public class VerificationWorkTest {
         assertEquals("sorry, your title should have at least 2 symbols",
                 violations.iterator().next().getMessage());
     }
+
     @Test
     public void testInvalidVerificationWorkWithoutTitle() {
         List<Student> students = new ArrayList<>();
         List<Task> tasks = new ArrayList<>();
 
         VerificationWork verificationWork = new VerificationWork(1, null,
-                LocalDateTime.of(20001, 01, 01, 0,0,0),
-                LocalDateTime.of(20001, 01, 01, 0,0,0),
+                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
                 tasks, students);
         Set<ConstraintViolation<VerificationWork>> violations = validator.validate(verificationWork);
 

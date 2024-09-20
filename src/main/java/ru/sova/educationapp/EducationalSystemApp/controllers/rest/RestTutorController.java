@@ -44,8 +44,9 @@ public class RestTutorController {
                 ? new ResponseEntity<>(tutors, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<TutorDTO> getTutorById(@PathVariable("id") int id){
+    public ResponseEntity<TutorDTO> getTutorById(@PathVariable("id") int id) {
         final TutorDTO tutorDTO = tutorMapper.toTutorDTO(tutorService.findById(id));
         return tutorDTO != null
                 ? new ResponseEntity<>(tutorDTO, HttpStatus.OK)
@@ -54,12 +55,12 @@ public class RestTutorController {
 
     @PostMapping()
     public ResponseEntity<HttpStatus> create(@RequestBody @Valid TutorDTO tutorDTO,
-                                             BindingResult bindingResult){
+                                             BindingResult bindingResult) {
 //        personValidator.validate(person, bindingResult);//todo
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             StringBuilder errorMesssage = new StringBuilder();
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-            for (FieldError fieldError : fieldErrors){
+            for (FieldError fieldError : fieldErrors) {
                 errorMesssage.append(fieldError.getField()).append(" - ")
                         .append(fieldError.getDefaultMessage()).append(";");
             }
@@ -72,33 +73,35 @@ public class RestTutorController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<HttpStatus> update(@RequestBody @Valid TutorDTO tutorDTO,
-                                             BindingResult bindingResult, @PathVariable("id") int id){
+                                             BindingResult bindingResult, @PathVariable("id") int id) {
 //        personValidator.validate(person, bindingResult);//todo
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             StringBuilder errorMesssage = new StringBuilder();
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-            for (FieldError fieldError : fieldErrors){
+            for (FieldError fieldError : fieldErrors) {
                 errorMesssage.append(fieldError.getField()).append(" - ")
                         .append(fieldError.getDefaultMessage()).append(";");
             }
             throw new NotUpdatedException(errorMesssage.toString() + ": the tutor wasn't updated");
         }
         final boolean updated = tutorService.update(id, tutorMapper.toTutor(tutorDTO));
-        return updated ? new ResponseEntity<>(HttpStatus.OK): new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        return updated ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteTutor(@PathVariable("id") int id){
+    public ResponseEntity<?> deleteTutor(@PathVariable("id") int id) {
         Boolean deleted = tutorService.deleteById(id);
         return deleted ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
     @PatchMapping("/{id}/choose")
     public ResponseEntity<HttpStatus> assignStudent(@PathVariable("id") int id,
-                         @RequestBody StudentDTO studentDTO, BindingResult bindingResult){
-        if (bindingResult.hasErrors()){
+                                                    @RequestBody StudentDTO studentDTO,
+                                                    BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
             StringBuilder errorMesssage = new StringBuilder();
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-            for (FieldError fieldError : fieldErrors){
+            for (FieldError fieldError : fieldErrors) {
                 errorMesssage.append(fieldError.getField()).append(" - ")
                         .append(fieldError.getDefaultMessage()).append(";");
             }
@@ -106,16 +109,17 @@ public class RestTutorController {
         }
         Boolean added = tutorService.addStudent(studentService.findById(studentDTO.getId()),
                 tutorService.findById(id));
-        return added ? new ResponseEntity<>(HttpStatus.OK): new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        return added ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
+
     @PatchMapping("/{id}/exclude")
     public ResponseEntity<HttpStatus> excludeStudent(@PathVariable("id") int id,
                                                      @RequestBody StudentDTO studentDTO,
-                                                     BindingResult bindingResult){
-        if (bindingResult.hasErrors()){
+                                                     BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
             StringBuilder errorMesssage = new StringBuilder();
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-            for (FieldError fieldError : fieldErrors){
+            for (FieldError fieldError : fieldErrors) {
                 errorMesssage.append(fieldError.getField()).append(" - ")
                         .append(fieldError.getDefaultMessage()).append(";");
             }
@@ -123,7 +127,7 @@ public class RestTutorController {
         }
         Boolean excluded = tutorService.excludeStudent(studentService.findById(studentDTO.getId()),
                 tutorService.findById(id));
-        return excluded ? new ResponseEntity<>(HttpStatus.OK): new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        return excluded ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 }
 

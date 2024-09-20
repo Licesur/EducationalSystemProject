@@ -38,6 +38,7 @@ public class VerificationWorkDtoTest {
         assertEquals("testVerificationWorkTitle1", verificationWorkDTO.getTitle());
         assertEquals(taskDTOS, verificationWorkDTO.getTasks());
     }
+
     @Test
     public void testInvalidVerificationWorkDTOWithInvalidTitle() {
         List<TaskDTO> taskDTOS = new ArrayList<>();
@@ -59,6 +60,7 @@ public class VerificationWorkDtoTest {
         assertEquals("sorry, your title should have at least 2 symbols",
                 violations.iterator().next().getMessage());
     }
+
     @Test
     public void testInvalidVerificationWorkWithoutTitle() {
         List<TaskDTO> taskDTOS = new ArrayList<>();

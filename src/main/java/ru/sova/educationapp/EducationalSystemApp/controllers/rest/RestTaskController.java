@@ -36,6 +36,7 @@ public class RestTaskController {
                 ? new ResponseEntity<>(tasks, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<TaskDTO> getTask(@PathVariable("id") int id) {
         final TaskDTO taskDTO = taskMapper.toTaskDTO(taskService.findById(id));
@@ -46,12 +47,12 @@ public class RestTaskController {
 
     @PostMapping()
     public ResponseEntity<HttpStatus> create(@RequestBody @Valid TaskDTO taskDTO,
-                                             BindingResult bindingResult){
+                                             BindingResult bindingResult) {
 //        personValidator.validate(person, bindingResult);//todo
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             StringBuilder errorMesssage = new StringBuilder();
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-            for (FieldError fieldError : fieldErrors){
+            for (FieldError fieldError : fieldErrors) {
                 errorMesssage.append(fieldError.getField()).append(" - ")
                         .append(fieldError.getDefaultMessage()).append(";");
             }
@@ -63,23 +64,23 @@ public class RestTaskController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<HttpStatus> update(@RequestBody @Valid TaskDTO taskDTO,
-                                             BindingResult bindingResult, @PathVariable("id") int id){
+                                             BindingResult bindingResult, @PathVariable("id") int id) {
 //        personValidator.validate(person, bindingResult);//todo
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             StringBuilder errorMesssage = new StringBuilder();
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-            for (FieldError fieldError : fieldErrors){
+            for (FieldError fieldError : fieldErrors) {
                 errorMesssage.append(fieldError.getField()).append(" - ")
                         .append(fieldError.getDefaultMessage()).append(";");
             }
             throw new NotUpdatedException(errorMesssage.toString());
         }
         final boolean updated = taskService.update(id, taskMapper.toTask(taskDTO));
-        return updated ? new ResponseEntity<>(HttpStatus.OK): new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        return updated ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteTask(@PathVariable("id") int id){
+    public ResponseEntity<?> deleteTask(@PathVariable("id") int id) {
         Boolean deleted = taskService.deleteById(id);
         return deleted ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }

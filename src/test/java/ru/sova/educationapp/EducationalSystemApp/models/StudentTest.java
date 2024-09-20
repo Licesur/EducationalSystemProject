@@ -28,8 +28,8 @@ public class StudentTest {
         List<VerificationWork> verificationWorks = new ArrayList<>();
         List<Tutor> tutors = new ArrayList<>();
 
-        Student student = new Student("testStudentName1", "testStudentPassword1",
-                "testStudentEmail@email.ru", 16 , tutors , verificationWorks);
+        Student student = new Student(1, "testStudentName1", "testStudentPassword1",
+                "testStudentEmail@email.ru", 16, tutors, verificationWorks);
 
         assertEquals("testStudentName1", student.getFullName());
         assertEquals("testStudentPassword1", student.getPassword());
@@ -44,37 +44,40 @@ public class StudentTest {
         List<VerificationWork> verificationWorks = new ArrayList<>();
         List<Tutor> tutors = new ArrayList<>();
 
-        Student student = new Student(null, "testStudentPassword1",
-                "testStudentEmail@email.ru", 16 , tutors , verificationWorks);
+        Student student = new Student(1,null, "testStudentPassword1",
+                "testStudentEmail@email.ru", 16, tutors, verificationWorks);
         Set<ConstraintViolation<Student>> violations = validator.validate(student);
 
         assertFalse(violations.isEmpty());
         assertEquals("please enter your full name", violations.iterator().next().getMessage());
     }
+
     @Test
     public void testInvalidStudentWithoutPassword() {
         List<VerificationWork> verificationWorks = new ArrayList<>();
         List<Tutor> tutors = new ArrayList<>();
 
-        Student student = new Student("testStudentName1", null,
-                "testStudentEmail@email.ru", 16 , tutors , verificationWorks);
+        Student student = new Student(1, "testStudentName1", null,
+                "testStudentEmail@email.ru", 16, tutors, verificationWorks);
         Set<ConstraintViolation<Student>> violations = validator.validate(student);
 
         assertFalse(violations.isEmpty());
         assertEquals("please enter the password", violations.iterator().next().getMessage());
     }
+
     @Test
     public void testInvalidStudentWithoutEmail() {
         List<VerificationWork> verificationWorks = new ArrayList<>();
         List<Tutor> tutors = new ArrayList<>();
 
-        Student student = new Student("testStudentName1", "testStudentPassword1",
-                null, 16 , tutors , verificationWorks);
+        Student student = new Student(1,"testStudentName1", "testStudentPassword1",
+                null, 16, tutors, verificationWorks);
         Set<ConstraintViolation<Student>> violations = validator.validate(student);
 
         assertFalse(violations.isEmpty());
         assertEquals("email cant be empty", violations.iterator().next().getMessage());
     }
+
     @Test
     public void testInvalidStudentWithInvalidEmail() {
         List<VerificationWork> verificationWorks = new ArrayList<>();
@@ -96,74 +99,77 @@ public class StudentTest {
 
         Set<ConstraintViolation<Student>> violations = new HashSet<>();
         for (String email : emails) {
-            Student student = new Student("testStudentName1", "testStudentPassword1",
-                    email, 16 , tutors , verificationWorks);
+            Student student = new Student(1,"testStudentName1", "testStudentPassword1",
+                    email, 16, tutors, verificationWorks);
             violations.add(validator.validate(student).stream().findAny().orElse(null));
         }
 
         assertEquals(violations.size(), emails.size());
         violations.forEach(violation -> assertEquals("invalid email format", violation.getMessage()));
     }
+
     @Test
     public void testInvalidStudentWithInvalidName() {
         List<VerificationWork> verificationWorks = new ArrayList<>();
         List<Tutor> tutors = new ArrayList<>();
 
-        Student student = new Student("t", "testStudentPassword1",
-                "testStudentEmail@email.ru", 16 , tutors , verificationWorks);
+        Student student = new Student(1,"t", "testStudentPassword1",
+                "testStudentEmail@email.ru", 16, tutors, verificationWorks);
         Set<ConstraintViolation<Student>> violations = validator.validate(student);
 
         assertFalse(violations.isEmpty());
         assertEquals("sorry, your name should have at least 2 symbols",
                 violations.iterator().next().getMessage());
 
-        student = new Student("test Student Name Out Of Bounds11111111111111111111",
+        student = new Student(1,"test Student Name Out Of Bounds11111111111111111111",
                 "testStudentPassword1",
-                "testStudentEmail@email.ru", 16 , tutors , verificationWorks);
+                "testStudentEmail@email.ru", 16, tutors, verificationWorks);
         violations = validator.validate(student);
 
         assertFalse(violations.isEmpty());
         assertEquals("sorry, your name should be shorter than 50 symbols",
                 violations.iterator().next().getMessage());
     }
+
     @Test
     public void testInvalidStudentWithInvalidPassword() {
         List<VerificationWork> verificationWorks = new ArrayList<>();
         List<Tutor> tutors = new ArrayList<>();
 
-        Student student = new Student("testStudentName1", "test",
-                "testStudentEmail@email.ru", 16 , tutors , verificationWorks);
+        Student student = new Student(1,"testStudentName1", "test",
+                "testStudentEmail@email.ru", 16, tutors, verificationWorks);
         Set<ConstraintViolation<Student>> violations = validator.validate(student);
 
         assertFalse(violations.isEmpty());
         assertEquals("sorry, your password should have at least 6 symbols",
                 violations.iterator().next().getMessage());
 
-        student = new Student("testStudentName1",
+        student = new Student(1,"testStudentName1",
                 "test Student Password Out Of Bound111111111111111111",
-                "testStudentEmail@email.ru", 16 , tutors , verificationWorks);
+                "testStudentEmail@email.ru", 16, tutors, verificationWorks);
         violations = validator.validate(student);
 
         assertFalse(violations.isEmpty());
         assertEquals("sorry, your password should be shorter than 50 symbols",
                 violations.iterator().next().getMessage());
     }
+
     @Test
     public void testInvalidStudentWithInvalidAge() {
         List<VerificationWork> verificationWorks = new ArrayList<>();
         List<Tutor> tutors = new ArrayList<>();
 
-        Student student = new Student("testStudentName1", "testStudentPassword1",
-                "testStudentEmail@email.ru", -17 , tutors , verificationWorks);
+        Student student = new Student(1,"testStudentName1", "testStudentPassword1",
+                "testStudentEmail@email.ru", -17, tutors, verificationWorks);
         Set<ConstraintViolation<Student>> violations = validator.validate(student);
 
         assertFalse(violations.isEmpty());
         assertEquals("your age should be greater then 0",
                 violations.iterator().next().getMessage());
 
-        student = new Student("testStudentName1",
+        student = new Student(1,"testStudentName1",
                 "testStudentPassword1",
-                "testStudentEmail@email.ru", 300 , tutors , verificationWorks);
+                "testStudentEmail@email.ru", 300, tutors, verificationWorks);
         violations = validator.validate(student);
 
         assertFalse(violations.isEmpty());
