@@ -72,7 +72,7 @@ public class TaskTest {
     public void testInvalidTaskWithoutDefinition() {
         List<VerificationWork> verificationWorks = new ArrayList<>();
 
-        Task task = new Task(0L, "", "test answer", verificationWorks);
+        Task task = new Task(0L, null, "test answer", verificationWorks);
 
         Set<ConstraintViolation<Task>> violations = validator.validate(task);
 
