@@ -18,7 +18,7 @@ public class Tutor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private long id;
 
     @Column(name = "full_name")
     @NotEmpty(message = "please enter your full name")

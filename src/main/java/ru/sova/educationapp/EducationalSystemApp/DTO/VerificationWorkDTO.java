@@ -17,7 +17,7 @@ import java.util.List;
 public class VerificationWorkDTO {
 
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
-    private int id;
+    private long id;
 
     @NotEmpty(message = "please enter the title of the work")
     @Size(min = 2, message = "sorry, your title should have at least 2 symbols")

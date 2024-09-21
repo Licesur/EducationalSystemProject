@@ -30,7 +30,7 @@ public class TutorTest {
     public void shouldCreateTutor() {
         List<Student> students = new ArrayList<>();
 
-        Tutor tutor = new Tutor(1, "testTutorName1", "testTutorPassword1",
+        Tutor tutor = new Tutor(1L, "testTutorName1", "testTutorPassword1",
                 "testTutorEmail@email.ru", 23, "testDiscipline", students);
 
         assertEquals("testTutorName1", tutor.getFullName());
@@ -45,7 +45,7 @@ public class TutorTest {
     public void testInvalidTutorWithoutName() {
         List<Student> students = new ArrayList<>();
 
-        Tutor tutor = new Tutor(1, null, "testTutorPassword1",
+        Tutor tutor = new Tutor(1L, null, "testTutorPassword1",
                 "testTutorEmail@email.ru", 23, "testDiscipline", students);
         Set<ConstraintViolation<Tutor>> violations = validator.validate(tutor);
 
@@ -57,7 +57,7 @@ public class TutorTest {
     public void testInvalidTutorWithoutPassword() {
         List<Student> students = new ArrayList<>();
 
-        Tutor tutor = new Tutor(1, "testTutorName1", null,
+        Tutor tutor = new Tutor(1L, "testTutorName1", null,
                 "testTutorEmail@email.ru", 23, "testDiscipline", students);
         Set<ConstraintViolation<Tutor>> violations = validator.validate(tutor);
 
@@ -69,7 +69,7 @@ public class TutorTest {
     public void testInvalidTutorWithoutEmail() {
         List<Student> students = new ArrayList<>();
 
-        Tutor tutor = new Tutor(1, "testTutorName1", "testTutorPassword1",
+        Tutor tutor = new Tutor(1L, "testTutorName1", "testTutorPassword1",
                 null, 23, "testDiscipline", students);
         Set<ConstraintViolation<Tutor>> violations = validator.validate(tutor);
 
@@ -81,7 +81,7 @@ public class TutorTest {
     public void testInvalidTutorWithoutDiscipline() {
         List<Student> students = new ArrayList<>();
 
-        Tutor tutor = new Tutor(1, "testTutorName1", "testTutorPassword1",
+        Tutor tutor = new Tutor(1L, "testTutorName1", "testTutorPassword1",
                 "testTutorEmail@email.ru", 23, null, students);
         Set<ConstraintViolation<Tutor>> violations = validator.validate(tutor);
 
@@ -109,7 +109,7 @@ public class TutorTest {
 
         Set<ConstraintViolation<Tutor>> violations = new HashSet<>();
         for (String email : emails) {
-            Tutor tutor = new Tutor(1, "testTutorName1", "testTutorPassword1",
+            Tutor tutor = new Tutor(1L, "testTutorName1", "testTutorPassword1",
                     email, 23, "testDiscipline", students);
             violations.add(validator.validate(tutor).stream().findAny().orElse(null));
         }
@@ -122,7 +122,7 @@ public class TutorTest {
     public void testInvalidTutorWithInvalidName() {
         List<Student> students = new ArrayList<>();
 
-        Tutor tutor = new Tutor(1, "t", "testTutorPassword1",
+        Tutor tutor = new Tutor(1L, "t", "testTutorPassword1",
                 "testStudentEmail@email.ru", 23, "testDiscipline", students);
         Set<ConstraintViolation<Tutor>> violations = validator.validate(tutor);
 
@@ -130,7 +130,7 @@ public class TutorTest {
         assertEquals("sorry, your name should have at least 2 symbols",
                 violations.iterator().next().getMessage());
 
-        tutor = new Tutor(1, "test Student Name Out Of Bounds11111111111111111111",
+        tutor = new Tutor(1L, "test Student Name Out Of Bounds11111111111111111111",
                 "testTutorPassword1", "testStudentEmail@email.ru", 23,
                 "testDiscipline", students);
         violations = validator.validate(tutor);
@@ -144,7 +144,7 @@ public class TutorTest {
     public void testInvalidTutorWithInvalidPassword() {
         List<Student> students = new ArrayList<>();
 
-        Tutor tutor = new Tutor(1, "testTutorName1", "test",
+        Tutor tutor = new Tutor(1L, "testTutorName1", "test",
                 "testStudentEmail@email.ru", 23, "testDiscipline", students);
         Set<ConstraintViolation<Tutor>> violations = validator.validate(tutor);
 
@@ -152,7 +152,7 @@ public class TutorTest {
         assertEquals("sorry, your password should have at least 6 symbols",
                 violations.iterator().next().getMessage());
 
-        tutor = new Tutor(1, "testTutorName1",
+        tutor = new Tutor(1L, "testTutorName1",
                 "test Student Password Out Of Bound111111111111111111",
                 "testStudentEmail@email.ru", 23, "testDiscipline", students);
         violations = validator.validate(tutor);
@@ -166,7 +166,7 @@ public class TutorTest {
     public void testInvalidTutorWithInvalidAge() {
         List<Student> students = new ArrayList<>();
 
-        Tutor tutor = new Tutor(1, "testTutorName1", "testTutorPassword1",
+        Tutor tutor = new Tutor(1L, "testTutorName1", "testTutorPassword1",
                 "testStudentEmail@email.ru", -23, "testDiscipline", students);
         Set<ConstraintViolation<Tutor>> violations = validator.validate(tutor);
 
@@ -174,7 +174,7 @@ public class TutorTest {
         assertEquals("your age should be greater then 0",
                 violations.iterator().next().getMessage());
 
-        tutor = new Tutor(1, "testTutorName1", "testTutorPassword1",
+        tutor = new Tutor(1L, "testTutorName1", "testTutorPassword1",
                 "testStudentEmail@email.ru", 123, "testDiscipline", students);
         violations = validator.validate(tutor);
 

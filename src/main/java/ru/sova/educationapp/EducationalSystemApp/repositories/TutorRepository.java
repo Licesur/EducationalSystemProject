@@ -8,5 +8,5 @@ import ru.sova.educationapp.EducationalSystemApp.models.Tutor;
 import java.util.Optional;
 
 @Repository
-public interface TutorRepository extends JpaRepository<Tutor, Integer> {
+public interface TutorRepository extends JpaRepository<Tutor, Long> {
 }

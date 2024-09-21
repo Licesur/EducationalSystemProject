@@ -24,7 +24,7 @@ public class TaskService {
         return taskRepository.findAll();
     }
 
-    public Task findById(int id) {
+    public Task findById(long id) {
         Optional<Task> foundTask = taskRepository.findById(id);
 
         return foundTask.orElse(null);
@@ -36,13 +36,13 @@ public class TaskService {
     }
 
     @Transactional(readOnly = false)
-    public Boolean deleteById(int id) {
+    public Boolean deleteById(long id) {
         taskRepository.deleteById(id);
         return !taskRepository.findById(id).isPresent();
     }
 
     @Transactional(readOnly = false)
-    public Boolean update(int id, Task task) {
+    public Boolean update(long id, Task task) {
         task.setId(id);
         taskRepository.save(task);
 

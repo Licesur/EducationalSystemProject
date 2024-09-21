@@ -46,11 +46,13 @@ public class StudentController {
     }
 
     @GetMapping("/{id}")
-    public String getStudent(@PathVariable("id") int id, Model model,
+    public String getStudent(@PathVariable("id") long id, Model model,
                              @ModelAttribute("work") VerificationWorkDTO verificationWorkDTO) {
         model.addAttribute("student", studentMapper.toStudentDTO(studentService.findById(id)));
-        model.addAttribute("tutors",
-                studentService.findById(id).getTutors()
+        System.out.println(studentService.findById(id));
+        System.out.println(studentMapper.toStudentDTO(studentService.findById(id)));
+
+        model.addAttribute("tutors", studentService.findById(id).getTutors()
                         .stream().map(tutorMapper::toTutorDTO).collect(Collectors.toList()));
         return "students/index";
     }
@@ -72,14 +74,14 @@ public class StudentController {
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") int id) {
+    public String edit(Model model, @PathVariable("id") long id) {
         model.addAttribute("student", studentMapper.toStudentDTO(studentService.findById(id)));
         return "students/edit";
     }
 
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("student") @Valid StudentDTO studentDTO,
-                         BindingResult bindingResult, @PathVariable("id") int id) {
+                         BindingResult bindingResult, @PathVariable("id") long id) {
 //        personValidator.validate(person, bindingResult);//todo
 
         if (bindingResult.hasErrors()) {
@@ -90,13 +92,13 @@ public class StudentController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteStudent(@PathVariable("id") int id) {
+    public String deleteStudent(@PathVariable("id") long id) {
         studentService.deleteById(id);
         return "redirect:/students";
     }
 
     @PatchMapping("/{id}/excludeWork")
-    public String excludeWork(@PathVariable("id") int id,
+    public String excludeWork(@PathVariable("id") long id,
                               @ModelAttribute("workToExclude") VerificationWorkDTO verificationWorkDTO) {
         studentService.excludeWork(studentService.findById(id),
                 verificationWorkService.findById(verificationWorkMapper

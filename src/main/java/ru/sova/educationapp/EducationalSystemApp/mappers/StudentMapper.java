@@ -8,6 +8,7 @@ import ru.sova.educationapp.EducationalSystemApp.models.Student;
 
 @Mapper(uses = {VerificationWorkMapper.class}, componentModel = "spring")
 public interface StudentMapper {
+
     StudentMapper INSTANCE = Mappers.getMapper(StudentMapper.class);
 
     StudentDTO toStudentDTO(Student student);

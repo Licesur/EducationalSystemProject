@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import ru.sova.educationapp.EducationalSystemApp.models.VerificationWork;
 
 @Repository
-public interface VerificationWorkRepository extends JpaRepository<VerificationWork, Integer> {
+public interface VerificationWorkRepository extends JpaRepository<VerificationWork, Long> {
 }

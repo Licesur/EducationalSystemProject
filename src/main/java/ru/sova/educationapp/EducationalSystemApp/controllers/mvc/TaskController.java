@@ -30,7 +30,7 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
-    public String getTask(@PathVariable("id") int id, Model model) {
+    public String getTask(@PathVariable("id") long id, Model model) {
         model.addAttribute("task", taskMapper.toTaskDTO(taskService.findById(id)));
         return "tasks/index";
     }
@@ -52,14 +52,14 @@ public class TaskController {
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") int id) {
+    public String edit(Model model, @PathVariable("id") long id) {
         model.addAttribute("task", taskMapper.toTaskDTO(taskService.findById(id)));
         return "tasks/edit";
     }
 
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("task") @Valid TaskDTO taskDTO,
-                         BindingResult bindingResult, @PathVariable("id") int id) {
+                         BindingResult bindingResult, @PathVariable("id") long id) {
 //        personValidator.validate(person, bindingResult);//todo
 
         if (bindingResult.hasErrors()) {
@@ -70,7 +70,7 @@ public class TaskController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteTask(@PathVariable("id") int id) {
+    public String deleteTask(@PathVariable("id") long id) {
         taskService.deleteById(id);
         return "redirect:/tasks";
     }

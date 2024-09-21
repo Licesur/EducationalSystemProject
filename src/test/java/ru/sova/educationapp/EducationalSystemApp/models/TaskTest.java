@@ -29,7 +29,7 @@ public class TaskTest {
     public void shouldCreateTask() {
         List<VerificationWork> verificationWorks = new ArrayList<>();
 
-        Task task = new Task(1, "test task definition 1", "test task answer 1",
+        Task task = new Task(1L, "test task definition 1", "test task answer 1",
                 verificationWorks);
 
         assertEquals("test task definition 1", task.getDefinition());
@@ -54,13 +54,13 @@ public class TaskTest {
                 "В качестве ответа запишите последовательные ответы пунктов а,б,в";
         List<VerificationWork> verificationWorks = new ArrayList<>();
 
-        Task task = new Task(0, definition, "test answer", verificationWorks);
+        Task task = new Task(0L, definition, "test answer", verificationWorks);
         Set<ConstraintViolation<Task>> violations = validator.validate(task);
         assertFalse(violations.isEmpty());
         assertEquals("sorry, your definition is too large, please try to insert it in 500 symbols",
                 violations.iterator().next().getMessage());
 
-        task = new Task(0, "?", "test answer", verificationWorks);
+        task = new Task(0L, "?", "test answer", verificationWorks);
         violations = validator.validate(task);
 
         assertFalse(violations.isEmpty());
@@ -72,7 +72,7 @@ public class TaskTest {
     public void testInvalidTaskWithoutDefinition() {
         List<VerificationWork> verificationWorks = new ArrayList<>();
 
-        Task task = new Task(0, "", "test answer", verificationWorks);
+        Task task = new Task(0L, "", "test answer", verificationWorks);
 
         Set<ConstraintViolation<Task>> violations = validator.validate(task);
 
@@ -85,7 +85,7 @@ public class TaskTest {
     public void testInvalidTaskWithoutAnswer() {
         List<VerificationWork> verificationWorks = new ArrayList<>();
 
-        Task task = new Task(0, "test definition", "", verificationWorks);
+        Task task = new Task(0L, "test definition", "", verificationWorks);
 
         Set<ConstraintViolation<Task>> violations = validator.validate(task);
 
@@ -98,7 +98,7 @@ public class TaskTest {
     public void testInvalidTaskWithInvalidAnswer() {
         List<VerificationWork> verificationWorks = new ArrayList<>();
 
-        Task task = new Task(0, "test definition",
+        Task task = new Task(0L, "test definition",
                 "test answer with more than 100 symbols " +
                         "// test answer with more than 100 symbols " +
                         "// test answer with more than 100 symbols", verificationWorks);

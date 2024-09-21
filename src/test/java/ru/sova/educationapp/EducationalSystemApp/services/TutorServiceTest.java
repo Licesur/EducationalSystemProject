@@ -22,7 +22,7 @@ import static org.mockito.Mockito.times;
 
 public class TutorServiceTest {
 
-    private static final int ID = 1;
+    private static final long ID = 1L;
 
     @Mock
     private TutorRepository tutorRepository;
@@ -38,7 +38,7 @@ public class TutorServiceTest {
     @Test
     public void testFindTutorById_shouldCallRepository() {
         final Optional<Tutor> expected = Optional.ofNullable(mock(Tutor.class));
-        when(tutorRepository.findById(ID)).thenReturn(expected);
+        when(tutorRepository.findById(  ID)).thenReturn(expected);
 
         final Optional<Tutor> actual = tutorRepository.findById(ID);
 

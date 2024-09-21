@@ -26,7 +26,7 @@ public class VerificationWorkService {
         return verificationWorkRepository.findAll();
     }
 
-    public VerificationWork findById(int id) {
+    public VerificationWork findById(long id) {
         Optional<VerificationWork> foundVerificationWork = verificationWorkRepository.findById(id);
 
         return foundVerificationWork.orElse(null);
@@ -38,13 +38,13 @@ public class VerificationWorkService {
     }
 
     @Transactional(readOnly = false)
-    public boolean deleteById(int id) {
+    public boolean deleteById(long id) {
         verificationWorkRepository.deleteById(id);
         return !verificationWorkRepository.findById(id).isPresent();
     }
 
     @Transactional(readOnly = false)
-    public boolean update(int id, VerificationWork verificationWork) {
+    public boolean update(long id, VerificationWork verificationWork) {
         verificationWork.setId(id);
         verificationWorkRepository.save(verificationWork);
         return verificationWorkRepository.findById(id).isPresent()

@@ -52,7 +52,7 @@ public class StudentService {
         return students;
     }
 
-    public Student findById(int id) {
+    public Student findById(long id) {
         Optional<Student> foundPerson = studentRepository.findById(id);
 
         return foundPerson.orElse(null);
@@ -64,13 +64,13 @@ public class StudentService {
     }
 
     @Transactional(readOnly = false)
-    public Boolean deleteById(int id) {
+    public Boolean deleteById(long id) {
         studentRepository.deleteById(id);
         return !studentRepository.findById(id).isPresent();
     }
 
     @Transactional(readOnly = false)
-    public Boolean update(int id, Student student) {
+    public Boolean update(long id, Student student) {
         student.setId(id);
         studentRepository.save(student);
 
@@ -99,9 +99,9 @@ public class StudentService {
         verificationWorkService.save(verificationWork);
     }
 
-    public Map<Integer, Boolean> checkAnswers(int workId, List<TaskDTO> answers) {
+    public Map<Long, Boolean> checkAnswers(long workId, List<TaskDTO> answers) {
         final List<Task> tasks = verificationWorkService.findById(workId).getTasks();
-        Map<Integer, Boolean> answersStatus = new HashMap<>();
+        Map<Long, Boolean> answersStatus = new HashMap<>();
         for (TaskDTO task : answers) {
             if (task.getAnswer().equals(taskService.findById(task.getId()).getAnswer())) {
                 answersStatus.put(task.getId(), true);
@@ -117,7 +117,7 @@ public class StudentService {
         return answersStatus;
     }
 
-    public List<Task> findTasksFromVerificationWork(int id, int workId) {
+    public List<Task> findTasksFromVerificationWork(long id, long workId) {
         return studentRepository.findById(id).get().getVerificationWorks().stream()
                 .filter(s -> s.getId() == workId).findAny().get().getTasks().stream().toList();
     }

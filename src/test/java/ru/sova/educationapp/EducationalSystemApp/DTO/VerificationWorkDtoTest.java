@@ -32,7 +32,7 @@ public class VerificationWorkDtoTest {
     public void shouldCreateVerificationWorkDTO() {
         List<TaskDTO> taskDTOS = new ArrayList<>();
 
-        VerificationWorkDTO verificationWorkDTO = new VerificationWorkDTO(1, "testVerificationWorkTitle1",
+        VerificationWorkDTO verificationWorkDTO = new VerificationWorkDTO(1L, "testVerificationWorkTitle1",
                 taskDTOS);
 
         assertEquals("testVerificationWorkTitle1", verificationWorkDTO.getTitle());
@@ -43,7 +43,7 @@ public class VerificationWorkDtoTest {
     public void testInvalidVerificationWorkDTOWithInvalidTitle() {
         List<TaskDTO> taskDTOS = new ArrayList<>();
 
-        VerificationWorkDTO verificationWorkDTO = new VerificationWorkDTO(1, "test verification work title " +
+        VerificationWorkDTO verificationWorkDTO = new VerificationWorkDTO(1L, "test verification work title " +
                 "// test verification work title // test verification work title // test verification work title",
                 taskDTOS);
         Set<ConstraintViolation<VerificationWorkDTO>> violations = validator.validate(verificationWorkDTO);
@@ -52,7 +52,7 @@ public class VerificationWorkDtoTest {
         assertEquals("sorry, your title should be shorter than 100 symbols",
                 violations.iterator().next().getMessage());
 
-        verificationWorkDTO = new VerificationWorkDTO(1, "?", taskDTOS);
+        verificationWorkDTO = new VerificationWorkDTO(1L, "?", taskDTOS);
         violations = validator.validate(verificationWorkDTO);
 
 
@@ -65,7 +65,7 @@ public class VerificationWorkDtoTest {
     public void testInvalidVerificationWorkWithoutTitle() {
         List<TaskDTO> taskDTOS = new ArrayList<>();
 
-        VerificationWorkDTO verificationWorkDTO = new VerificationWorkDTO(1, null,
+        VerificationWorkDTO verificationWorkDTO = new VerificationWorkDTO(1L, null,
                 taskDTOS);
         Set<ConstraintViolation<VerificationWorkDTO>> violations = validator.validate(verificationWorkDTO);
 

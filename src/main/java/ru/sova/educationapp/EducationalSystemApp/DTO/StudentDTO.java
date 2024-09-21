@@ -4,16 +4,18 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
 public class StudentDTO {
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
-    private int id;
+    private long id;
 
     @NotEmpty(message = "please enter your full name")
     @Schema(description = "Ваше полное имя должно содержать от 2 до 50 символов")
@@ -39,6 +41,6 @@ public class StudentDTO {
 
     @EqualsAndHashCode.Exclude
     @Schema(description = "Список работ, назначенных ученику к выполнению")
-    private List<VerificationWorkDTO> verificationWorks;
+    private List<VerificationWorkDTO> verificationWorks = new ArrayList<>();
 
 }

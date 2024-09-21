@@ -54,7 +54,7 @@ public class VerificationWorkController {
     }
 
     @GetMapping("/{id}")
-    public String getVerificationWork(@PathVariable("id") int id, Model model,
+    public String getVerificationWork(@PathVariable("id") long id, Model model,
                                       @ModelAttribute("student") StudentDTO studentDTO) {
         model.addAttribute("tasks",
                 taskService.findByVerificationWork(verificationWorkService.findById(id)).stream()
@@ -94,7 +94,7 @@ public class VerificationWorkController {
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") int id) {
+    public String edit(Model model, @PathVariable("id") long id) {
         model.addAttribute("work", verificationWorkMapper
                 .toVerificationWorkDTO(verificationWorkService.findById(id)));
         model.addAttribute("tasks", taskService.finAll().stream()
@@ -104,7 +104,7 @@ public class VerificationWorkController {
 
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("work") @Valid VerificationWorkDTO workToUpdateDTO,
-                         BindingResult bindingResult, @PathVariable("id") int id,
+                         BindingResult bindingResult, @PathVariable("id") long id,
                          @RequestParam(name = "selectedTasks") List<String> selectedTasksDtoId) {
 //        personValidator.validate(person, bindingResult);//todo
         if (bindingResult.hasErrors()) {
@@ -119,13 +119,13 @@ public class VerificationWorkController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteVerificationWork(@PathVariable("id") int id) {
+    public String deleteVerificationWork(@PathVariable("id") long id) {
         verificationWorkService.deleteById(id);
         return "redirect:/works";
     }
 
     @PatchMapping("/{id}/choose")
-    public String choose(@PathVariable("id") int id,
+    public String choose(@PathVariable("id") long id,
                          @ModelAttribute("work") VerificationWorkDTO verificationWorkDTO,
                          @ModelAttribute("student") StudentDTO studentDTO) {
         studentService.addVerificationWork(verificationWorkService.findById(id),

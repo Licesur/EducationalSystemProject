@@ -20,7 +20,7 @@ import static org.mockito.Mockito.times;
 
 public class VerificationWorkServiceTest {
 
-    private static final int ID = 1;
+    private static final long ID = 1;
 
     @Mock
     private VerificationWorkRepository verificationWorkRepository;

@@ -14,7 +14,7 @@ import java.util.Objects;
 @EqualsAndHashCode
 public class TutorDTO {
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
-    private int id;
+    private long id;
 
     @NotEmpty(message = "please enter your full name")
     @Schema(description = "Ваше полное имя должно содержать от 2 до 50 символов")

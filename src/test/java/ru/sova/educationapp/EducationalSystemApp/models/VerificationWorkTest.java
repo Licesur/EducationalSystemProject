@@ -31,7 +31,7 @@ public class VerificationWorkTest {
     public void shouldCreateVerificationWork() {
         List<Student> students = new ArrayList<>();
         List<Task> tasks = new ArrayList<>();
-        VerificationWork verificationWork = new VerificationWork(1, "testVerificationWorkTitle1",
+        VerificationWork verificationWork = new VerificationWork(1L, "testVerificationWorkTitle1",
                 LocalDateTime.of(20001, 01, 01, 0, 0, 0),
                 LocalDateTime.of(20001, 01, 01, 0, 0, 0),
                 tasks, students);
@@ -50,7 +50,7 @@ public class VerificationWorkTest {
         List<Student> students = new ArrayList<>();
         List<Task> tasks = new ArrayList<>();
 
-        VerificationWork verificationWork = new VerificationWork(1, "test verification work title " +
+        VerificationWork verificationWork = new VerificationWork(1L, "test verification work title " +
                 "// test verification work title // test verification work title // test verification work title",
                 LocalDateTime.of(20001, 01, 01, 0, 0, 0),
                 LocalDateTime.of(20001, 01, 01, 0, 0, 0),
@@ -61,7 +61,7 @@ public class VerificationWorkTest {
         assertEquals("sorry, your title should be shorter than 100 symbols",
                 violations.iterator().next().getMessage());
 
-        verificationWork = new VerificationWork(1, "?",
+        verificationWork = new VerificationWork(1L, "?",
                 LocalDateTime.of(20001, 01, 01, 0, 0, 0),
                 LocalDateTime.of(20001, 01, 01, 0, 0, 0),
                 tasks, students);
@@ -78,7 +78,7 @@ public class VerificationWorkTest {
         List<Student> students = new ArrayList<>();
         List<Task> tasks = new ArrayList<>();
 
-        VerificationWork verificationWork = new VerificationWork(1, null,
+        VerificationWork verificationWork = new VerificationWork(1L, null,
                 LocalDateTime.of(20001, 01, 01, 0, 0, 0),
                 LocalDateTime.of(20001, 01, 01, 0, 0, 0),
                 tasks, students);

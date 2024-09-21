@@ -25,7 +25,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class StudentServiceTest {
 
-    private static final int ID = 1;
+    private static final long ID = 1L;
 
     @Mock
     private StudentRepository studentRepository;
@@ -73,9 +73,9 @@ public class StudentServiceTest {
     @Test
     public void testFindAll_shouldCallRepository() {
         final List<Student> students = List.of(
-                new Student(1,"testName1", "testPassword1", "test1@email.ru",
+                new Student(1L,"testName1", "testPassword1", "test1@email.ru",
                         16, List.of(mock(Tutor.class)), List.of(mock(VerificationWork.class))),
-                new Student(2,"testName2", "testPassword2", "test2@email.ru",
+                new Student(2L,"testName2", "testPassword2", "test2@email.ru",
                         16, List.of(mock(Tutor.class)), List.of(mock(VerificationWork.class))));
 
         doReturn(students).when(studentRepository).findAll();
@@ -181,14 +181,14 @@ public class StudentServiceTest {
     @Test
     public void testCheckAnswersWithRightAnswers() {
         List<Task> tasks = List.of(
-                new Task(1, "task 1 def",
+                new Task(1L, "task 1 def",
                         "task 1 answer", List.of(mock(VerificationWork.class))),
-                new Task(2, "task 2 def",
+                new Task(2L, "task 2 def",
                         "task 2 answer", List.of(mock(VerificationWork.class))));
         List<TaskDTO> answers = List.of(
-                new TaskDTO(1, "task 1 def", "task 1 answer"),
-                new TaskDTO(2, "task 2 def", "task 2 answer"));
-        Map<Integer, Boolean> answersStatus = new HashMap<>();
+                new TaskDTO(1L, "task 1 def", "task 1 answer"),
+                new TaskDTO(2L, "task 2 def", "task 2 answer"));
+        Map<Long, Boolean> answersStatus = new HashMap<>();
         for (TaskDTO task : answers) {
             if (task.getAnswer().equals(tasks.stream().filter(s -> s.getId() == task.getId()).findAny().get().getAnswer())) {
                 answersStatus.put(task.getId(), true);
@@ -202,14 +202,14 @@ public class StudentServiceTest {
     @Test
     public void testCheckAnswersWithInvalidAnswers() {
         List<Task> tasks = List.of(
-                new Task(1, "task 1 def",
+                new Task(1L, "task 1 def",
                         "task 1 answer", List.of(mock(VerificationWork.class))),
-                new Task(2, "task 2 def",
+                new Task(2L, "task 2 def",
                         "task 2 answer", List.of(mock(VerificationWork.class))));
         List<TaskDTO> answers = List.of(
-                new TaskDTO(1, "task 1 def", "wrong task 1 answer"),
-                new TaskDTO(2, "task 2 def", "wrong task 2 answer"));
-        Map<Integer, Boolean> answersStatus = new HashMap<>();
+                new TaskDTO(1L, "task 1 def", "wrong task 1 answer"),
+                new TaskDTO(2L, "task 2 def", "wrong task 2 answer"));
+        Map<Long, Boolean> answersStatus = new HashMap<>();
         for (TaskDTO task : answers) {
             if (task.getAnswer().equals(tasks.stream().filter(s -> s.getId() == task.getId()).findAny().get().getAnswer())) {
                 answersStatus.put(task.getId(), true);
@@ -226,7 +226,7 @@ public class StudentServiceTest {
         final VerificationWork verificationWork = new VerificationWork(
                 ID, "test title 1", LocalDateTime.now(),
                 LocalDateTime.now(), List.of(task), List.of(mock(Student.class)));
-        final Student student = new Student(1,"test name 1", "test password 1",
+        final Student student = new Student(1L,"test name 1", "test password 1",
                 "test@email.ru", 16, List.of(mock(Tutor.class)), List.of(verificationWork));
         doReturn(Optional.of(student)).when(studentRepository).findById(ID);
         List<Task> foundTasks = studentRepository.findById(ID).get().getVerificationWorks()

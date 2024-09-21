@@ -29,7 +29,7 @@ public class TutorService {
         return tutorRepository.findAll();
     }
 
-    public Tutor findById(int id) {
+    public Tutor findById(long id) {
         Optional<Tutor> foundBook = tutorRepository.findById(id);
 
         return foundBook.orElse(null);
@@ -41,13 +41,13 @@ public class TutorService {
     }
 
     @Transactional(readOnly = false)
-    public Boolean deleteById(int id) {
+    public Boolean deleteById(long id) {
         tutorRepository.deleteById(id);
         return !tutorRepository.findById(id).isPresent();
     }
 
     @Transactional(readOnly = false)
-    public boolean update(int id, Tutor tutor) {
+    public boolean update(long id, Tutor tutor) {
         Tutor tutorToBeUpdated = tutorRepository.findById(id).get();
         tutor.setId(id);
         tutorToBeUpdated.setStudents(tutor.getStudents());

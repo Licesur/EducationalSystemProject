@@ -28,7 +28,7 @@ public class StudentTest {
         List<VerificationWork> verificationWorks = new ArrayList<>();
         List<Tutor> tutors = new ArrayList<>();
 
-        Student student = new Student(1, "testStudentName1", "testStudentPassword1",
+        Student student = new Student(1L, "testStudentName1", "testStudentPassword1",
                 "testStudentEmail@email.ru", 16, tutors, verificationWorks);
 
         assertEquals("testStudentName1", student.getFullName());
@@ -44,7 +44,7 @@ public class StudentTest {
         List<VerificationWork> verificationWorks = new ArrayList<>();
         List<Tutor> tutors = new ArrayList<>();
 
-        Student student = new Student(1,null, "testStudentPassword1",
+        Student student = new Student(1L,null, "testStudentPassword1",
                 "testStudentEmail@email.ru", 16, tutors, verificationWorks);
         Set<ConstraintViolation<Student>> violations = validator.validate(student);
 
@@ -57,7 +57,7 @@ public class StudentTest {
         List<VerificationWork> verificationWorks = new ArrayList<>();
         List<Tutor> tutors = new ArrayList<>();
 
-        Student student = new Student(1, "testStudentName1", null,
+        Student student = new Student(1L, "testStudentName1", null,
                 "testStudentEmail@email.ru", 16, tutors, verificationWorks);
         Set<ConstraintViolation<Student>> violations = validator.validate(student);
 
@@ -70,7 +70,7 @@ public class StudentTest {
         List<VerificationWork> verificationWorks = new ArrayList<>();
         List<Tutor> tutors = new ArrayList<>();
 
-        Student student = new Student(1,"testStudentName1", "testStudentPassword1",
+        Student student = new Student(1L,"testStudentName1", "testStudentPassword1",
                 null, 16, tutors, verificationWorks);
         Set<ConstraintViolation<Student>> violations = validator.validate(student);
 
@@ -99,7 +99,7 @@ public class StudentTest {
 
         Set<ConstraintViolation<Student>> violations = new HashSet<>();
         for (String email : emails) {
-            Student student = new Student(1,"testStudentName1", "testStudentPassword1",
+            Student student = new Student(1L,"testStudentName1", "testStudentPassword1",
                     email, 16, tutors, verificationWorks);
             violations.add(validator.validate(student).stream().findAny().orElse(null));
         }
@@ -113,7 +113,7 @@ public class StudentTest {
         List<VerificationWork> verificationWorks = new ArrayList<>();
         List<Tutor> tutors = new ArrayList<>();
 
-        Student student = new Student(1,"t", "testStudentPassword1",
+        Student student = new Student(1L,"t", "testStudentPassword1",
                 "testStudentEmail@email.ru", 16, tutors, verificationWorks);
         Set<ConstraintViolation<Student>> violations = validator.validate(student);
 
@@ -121,7 +121,7 @@ public class StudentTest {
         assertEquals("sorry, your name should have at least 2 symbols",
                 violations.iterator().next().getMessage());
 
-        student = new Student(1,"test Student Name Out Of Bounds11111111111111111111",
+        student = new Student(1L,"test Student Name Out Of Bounds11111111111111111111",
                 "testStudentPassword1",
                 "testStudentEmail@email.ru", 16, tutors, verificationWorks);
         violations = validator.validate(student);
@@ -136,7 +136,7 @@ public class StudentTest {
         List<VerificationWork> verificationWorks = new ArrayList<>();
         List<Tutor> tutors = new ArrayList<>();
 
-        Student student = new Student(1,"testStudentName1", "test",
+        Student student = new Student(1L,"testStudentName1", "test",
                 "testStudentEmail@email.ru", 16, tutors, verificationWorks);
         Set<ConstraintViolation<Student>> violations = validator.validate(student);
 
@@ -144,7 +144,7 @@ public class StudentTest {
         assertEquals("sorry, your password should have at least 6 symbols",
                 violations.iterator().next().getMessage());
 
-        student = new Student(1,"testStudentName1",
+        student = new Student(1L,"testStudentName1",
                 "test Student Password Out Of Bound111111111111111111",
                 "testStudentEmail@email.ru", 16, tutors, verificationWorks);
         violations = validator.validate(student);
@@ -159,7 +159,7 @@ public class StudentTest {
         List<VerificationWork> verificationWorks = new ArrayList<>();
         List<Tutor> tutors = new ArrayList<>();
 
-        Student student = new Student(1,"testStudentName1", "testStudentPassword1",
+        Student student = new Student(1L,"testStudentName1", "testStudentPassword1",
                 "testStudentEmail@email.ru", -17, tutors, verificationWorks);
         Set<ConstraintViolation<Student>> violations = validator.validate(student);
 
@@ -167,7 +167,7 @@ public class StudentTest {
         assertEquals("your age should be greater then 0",
                 violations.iterator().next().getMessage());
 
-        student = new Student(1,"testStudentName1",
+        student = new Student(1L,"testStudentName1",
                 "testStudentPassword1",
                 "testStudentEmail@email.ru", 300, tutors, verificationWorks);
         violations = validator.validate(student);

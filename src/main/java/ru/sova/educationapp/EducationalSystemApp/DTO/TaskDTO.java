@@ -13,7 +13,7 @@ import lombok.*;
 @EqualsAndHashCode
 public class TaskDTO {
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
-    private int id;
+    private long id;
 
     @NotEmpty(message = "please enter the definition for the task")
     @Schema(description = "Текст задачи должен содержать от 3 до 500 символов")

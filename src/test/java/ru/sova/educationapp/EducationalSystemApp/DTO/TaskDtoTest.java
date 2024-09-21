@@ -29,7 +29,7 @@ public class TaskDtoTest {
     @Test
     public void shouldCreateTaskDTO() {
 
-        TaskDTO taskDTO = new TaskDTO(1, "test task definition 1", "test task answer 1");
+        TaskDTO taskDTO = new TaskDTO(1L, "test task definition 1", "test task answer 1");
 
         assertEquals("test task definition 1", taskDTO.getDefinition());
         assertEquals("test task answer 1", taskDTO.getAnswer());
@@ -50,14 +50,14 @@ public class TaskDtoTest {
                 "в) В какое наибольшее число раз могла увеличиться сумма всех этих чисел? \n" +
                 "\n" +
                 "В качестве ответа запишите последовательные ответы пунктов а,б,в";
-        TaskDTO taskDTO = new TaskDTO(0, definition, "test answer");
+        TaskDTO taskDTO = new TaskDTO(0L, definition, "test answer");
         Set<ConstraintViolation<TaskDTO>> violations = validator.validate(taskDTO);
 
         assertFalse(violations.isEmpty());
         assertEquals("sorry, your definition is too large, please try to insert it in 500 symbols",
                 violations.iterator().next().getMessage());
 
-        taskDTO = new TaskDTO(0, "?", "test answer");
+        taskDTO = new TaskDTO(0L, "?", "test answer");
         violations = validator.validate(taskDTO);
 
         assertFalse(violations.isEmpty());
@@ -67,7 +67,7 @@ public class TaskDtoTest {
 
     @Test
     public void testInvalidTaskDTOWithoutDefinition() {
-        TaskDTO taskDTO = new TaskDTO(0, null, "test answer");
+        TaskDTO taskDTO = new TaskDTO(0L, null, "test answer");
 
         Set<ConstraintViolation<TaskDTO>> violations = validator.validate(taskDTO);
 
@@ -78,7 +78,7 @@ public class TaskDtoTest {
 
     @Test
     public void testInvalidTaskDTOWithoutAnswer() {
-        TaskDTO taskDTO = new TaskDTO(0, "test definition", "");
+        TaskDTO taskDTO = new TaskDTO(0L, "test definition", "");
 
         Set<ConstraintViolation<TaskDTO>> violations = validator.validate(taskDTO);
 
@@ -89,7 +89,7 @@ public class TaskDtoTest {
 
     @Test
     public void testInvalidTaskDTOWithInvalidAnswer() {
-        TaskDTO taskDTO = new TaskDTO(0, "test definition",
+        TaskDTO taskDTO = new TaskDTO(0L, "test definition",
                 "test answer with more than 100 symbols " +
                         "// test answer with more than 100 symbols " +
                         "// test answer with more than 100 symbols");

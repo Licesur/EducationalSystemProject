@@ -31,7 +31,7 @@ public class TutorDtoTest {
     public void shouldCreateTutorDTO() {
         List<StudentDTO> studentDTOS = new ArrayList<>();
 
-        TutorDTO tutorDTO = new TutorDTO(1, "testTutorName1", "testTutorPassword1",
+        TutorDTO tutorDTO = new TutorDTO(1L, "testTutorName1", "testTutorPassword1",
                 "testTutorEmail@email.ru", 23, "testDiscipline", studentDTOS);
 
         assertEquals("testTutorName1", tutorDTO.getFullName());
@@ -46,7 +46,7 @@ public class TutorDtoTest {
     public void testInvalidTutorDTOWithoutName() {
         List<StudentDTO> studentDTOS = new ArrayList<>();
 
-        TutorDTO tutorDTO = new TutorDTO(1, null, "testTutorPassword1",
+        TutorDTO tutorDTO = new TutorDTO(1L, null, "testTutorPassword1",
                 "testTutorEmail@email.ru", 23, "testDiscipline", studentDTOS);
         Set<ConstraintViolation<TutorDTO>> violations = validator.validate(tutorDTO);
 
@@ -58,7 +58,7 @@ public class TutorDtoTest {
     public void testInvalidTutorWithoutPassword() {
         List<StudentDTO> studentDTOS = new ArrayList<>();
 
-        TutorDTO tutorDTO = new TutorDTO(1, "testTutorName1", null,
+        TutorDTO tutorDTO = new TutorDTO(1L, "testTutorName1", null,
                 "testTutorEmail@email.ru", 23, "testDiscipline", studentDTOS);
         Set<ConstraintViolation<TutorDTO>> violations = validator.validate(tutorDTO);
 
@@ -70,7 +70,7 @@ public class TutorDtoTest {
     public void testInvalidTutorDTOWithoutEmail() {
         List<StudentDTO> studentDTOS = new ArrayList<>();
 
-        TutorDTO tutorDTO = new TutorDTO(1, "testTutorName1", "testTutorPassword1",
+        TutorDTO tutorDTO = new TutorDTO(1L, "testTutorName1", "testTutorPassword1",
                 null, 23, "testDiscipline", studentDTOS);
         Set<ConstraintViolation<TutorDTO>> violations = validator.validate(tutorDTO);
 
@@ -82,7 +82,7 @@ public class TutorDtoTest {
     public void testInvalidTutorDTOWithoutDiscipline() {
         List<StudentDTO> studentDTOS = new ArrayList<>();
 
-        TutorDTO tutorDTO = new TutorDTO(1, "testTutorName1", "testTutorPassword1",
+        TutorDTO tutorDTO = new TutorDTO(1L, "testTutorName1", "testTutorPassword1",
                 "testTutorEmail@email.ru", 23, null, studentDTOS);
         Set<ConstraintViolation<TutorDTO>> violations = validator.validate(tutorDTO);
 
@@ -110,7 +110,7 @@ public class TutorDtoTest {
 
         Set<ConstraintViolation<TutorDTO>> violations = new HashSet<>();
         for (String email : emails) {
-            TutorDTO tutorDTO = new TutorDTO(1, "testTutorName1", "testTutorPassword1",
+            TutorDTO tutorDTO = new TutorDTO(1L, "testTutorName1", "testTutorPassword1",
                     email, 23, "testDiscipline", studentDTOS);
             violations.add(validator.validate(tutorDTO).stream().findAny().orElse(null));
         }
@@ -123,7 +123,7 @@ public class TutorDtoTest {
     public void testInvalidTutorDTOWithInvalidName() {
         List<StudentDTO> studentDTOS = new ArrayList<>();
 
-        TutorDTO tutorDTO = new TutorDTO(1, "t", "testTutorPassword1",
+        TutorDTO tutorDTO = new TutorDTO(1L, "t", "testTutorPassword1",
                 "testStudentEmail@email.ru", 23, "testDiscipline", studentDTOS);
         Set<ConstraintViolation<TutorDTO>> violations = validator.validate(tutorDTO);
 
@@ -131,7 +131,7 @@ public class TutorDtoTest {
         assertEquals("sorry, your name should have at least 2 symbols",
                 violations.iterator().next().getMessage());
 
-        tutorDTO = new TutorDTO(1, "test Student Name Out Of Bounds11111111111111111111",
+        tutorDTO = new TutorDTO(1L, "test Student Name Out Of Bounds11111111111111111111",
                 "testTutorPassword1", "testStudentEmail@email.ru", 23,
                 "testDiscipline", studentDTOS);
         violations = validator.validate(tutorDTO);
@@ -153,7 +153,7 @@ public class TutorDtoTest {
         assertEquals("sorry, your password should have at least 6 symbols",
                 violations.iterator().next().getMessage());
 
-        tutorDTO = new TutorDTO(1, "testTutorName1",
+        tutorDTO = new TutorDTO(1L, "testTutorName1",
                 "test Student Password Out Of Bound111111111111111111",
                 "testStudentEmail@email.ru", 23, "testDiscipline", studentDTOS);
         violations = validator.validate(tutorDTO);
@@ -167,7 +167,7 @@ public class TutorDtoTest {
     public void testInvalidTutorDTOWithInvalidAge() {
         List<StudentDTO> studentDTOS = new ArrayList<>();
 
-        TutorDTO tutorDTO = new TutorDTO(1, "testTutorName1", "testTutorPassword1",
+        TutorDTO tutorDTO = new TutorDTO(1L, "testTutorName1", "testTutorPassword1",
                 "testStudentEmail@email.ru", -23, "testDiscipline", studentDTOS);
         Set<ConstraintViolation<TutorDTO>> violations = validator.validate(tutorDTO);
 
@@ -175,7 +175,7 @@ public class TutorDtoTest {
         assertEquals("your age should be greater then 0",
                 violations.iterator().next().getMessage());
 
-        tutorDTO = new TutorDTO(1, "testTutorName1", "testTutorPassword1",
+        tutorDTO = new TutorDTO(1L, "testTutorName1", "testTutorPassword1",
                 "testStudentEmail@email.ru", 123, "testDiscipline", studentDTOS);
         violations = validator.validate(tutorDTO);
 
