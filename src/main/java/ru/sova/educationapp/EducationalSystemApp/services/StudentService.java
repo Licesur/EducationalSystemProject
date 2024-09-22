@@ -119,6 +119,6 @@ public class StudentService {
 
     public List<Task> findTasksFromVerificationWork(long id, long workId) {
         return studentRepository.findById(id).get().getVerificationWorks().stream()
-                .filter(s -> s.getId() == workId).findAny().get().getTasks().stream().toList();
+                .filter(s -> s.getId() == workId).findAny().get().getTasks();
     }
 }

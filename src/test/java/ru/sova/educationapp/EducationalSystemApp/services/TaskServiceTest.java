@@ -2,9 +2,11 @@ package ru.sova.educationapp.EducationalSystemApp.services;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import ru.sova.educationapp.EducationalSystemApp.models.Student;
 import ru.sova.educationapp.EducationalSystemApp.models.Task;
 import ru.sova.educationapp.EducationalSystemApp.models.Tutor;
@@ -17,46 +19,45 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
-
+@ExtendWith(MockitoExtension.class)
 public class TaskServiceTest {
 
     private static final long ID = 1;
 
     @Mock
     private TaskRepository taskRepository;
+    @InjectMocks
+    private TaskService taskService;
 
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.openMocks(this); // Инициализация моков
-    }
 
     @Test
-    public void testFindTaskById_shouldCallRepository() {
-        final Optional<Task> expected = Optional.ofNullable(mock(Task.class));
-        when(taskRepository.findById(ID)).thenReturn(expected);
+    public void testFindTaskById() {
+        final Task expected = mock(Task.class);
+        when(taskRepository.findById(ID)).thenReturn(Optional.of(expected));
 
-        final Optional<Task> actual = taskRepository.findById(ID);
+        final Task actual = taskService.findById(ID);
 
         assertNotNull(actual);
         assertEquals(expected, actual);
         verify(taskRepository, times(1)).findById(ID);
     }
 
+
     @Test
     public void testFindAll_shouldCallRepository() {
-        final Task task = mock(Task.class);
-        final List<Task> expected = Collections.singletonList(task);
-        when(taskRepository.findAll()).thenReturn(expected);
+        final List<Task> tasks = List.of(mock(Task.class), mock(Task.class));
 
-        List<Task> actual = taskRepository.findAll();
+        doReturn(tasks).when(taskRepository).findAll();
 
-        assertNotNull(actual);
-        assertEquals(actual.size(), expected.size());
-        assertEquals(actual, expected);
+        var gottenTasks = taskService.finAll();
+
+        assertNotNull(gottenTasks);
+        assertEquals(gottenTasks.size(), tasks.size());
+        assertEquals(gottenTasks, tasks);
         verify(taskRepository, times(1)).findAll();
     }
 
@@ -65,32 +66,80 @@ public class TaskServiceTest {
         final Task task = mock(Task.class);
         when(taskRepository.save(task)).thenReturn(task);
 
-        Task actual = taskRepository.save(task);
+        Task actual = taskService.save(task);
 
         assertNotNull(actual);
         verify(taskRepository, times(1)).save(task);
     }
 
+
+
     @Test
-    public void testDeleteById_shouldCallRepository() {
+    public void testDeleteById_Success() {
+        doNothing().when(taskRepository).deleteById(ID);
+        when(taskRepository.findById(ID)).thenReturn(Optional.empty());
 
-        taskRepository.deleteById(ID);
+        Boolean result = taskService.deleteById(ID);
 
+        assertTrue(result);
         verify(taskRepository, times(1)).deleteById(ID);
+        verify(taskRepository, times(1)).findById(ID);
+
+    }
+    @Test
+    public void testDeleteById_NonExistentId() {
+        // Настройка поведения мока
+        doNothing().when(taskRepository).deleteById(ID);
+        when(taskRepository.findById(ID)).thenReturn(Optional.of(new Task())); // запись найдена
+
+        // Мы не должны вызывать deleteById, следовательно, результат должно быть false
+        Boolean result = taskService.deleteById(ID);
+
+        // Проверяем, что метод не должен был быть успешно вызван
+        verify(taskRepository, times(1)).deleteById(ID);
+        verify(taskRepository, times(1)).findById(ID);
+        assertFalse(result);
     }
 
     @Test
-    public void testUpdate_shouldCallRepository() {
-        final Task task = mock(Task.class);
-        when(taskRepository.save(task)).thenReturn(task);
+    public void testUpdate_Success() {
+        Task task = new Task(0L, "task definition that will update some task",
+                "task answer that will update some task", null);
         when(taskRepository.findById(ID)).thenReturn(Optional.of(task));
 
-        Task updatedTask = taskRepository.save(task);
-        Optional<Task> foundTask = taskRepository.findById(ID);
+        Boolean result = taskService.update(ID, task);
 
-        assertEquals(updatedTask, task);
+        assertTrue(result);
+        verify(taskRepository, times(2)).findById(ID);
+        verify(taskRepository, times(1)).save(task);
+    }
+    @Test
+    public void testUpdate_NotFoundStudent() {
+        Task task = new Task(0L, "task definition that will update some task",
+                "task answer that will update some task", null);
+        when(taskRepository.findById(ID)).thenReturn(Optional.empty());
+
+        Boolean result = taskService.update(ID, task);
+
+        assertFalse(result);
         verify(taskRepository, times(1)).findById(ID);
         verify(taskRepository, times(1)).save(task);
+    }
+    @Test
+    public void testUpdate_NotThatStudent() {
+        Task task1 = new Task(0L, "task definition that will update some task 1",
+                "task answer that will update some task 1", null);
+
+        Task task2 = new Task(2L, "task definition that will be returned",
+                "task answer that will be returned", null);
+
+        when(taskRepository.findById(ID)).thenReturn(Optional.of(task2));
+
+        Boolean result = taskService.update(ID, task1);
+
+        assertFalse(result);
+        verify(taskRepository, times(2)).findById(ID);
+        verify(taskRepository, times(1)).save(task1);
     }
 
     @Test
@@ -104,6 +153,30 @@ public class TaskServiceTest {
         assertEquals(tasks, foundTasks);
         verify(taskRepository, times(1))
                 .findAllByVerificationWorksContains(verificationWork);
+    }
+    @Test
+    public void testFindByVerificationWork_FoundTasks() {
+        final VerificationWork verificationWork1 = mock(VerificationWork.class);
+        final List<Task> tasks = List.of(mock(Task.class));
+        when(taskRepository.findAllByVerificationWorksContains(verificationWork1)).thenReturn(tasks);
+
+        List<Task> result = taskService.findByVerificationWork(verificationWork1);
+
+        assertEquals(tasks, result);
+        verify(taskRepository, times(1))
+                .findAllByVerificationWorksContains(verificationWork1);
+    }
+    @Test
+    public void testFindByVerificationWork_NotFoundAnyTasks() {
+        final VerificationWork verificationWork1 = mock(VerificationWork.class);
+        final List<Task> tasks = Collections.emptyList();
+        when(taskRepository.findAllByVerificationWorksContains(verificationWork1)).thenReturn(tasks);
+
+        List<Task> result = taskService.findByVerificationWork(verificationWork1);
+
+        assertEquals(Collections.emptyList(), result);
+        verify(taskRepository, times(1))
+                .findAllByVerificationWorksContains(verificationWork1);
     }
 
 }
