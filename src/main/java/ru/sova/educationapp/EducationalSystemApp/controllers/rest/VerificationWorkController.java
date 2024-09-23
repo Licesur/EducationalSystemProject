@@ -39,7 +39,7 @@ public class VerificationWorkController {
 
     @GetMapping
     public ResponseEntity<List<VerificationWorkDTO>> getVerificationWorks() {
-        final List<VerificationWorkDTO> verificationWorks = verificationWorkService.finAll()
+        final List<VerificationWorkDTO> verificationWorks = verificationWorkService.findAll()
                 .stream().map(verificationWorkMapper::toVerificationWorkDTO).toList();
         return !verificationWorks.isEmpty()
                 ? new ResponseEntity<>(verificationWorks, HttpStatus.OK)

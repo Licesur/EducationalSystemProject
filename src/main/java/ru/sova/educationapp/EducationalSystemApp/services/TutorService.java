@@ -25,7 +25,7 @@ public class TutorService {
         this.studentService = studentService;
     }
 
-    public List<Tutor> finAll() {
+    public List<Tutor> findAll() {
         return tutorRepository.findAll();
     }
 

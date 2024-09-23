@@ -1,17 +1,12 @@
 package ru.sova.educationapp.EducationalSystemApp.services;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.sova.educationapp.EducationalSystemApp.models.Student;
 import ru.sova.educationapp.EducationalSystemApp.models.Task;
-import ru.sova.educationapp.EducationalSystemApp.models.Tutor;
 import ru.sova.educationapp.EducationalSystemApp.models.VerificationWork;
-import ru.sova.educationapp.EducationalSystemApp.repositories.TutorRepository;
 import ru.sova.educationapp.EducationalSystemApp.repositories.VerificationWorkRepository;
 
 import java.time.LocalDateTime;
@@ -50,7 +45,7 @@ public class VerificationWorkServiceTest {
 
         doReturn(verificationWorks).when(verificationWorkRepository).findAll();
 
-        var gottenVerificationWorks = verificationWorkService.finAll();
+        var gottenVerificationWorks = verificationWorkService.findAll();
 
         assertNotNull(gottenVerificationWorks);
         assertEquals(gottenVerificationWorks.size(), verificationWorks.size());

@@ -38,7 +38,7 @@ public class TutorController {
 
     @GetMapping
     public ResponseEntity<List<TutorDTO>> getTutors() {
-        final List<TutorDTO> tutors = tutorService.finAll()
+        final List<TutorDTO> tutors = tutorService.findAll()
                 .stream().map(tutorMapper::toTutorDTO).toList();
         return !tutors.isEmpty()
                 ? new ResponseEntity<>(tutors, HttpStatus.OK)

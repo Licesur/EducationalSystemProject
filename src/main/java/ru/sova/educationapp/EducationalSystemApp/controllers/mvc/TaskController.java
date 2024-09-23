@@ -25,7 +25,7 @@ public class TaskController {
 
     @GetMapping
     public String getTasks(Model model) {
-        model.addAttribute("tasks", taskService.finAll().stream().map(taskMapper::toTaskDTO));
+        model.addAttribute("tasks", taskService.findAll().stream().map(taskMapper::toTaskDTO));
         return "tasks/show";
     }
 

@@ -48,7 +48,7 @@ public class VerificationWorkController {
 
     @GetMapping
     public String getVerificationWorks(Model model) {
-        model.addAttribute("works", verificationWorkService.finAll().stream()
+        model.addAttribute("works", verificationWorkService.findAll().stream()
                 .map(verificationWorkMapper::toVerificationWorkDTO));
         return "works/show";
     }
@@ -73,7 +73,7 @@ public class VerificationWorkController {
     @GetMapping("/new")
     public String newVerificationWork(@ModelAttribute("work") VerificationWorkDTO verificationWorkDTO,
                                       Model model) {
-        model.addAttribute("tasksDTO", taskListMapper.taskListToTaskDTOList(taskService.finAll()));
+        model.addAttribute("tasksDTO", taskListMapper.taskListToTaskDTOList(taskService.findAll()));
 //        taskService.finAll().stream()
 //                .map(taskMapper::toTaskDTO).forEach(s -> System.out.println(s.getId()));
         return "works/new";
@@ -97,7 +97,7 @@ public class VerificationWorkController {
     public String edit(Model model, @PathVariable("id") long id) {
         model.addAttribute("work", verificationWorkMapper
                 .toVerificationWorkDTO(verificationWorkService.findById(id)));
-        model.addAttribute("tasks", taskService.finAll().stream()
+        model.addAttribute("tasks", taskService.findAll().stream()
                 .map(taskMapper::toTaskDTO).collect(Collectors.toList()));
         return "works/edit";
     }

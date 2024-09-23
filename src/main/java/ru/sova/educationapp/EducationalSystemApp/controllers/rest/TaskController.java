@@ -30,7 +30,7 @@ public class TaskController {
 
     @GetMapping
     public ResponseEntity<List<TaskDTO>> getTasks() {
-        final List<TaskDTO> tasks = taskService.finAll()
+        final List<TaskDTO> tasks = taskService.findAll()
                 .stream().map(taskMapper::toTaskDTO).toList();
         return !tasks.isEmpty()
                 ? new ResponseEntity<>(tasks, HttpStatus.OK)

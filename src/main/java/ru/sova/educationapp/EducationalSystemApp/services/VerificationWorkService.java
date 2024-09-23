@@ -21,7 +21,7 @@ public class VerificationWorkService {
         this.verificationWorkRepository = verificationWorkRepository;
     }
 
-    public List<VerificationWork> finAll() {
+    public List<VerificationWork> findAll() {
         return verificationWorkRepository.findAll();
     }
 

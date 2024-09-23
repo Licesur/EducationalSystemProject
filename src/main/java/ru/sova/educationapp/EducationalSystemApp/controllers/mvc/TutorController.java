@@ -1,6 +1,5 @@
 package ru.sova.educationapp.EducationalSystemApp.controllers.mvc;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,8 +13,6 @@ import ru.sova.educationapp.EducationalSystemApp.mappers.TutorMapper;
 import ru.sova.educationapp.EducationalSystemApp.models.Tutor;
 import ru.sova.educationapp.EducationalSystemApp.services.StudentService;
 import ru.sova.educationapp.EducationalSystemApp.services.TutorService;
-
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/tutors")
@@ -39,7 +36,7 @@ public class TutorController {
 
     @GetMapping
     public String getTutors(Model model) {
-        model.addAttribute("tutors", tutorService.finAll().stream().map(tutorMapper::toTutorDTO));
+        model.addAttribute("tutors", tutorService.findAll().stream().map(tutorMapper::toTutorDTO));
         return "tutors/show";
     }
 

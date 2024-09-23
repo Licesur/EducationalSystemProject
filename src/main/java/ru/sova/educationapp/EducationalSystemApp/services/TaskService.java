@@ -20,7 +20,7 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
-    public List<Task> finAll() {
+    public List<Task> findAll() {
         return taskRepository.findAll();
     }
 

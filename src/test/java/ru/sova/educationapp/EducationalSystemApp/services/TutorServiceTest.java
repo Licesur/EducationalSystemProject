@@ -1,23 +1,16 @@
 package ru.sova.educationapp.EducationalSystemApp.services;
 
-import org.hibernate.annotations.Immutable;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.sova.educationapp.EducationalSystemApp.models.Student;
-import ru.sova.educationapp.EducationalSystemApp.models.Task;
 import ru.sova.educationapp.EducationalSystemApp.models.Tutor;
 import ru.sova.educationapp.EducationalSystemApp.models.VerificationWork;
-import ru.sova.educationapp.EducationalSystemApp.repositories.TaskRepository;
 import ru.sova.educationapp.EducationalSystemApp.repositories.TutorRepository;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,7 +54,7 @@ public class TutorServiceTest {
 
         doReturn(tutors).when(tutorRepository).findAll();
 
-        var gottenTutors = tutorService.finAll();
+        var gottenTutors = tutorService.findAll();
 
         assertNotNull(gottenTutors);
         assertEquals(tutors.size(), gottenTutors.size());

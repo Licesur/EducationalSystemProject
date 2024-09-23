@@ -1,17 +1,12 @@
 package ru.sova.educationapp.EducationalSystemApp.services;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.sova.educationapp.EducationalSystemApp.models.Student;
 import ru.sova.educationapp.EducationalSystemApp.models.Task;
-import ru.sova.educationapp.EducationalSystemApp.models.Tutor;
 import ru.sova.educationapp.EducationalSystemApp.models.VerificationWork;
-import ru.sova.educationapp.EducationalSystemApp.repositories.StudentRepository;
 import ru.sova.educationapp.EducationalSystemApp.repositories.TaskRepository;
 
 import java.util.ArrayList;
@@ -53,7 +48,7 @@ public class TaskServiceTest {
 
         doReturn(tasks).when(taskRepository).findAll();
 
-        var gottenTasks = taskService.finAll();
+        var gottenTasks = taskService.findAll();
 
         assertNotNull(gottenTasks);
         assertEquals(gottenTasks.size(), tasks.size());
