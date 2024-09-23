@@ -48,9 +48,7 @@ public class TutorService {
 
     @Transactional(readOnly = false)
     public boolean update(long id, Tutor tutor) {
-        Tutor tutorToBeUpdated = tutorRepository.findById(id).get();
         tutor.setId(id);
-        tutorToBeUpdated.setStudents(tutor.getStudents());
         tutorRepository.save(tutor);
 
         return tutorRepository.findById(id).isPresent() && tutorRepository.findById(id).get().equals(tutor);

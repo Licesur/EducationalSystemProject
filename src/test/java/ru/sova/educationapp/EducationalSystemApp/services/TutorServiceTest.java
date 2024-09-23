@@ -1,9 +1,13 @@
 package ru.sova.educationapp.EducationalSystemApp.services;
 
+import org.hibernate.annotations.Immutable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import ru.sova.educationapp.EducationalSystemApp.models.Student;
 import ru.sova.educationapp.EducationalSystemApp.models.Task;
 import ru.sova.educationapp.EducationalSystemApp.models.Tutor;
@@ -11,15 +15,17 @@ import ru.sova.educationapp.EducationalSystemApp.models.VerificationWork;
 import ru.sova.educationapp.EducationalSystemApp.repositories.TaskRepository;
 import ru.sova.educationapp.EducationalSystemApp.repositories.TutorRepository;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
-
+@ExtendWith(MockitoExtension.class)
 public class TutorServiceTest {
 
     private static final long ID = 1L;
@@ -29,18 +35,16 @@ public class TutorServiceTest {
 
     @Mock
     private StudentService studentService;
+    @InjectMocks
+    private TutorService tutorService;
 
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.openMocks(this); // Инициализация моков
-    }
 
     @Test
     public void testFindTutorById_shouldCallRepository() {
-        final Optional<Tutor> expected = Optional.ofNullable(mock(Tutor.class));
-        when(tutorRepository.findById(  ID)).thenReturn(expected);
+        final Tutor expected = mock(Tutor.class);
+        when(tutorRepository.findById(ID)).thenReturn(Optional.of(expected));
 
-        final Optional<Tutor> actual = tutorRepository.findById(ID);
+        final Tutor actual = tutorService.findById(ID);
 
         assertNotNull(actual);
         assertEquals(expected, actual);
@@ -49,15 +53,19 @@ public class TutorServiceTest {
 
     @Test
     public void testFindAll_shouldCallRepository() {
-        final Tutor tutor = mock(Tutor.class);
-        final List<Tutor> expected = Collections.singletonList(tutor);
-        when(tutorRepository.findAll()).thenReturn(expected);
+        final List<Tutor> tutors = List.of(
+                new Tutor(1L,"testName1", "testPassword1", "test1@email.ru",
+                        16, "math", List.of(mock(Student.class))),
+                new Tutor(2L,"testName2", "testPassword2", "test2@email.ru",
+                        16, "Math", List.of(mock(Student.class))));
 
-        List<Tutor> actual = tutorRepository.findAll();
+        doReturn(tutors).when(tutorRepository).findAll();
 
-        assertNotNull(actual);
-        assertEquals(actual.size(), expected.size());
-        assertEquals(actual, expected);
+        var gottenTutors = tutorService.finAll();
+
+        assertNotNull(gottenTutors);
+        assertEquals(tutors.size(), gottenTutors.size());
+        assertEquals(gottenTutors, tutors);
         verify(tutorRepository, times(1)).findAll();
     }
 
@@ -66,69 +74,238 @@ public class TutorServiceTest {
         final Tutor tutor = mock(Tutor.class);
         when(tutorRepository.save(tutor)).thenReturn(tutor);
 
-        Tutor actual = tutorRepository.save(tutor);
+        Tutor actual = tutorService.save(tutor);
 
         assertNotNull(actual);
         verify(tutorRepository, times(1)).save(tutor);
     }
 
     @Test
-    public void testDeleteById_shouldCallRepository() {
+    public void testDeleteById_Success() {
+        doNothing().when(tutorRepository).deleteById(ID);
+        when(tutorRepository.findById(ID)).thenReturn(Optional.empty());
 
-        tutorRepository.deleteById(ID);
+        Boolean result = tutorService.deleteById(ID);
 
+        assertTrue(result);
         verify(tutorRepository, times(1)).deleteById(ID);
-    }
+        verify(tutorRepository, times(1)).findById(ID);
 
+    }
     @Test
-    public void testUpdate_shouldCallRepository() {
-        final Tutor tutor = mock(Tutor.class);
-        when(tutorRepository.save(tutor)).thenReturn(tutor);
+    public void testDeleteById_NonExistentId() {
+        // Настройка поведения мока
+        doNothing().when(tutorRepository).deleteById(ID);
+        when(tutorRepository.findById(ID)).thenReturn(Optional.of(new Tutor())); // запись найдена
+
+        // Мы не должны вызывать deleteById, следовательно, результат должно быть false
+        Boolean result = tutorService.deleteById(ID);
+
+        // Проверяем, что метод не должен был быть успешно вызван
+        verify(tutorRepository, times(1)).deleteById(ID);
+        verify(tutorRepository, times(1)).findById(ID);
+        assertFalse(result);
+    }
+    @Test
+    public void testUpdate_Success() {
+        Tutor tutor = new Tutor(0L,"testName1", "testPassword1",
+                "test1@email.ru", 16, "math",
+                List.of(mock(Student.class)));
         when(tutorRepository.findById(ID)).thenReturn(Optional.of(tutor));
 
-        Tutor updatedTutor = tutorRepository.save(tutor);
-        Optional<Tutor> foundTutor = tutorRepository.findById(ID);
+        Boolean result = tutorService.update(ID, tutor);
 
-        assertEquals(updatedTutor, tutor);
+        assertTrue(result);
+        verify(tutorRepository, times(2)).findById(ID);
+        verify(tutorRepository, times(1)).save(tutor);
+    }
+    @Test
+    public void testUpdate_NotFoundTutor() {
+        Tutor tutor = new Tutor(0L,"testName1", "testPassword1",
+                "test1@email.ru", 16, "math",
+                List.of(mock(Student.class)));
+        when(tutorRepository.findById(ID)).thenReturn(Optional.empty());
+
+        Boolean result = tutorService.update(ID, tutor);
+
+        assertFalse(result);
         verify(tutorRepository, times(1)).findById(ID);
         verify(tutorRepository, times(1)).save(tutor);
     }
-
     @Test
-    public void testExcludeStudent_shouldCallRepository() {
-        final Tutor tutor = mock(Tutor.class);
-        final Student student = mock(Student.class);
-        when(tutorRepository.save(tutor)).thenReturn(tutor);
-        when(studentService.save(student)).thenReturn(student);
+    public void testUpdate_NotThatTutor() {
+        Tutor tutor1 = new Tutor(0L,"testName1", "testPassword1",
+                "test1@email.ru", 16, "math",
+                List.of(mock(Student.class)));
+        Tutor tutor2 = new Tutor(2L,"testName2", "testPassword2",
+                "test2@email.ru", 16, "math",
+                List.of(mock(Student.class)));
+        when(tutorRepository.findById(ID)).thenReturn(Optional.of(tutor2));
 
-        Student savedStudent = studentService.save(student);
-        Tutor savedTutor = tutorRepository.save(tutor);
+        Boolean result = tutorService.update(ID, tutor1);
 
-        assertEquals(savedStudent, student);
+        assertFalse(result);
+        verify(tutorRepository, times(2)).findById(ID);
+        verify(tutorRepository, times(1)).save(tutor1);
+    }
+    @Test
+    public void testExcludeStudent_Success() {
+        List<Student> students = new ArrayList<>();
+        List<Tutor> tutors = new ArrayList<>();
+        Student student = new Student(ID,"testName1", "testPassword1",
+                "test1@email.ru", 16, tutors,
+                List.of(mock(VerificationWork.class)));
+        Tutor tutor = new Tutor(ID,"testName1", "testPassword1",
+                "test1@email.ru", 16, "math",
+                students);
+        students.add(student);
+        tutors.add(tutor);
+        doReturn(tutor).when(tutorRepository).save(tutor);
+        doReturn(student).when(studentService).save(student);
+
+        Boolean result = tutorService.excludeStudent(student, tutor);
+
+        assertTrue(result);
+        assertFalse(student.getTutors().contains(tutor));
+        assertFalse(tutor.getStudents().contains(student));
         verify(tutorRepository, times(1)).save(tutor);
-        assertEquals(savedTutor, tutor);
         verify(studentService, times(1)).save(student);
     }
-
     @Test
-    public void testAddStudent_shouldCallRepositoryAndVerificationWorkService() {
-        final Student student = mock(Student.class);
-        final Tutor tutor = mock(Tutor.class);
-        when(tutorRepository.findById(ID)).thenReturn(Optional.of(tutor));
-        when(tutorRepository.save(tutor)).thenReturn(tutor);
-        when(studentService.save(student)).thenReturn(student);
+    public void testExcludeStudent_TriedToExcludeButThereIsNoSuchStudent() {
+        List<Student> students = new ArrayList<>();
+        List<Tutor> tutors = new ArrayList<>();
+        Student student1 = new Student(ID,"testName1", "testPassword1",
+                "test1@email.ru", 16, tutors,
+                List.of(mock(VerificationWork.class)));
+        Student student2 = new Student(2L,"testName2", "testPassword2",
+                "test2@email.ru", 16, tutors,
+                List.of(mock(VerificationWork.class)));
+        Tutor tutor = new Tutor(ID,"testName1", "testPassword1",
+                "test1@email.ru", 16, "math",
+                students);
+        students.add(student2);
+        tutors.add(tutor);
+        doReturn(tutor).when(tutorRepository).save(tutor);
+        doReturn(student1).when(studentService).save(student1);
 
-        Optional<Tutor> actualTutor = tutorRepository.findById(ID);
-        Tutor actualTutorAfterSaving = tutorRepository.save(tutor);
-        Student actualStudent = studentService.save(student);
+        Boolean result = tutorService.excludeStudent(student1, tutor);
 
-        assertNotNull(actualStudent);
-        assertNotNull(actualTutor);
-        assertNotNull(actualTutorAfterSaving);
-
-        verify(tutorRepository, times(1)).findById(ID);
-        verify(studentService, times(1)).save(student);
+        assertTrue(result);
+        assertFalse(student1.getTutors().contains(tutor));
+        assertFalse(tutor.getStudents().contains(student1));
         verify(tutorRepository, times(1)).save(tutor);
+        verify(studentService, times(1)).save(student1);
+    }
+    @Test
+    public void testAddStudent_TutorHasNoStudents(){
+        Student student = mock(Student.class);
+        Tutor tutor = new Tutor(1L, "test name 1", "test password 1",
+                "test@mail.ru", 30, "math", null);
+        doReturn(Optional.of(tutor)).when(tutorRepository).findById(ID);
+
+        boolean result = tutorService.addStudent(student, tutor);
+
+        assertEquals(student, tutor.getStudents().get(0));
+        verify(tutorRepository).save(tutor);
+        verify(studentService).save(student);
+        assertTrue(result);
+    }
+    @Test
+    public void testAddStudent_StudentAlreadyExists(){
+        Student student1 = mock(Student.class);
+        Student student2 = mock(Student.class);
+        List<Student> students = new ArrayList<>();
+        students.add(student1);
+        students.add(student2);
+        Tutor tutor = new Tutor(1L, "test name 1", "test password 1",
+                "test@mail.ru", 30, "math", students);
+        doReturn(Optional.of(tutor)).when(tutorRepository).findById(ID);
+
+        assertNotNull(tutor.getStudents());
+        assertTrue(tutor.getStudents().contains(student2));
+
+        boolean result = tutorService.addStudent(student2, tutor);
+
+        assertEquals(tutor.getStudents(), students);
+        verify(tutorRepository).save(tutor);
+        verify(studentService).save(student2);
+        assertTrue(result);
+    }
+    @Test
+    public void testAddStudent_StudentsAlreadyExistsWithoutNewStudent(){
+        Student student1 = mock(Student.class);
+        Student student2 = mock(Student.class);
+        List<Student> students = new ArrayList<>();
+        students.add(student1);
+        Tutor tutor = new Tutor(1L, "test name 1", "test password 1",
+                "test@mail.ru", 30, "math", students);
+        doReturn(Optional.of(tutor)).when(tutorRepository).findById(ID);
+
+        assertNotNull(tutor.getStudents());
+
+        boolean result = tutorService.addStudent(student2, tutor);
+
+        assertEquals(tutor.getStudents(), students);
+        verify(tutorRepository).save(tutor);
+        verify(studentService).save(student2);
+        assertTrue(result);
+    }
+    @Test
+    public void testAddStudent_StudentDoesNotHaveTutor(){
+        Tutor tutor = new Tutor(1L, "test name 1", "test password 1",
+                "test@mail.ru", 30, "math", null);
+        Student student = new Student(1L, "test name 1", "test password 1",
+                "test@mail.ru", 30, null, null);
+        doReturn(Optional.of(tutor)).when(tutorRepository).findById(ID);
+
+        boolean result = tutorService.addStudent(student, tutor);
+
+        assertEquals(tutor.getStudents().get(0), student);
+        verify(tutorRepository).save(tutor);
+        verify(studentService).save(student);
+        assertTrue(result);
+    }
+    @Test
+    public void testAddStudent_TutorAlreadyExists(){
+        Tutor tutor1 = new Tutor(ID, "test name 1", "test password 1",
+                "test@mail.ru", 30, "math", null);
+        Tutor tutor2 = new Tutor(2L, "test name 2", "test password 2",
+                "test@mail.ru", 30, "math", null);
+        Student student1 = new Student(ID, "test name 1", "test password 1",
+                "test@mail.ru", 30, List.of(tutor1,tutor2), null);
+        doReturn(Optional.of(tutor1)).when(tutorRepository).findById(ID);
+
+        assertNotNull(student1.getTutors());
+        assertTrue(student1.getTutors().contains(tutor1));
+        boolean result = tutorService.addStudent(student1, tutor1);
+
+        assertEquals(tutor1.getStudents().get(0), student1);
+        verify(tutorRepository).save(tutor1);
+        verify(studentService).save(student1);
+        assertTrue(result);
+    }
+    @Test
+    public void testAddStudent_TutorsAlreadyExistsWithoutNewTutor(){
+        Tutor tutor1 = new Tutor(ID, "test name 1", "test password 1",
+                "test@mail.ru", 30, "math", null);
+        Tutor tutor2 = new Tutor(2L, "test name 2", "test password 2",
+                "test@mail.ru", 30, "math", null);
+        List<Tutor> tutors = new ArrayList<>();
+        tutors.add(tutor2);
+        Student student1 = new Student(ID, "test name 1", "test password 1",
+                "test@mail.ru", 30, tutors, null);
+        doReturn(Optional.of(tutor1)).when(tutorRepository).findById(ID);
+
+
+        assertNotNull(student1.getTutors());
+
+        boolean result = tutorService.addStudent(student1, tutor1);
+
+        assertTrue(student1.getTutors().contains(tutor1));
+        verify(tutorRepository).save(tutor1);
+        verify(studentService).save(student1);
+        assertTrue(result);
     }
 
 }

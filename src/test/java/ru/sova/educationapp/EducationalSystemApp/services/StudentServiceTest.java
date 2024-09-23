@@ -38,26 +38,6 @@ public class StudentServiceTest {
     private final TaskService taskService = mock(TaskService.class);
 
     @Test
-    public void testAddVerificationWork_shouldCallRepositoryAndVerificationWorkService() {
-        final Student student = mock(Student.class);
-        final VerificationWork verificationWork = mock(VerificationWork.class);
-        when(studentRepository.findById(ID)).thenReturn(Optional.of(student));
-        when(studentRepository.save(student)).thenReturn(student);
-        when(verificationWorkService.save(verificationWork)).thenReturn(verificationWork);
-
-        Optional<Student> actualStudent = studentRepository.findById(ID);
-        Student actualStudentAfterSaving = studentRepository.save(student);
-        VerificationWork actualWork = verificationWorkService.save(verificationWork);
-
-        assertNotNull(actualStudent);
-        assertNotNull(actualWork);
-        assertNotNull(actualStudentAfterSaving);
-
-        verify(studentRepository, times(1)).findById(ID);
-        verify(verificationWorkService, times(1)).save(verificationWork);
-        verify(studentRepository, times(1)).save(student);
-    }
-    @Test
     public void testAddVerificationWork_studentHasNoWorks(){
         VerificationWork verificationWork = mock(VerificationWork.class);
         Student student = new Student(1L, "test name 1", "test password 1",
