@@ -2,22 +2,28 @@ package ru.sova.educationapp.EducationalSystemApp.services;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import ru.sova.educationapp.EducationalSystemApp.models.Student;
+import ru.sova.educationapp.EducationalSystemApp.models.Task;
 import ru.sova.educationapp.EducationalSystemApp.models.Tutor;
 import ru.sova.educationapp.EducationalSystemApp.models.VerificationWork;
 import ru.sova.educationapp.EducationalSystemApp.repositories.TutorRepository;
 import ru.sova.educationapp.EducationalSystemApp.repositories.VerificationWorkRepository;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
-
+@ExtendWith(MockitoExtension.class)
 public class VerificationWorkServiceTest {
 
     private static final long ID = 1;
@@ -25,35 +31,43 @@ public class VerificationWorkServiceTest {
     @Mock
     private VerificationWorkRepository verificationWorkRepository;
 
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.openMocks(this); // Инициализация моков
-    }
+    @InjectMocks
+    private VerificationWorkService verificationWorkService;
 
-    @Test
-    public void testFindTutorById_shouldCallRepository() {
-        final Optional<VerificationWork> expected = Optional.ofNullable(mock(VerificationWork.class));
-        when(verificationWorkRepository.findById(ID)).thenReturn(expected);
-
-        final Optional<VerificationWork> actualVerificationWork = verificationWorkRepository.findById(ID);
-
-        assertNotNull(actualVerificationWork);
-        assertEquals(expected, actualVerificationWork);
-        verify(verificationWorkRepository, times(1)).findById(ID);
-    }
 
     @Test
     public void testFindAll_shouldCallRepository() {
-        final VerificationWork verificationWork = mock(VerificationWork.class);
-        final List<VerificationWork> expected = Collections.singletonList(verificationWork);
-        when(verificationWorkRepository.findAll()).thenReturn(expected);
 
-        List<VerificationWork> actualVerificationWorks = verificationWorkRepository.findAll();
+        final List<VerificationWork> verificationWorks = List.of(
+                new VerificationWork(ID, "test title1",
+                        LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                        LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                        null, null),
+                new VerificationWork(2L, "test title2",
+                        LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                        LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                        null, null));
 
-        assertNotNull(actualVerificationWorks);
-        assertEquals(actualVerificationWorks.size(), expected.size());
-        assertEquals(actualVerificationWorks, expected);
+        doReturn(verificationWorks).when(verificationWorkRepository).findAll();
+
+        var gottenVerificationWorks = verificationWorkService.finAll();
+
+        assertNotNull(gottenVerificationWorks);
+        assertEquals(gottenVerificationWorks.size(), verificationWorks.size());
+        assertEquals(gottenVerificationWorks, verificationWorks);
         verify(verificationWorkRepository, times(1)).findAll();
+    }
+
+    @Test
+    public void testFindVerificationWorkById_shouldCallRepository() {
+        final VerificationWork expected = mock(VerificationWork.class);
+        when(verificationWorkRepository.findById(ID)).thenReturn(Optional.of(expected));
+
+        final VerificationWork actual = verificationWorkService.findById(ID);
+
+        assertNotNull(actual);
+        assertEquals(expected, actual);
+        verify(verificationWorkRepository, times(1)).findById(ID);
     }
 
     @Test
@@ -61,42 +75,100 @@ public class VerificationWorkServiceTest {
         final VerificationWork verificationWork = mock(VerificationWork.class);
         when(verificationWorkRepository.save(verificationWork)).thenReturn(verificationWork);
 
-        VerificationWork actualVerificationWork = verificationWorkRepository.save(verificationWork);
+        VerificationWork actual = verificationWorkService.save(verificationWork);
 
-        assertNotNull(actualVerificationWork);
-        assertEquals(actualVerificationWork, verificationWork);
+        assertNotNull(actual);
         verify(verificationWorkRepository, times(1)).save(verificationWork);
     }
 
     @Test
-    public void testDeleteById_shouldCallRepository() {
+    public void testDeleteById_Success() {
+        doNothing().when(verificationWorkRepository).deleteById(ID);
+        when(verificationWorkRepository.findById(ID)).thenReturn(Optional.empty());
 
-        verificationWorkRepository.deleteById(ID);
+        Boolean result = verificationWorkService.deleteById(ID);
 
+        assertTrue(result);
         verify(verificationWorkRepository, times(1)).deleteById(ID);
+        verify(verificationWorkRepository, times(1)).findById(ID);
+
+    }
+    @Test
+    public void testDeleteById_NonExistentId() {
+        // Настройка поведения мока
+        doNothing().when(verificationWorkRepository).deleteById(ID);
+        when(verificationWorkRepository.findById(ID)).thenReturn(Optional.of(new VerificationWork())); // запись найдена
+
+        // Мы не должны вызывать deleteById, следовательно, результат должно быть false
+        Boolean result = verificationWorkService.deleteById(ID);
+
+        // Проверяем, что метод не должен был быть успешно вызван
+        verify(verificationWorkRepository, times(1)).deleteById(ID);
+        verify(verificationWorkRepository, times(1)).findById(ID);
+        assertFalse(result);
     }
 
     @Test
-    public void testUpdate_shouldCallRepository() {
-        final VerificationWork verificationWork = mock(VerificationWork.class);
-        when(verificationWorkRepository.save(verificationWork)).thenReturn(verificationWork);
+    public void testUpdate_Success() {
+        VerificationWork verificationWork = new VerificationWork(0L, "test title",
+                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                Collections.emptyList(), Collections.emptyList());
+        when(verificationWorkRepository.findById(ID)).thenReturn(Optional.of(verificationWork));
 
-        VerificationWork updatedVerificationWork = verificationWorkRepository.save(verificationWork);
+        Boolean result = verificationWorkService.update(ID, verificationWork);
 
-        assertEquals(updatedVerificationWork, verificationWork);
+        assertTrue(result);
+        verify(verificationWorkRepository, times(2)).findById(ID);
         verify(verificationWorkRepository, times(1)).save(verificationWork);
+    }
+    @Test
+    public void testUpdate_NotFoundStudent() {
+        VerificationWork verificationWork = new VerificationWork(0L, "test title",
+                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                Collections.emptyList(), Collections.emptyList());
+        when(verificationWorkRepository.findById(ID)).thenReturn(Optional.empty());
+
+        Boolean result = verificationWorkService.update(ID, verificationWork);
+
+        assertFalse(result);
+        verify(verificationWorkRepository, times(1)).findById(ID);
+        verify(verificationWorkRepository, times(1)).save(verificationWork);
+    }
+    @Test
+    public void testUpdate_NotThatStudent() {
+        VerificationWork verificationWork1 = new VerificationWork(0L, "test title1",
+                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                Collections.emptyList(), Collections.emptyList());
+        VerificationWork verificationWork2 = new VerificationWork(1L, "test title2",
+                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                Collections.emptyList(), Collections.emptyList());
+        doReturn(Optional.of(verificationWork2)).when(verificationWorkRepository).findById(ID);
+
+        Boolean result = verificationWorkService.update(ID, verificationWork1);
+
+        assertFalse(result);
+        verify(verificationWorkRepository, times(2)).findById(ID);
+        verify(verificationWorkRepository, times(1)).save(verificationWork1);
     }
 
     @Test
-    public void addTasks_shouldCallRepository() {
-        final VerificationWork verificationWork = mock(VerificationWork.class);
-        when(verificationWorkRepository.save(verificationWork)).thenReturn(verificationWork);
+    public void fillTasks_shouldCallRepository() {
+        final VerificationWork verificationWork = new VerificationWork(0L, "test title1",
+                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                Collections.emptyList(), Collections.emptyList());
+        List<Task> tasks = List.of(mock(Task.class), mock(Task.class));
 
-        VerificationWork actualVerificationWork = verificationWorkRepository.save(verificationWork);
+        verificationWorkService.fillTasks(verificationWork, tasks);
 
-        assertNotNull(actualVerificationWork);
-        assertEquals(actualVerificationWork, verificationWork);
+        assertNotNull(verificationWork.getTasks());
+        assertEquals(verificationWork.getTasks(), tasks);
         verify(verificationWorkRepository, times(1)).save(verificationWork);
     }
+
 
 }

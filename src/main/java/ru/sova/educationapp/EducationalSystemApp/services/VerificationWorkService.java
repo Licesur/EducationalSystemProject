@@ -3,7 +3,6 @@ package ru.sova.educationapp.EducationalSystemApp.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.sova.educationapp.EducationalSystemApp.mappers.TaskMapper;
 import ru.sova.educationapp.EducationalSystemApp.models.Task;
 import ru.sova.educationapp.EducationalSystemApp.models.VerificationWork;
 import ru.sova.educationapp.EducationalSystemApp.repositories.VerificationWorkRepository;
@@ -48,11 +47,11 @@ public class VerificationWorkService {
         verificationWork.setId(id);
         verificationWorkRepository.save(verificationWork);
         return verificationWorkRepository.findById(id).isPresent()
-                && verificationWork.getTasks().equals(verificationWorkRepository.findById(id).get().getTasks());
+                && verificationWork.equals(verificationWorkRepository.findById(id).get());
     }
 
     @Transactional(readOnly = false)
-    public void addTasks(VerificationWork verificationWork, List<Task> tasks) {
+    public void fillTasks(VerificationWork verificationWork, List<Task> tasks) {
         verificationWork.setTasks(tasks);
         verificationWorkRepository.save(verificationWork);
     }

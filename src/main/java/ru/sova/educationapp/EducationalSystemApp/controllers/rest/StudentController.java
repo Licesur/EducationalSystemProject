@@ -23,16 +23,16 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/rest/students")
-public class RestStudentController {
+public class StudentController {
 
     private final StudentService studentService;
     private final StudentMapper studentMapper;
     private final TaskListMapper taskListMapper;
 
     @Autowired
-    public RestStudentController(StudentService studentService,
-                                 StudentMapper studentMapper,
-                                 TaskListMapper taskListMapper) {
+    public StudentController(StudentService studentService,
+                             StudentMapper studentMapper,
+                             TaskListMapper taskListMapper) {
         this.studentService = studentService;
         this.studentMapper = studentMapper;
         this.taskListMapper = taskListMapper;

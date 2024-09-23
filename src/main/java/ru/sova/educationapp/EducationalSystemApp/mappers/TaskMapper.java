@@ -10,6 +10,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface TaskMapper {
+
     TaskMapper INSTANCE = Mappers.getMapper(TaskMapper.class);
 
     List<TaskDTO> taskDTOListToTaskDTOList(List<Task> tasks);

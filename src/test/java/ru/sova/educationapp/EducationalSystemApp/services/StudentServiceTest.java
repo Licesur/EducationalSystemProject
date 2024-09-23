@@ -253,19 +253,19 @@ public class StudentServiceTest {
     }
     @Test
     public void testUpdate_NotThatStudent() {
-        Student student = new Student(0L,"testName1", "testPassword1",
+        Student student1 = new Student(0L,"testName1", "testPassword1",
                 "test1@email.ru", 16, List.of(mock(Tutor.class)),
                 List.of(mock(VerificationWork.class)));
-        Student student1 = new Student(2L,"testName1", "testPassword1",
+        Student student2 = new Student(1L,"testName2", "testPassword1",
                 "test1@email.ru", 16, List.of(mock(Tutor.class)),
                 List.of(mock(VerificationWork.class)));
-        when(studentRepository.findById(ID)).thenReturn(Optional.of(student1));
+        when(studentRepository.findById(ID)).thenReturn(Optional.of(student2));
 
-        Boolean result = studentService.update(ID, student);
+        Boolean result = studentService.update(ID, student1);
 
         assertFalse(result);
         verify(studentRepository, times(2)).findById(ID);
-        verify(studentRepository, times(1)).save(student);
+        verify(studentRepository, times(1)).save(student1);
     }
     @Test
     public void testFindByVerificationWorkNotContains_NotFoundAnyStudents() {

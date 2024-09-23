@@ -21,16 +21,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rest/tutors")
-public class RestTutorController {
+public class TutorController {
 
     private final TutorService tutorService;
     private final StudentService studentService;
     private final TutorMapper tutorMapper;
 
     @Autowired
-    public RestTutorController(TutorService tutorService,
-                               StudentService studentService,
-                               TutorMapper tutorMapper) {
+    public TutorController(TutorService tutorService,
+                           StudentService studentService,
+                           TutorMapper tutorMapper) {
         this.tutorService = tutorService;
         this.studentService = studentService;
         this.tutorMapper = tutorMapper;

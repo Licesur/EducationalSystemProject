@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rest/works")
-public class RestVerificationWorkController {
+public class VerificationWorkController {
 
     private final VerificationWorkService verificationWorkService;
     private final StudentService studentService;
@@ -27,10 +27,10 @@ public class RestVerificationWorkController {
     private final StudentMapper studentMapper;
 
     @Autowired
-    public RestVerificationWorkController(VerificationWorkService verificationWorkService,
-                                          StudentService studentService,
-                                          VerificationWorkMapper verificationWorkMapper,
-                                          StudentMapper studentMapper) {
+    public VerificationWorkController(VerificationWorkService verificationWorkService,
+                                      StudentService studentService,
+                                      VerificationWorkMapper verificationWorkMapper,
+                                      StudentMapper studentMapper) {
         this.verificationWorkService = verificationWorkService;
         this.studentService = studentService;
         this.verificationWorkMapper = verificationWorkMapper;

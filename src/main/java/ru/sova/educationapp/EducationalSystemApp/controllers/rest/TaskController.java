@@ -17,13 +17,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rest/tasks")
-public class RestTaskController {
+public class TaskController {
 
     private final TaskService taskService;
     private final TaskMapper taskMapper;
 
     @Autowired
-    public RestTaskController(TaskService taskService, TaskMapper taskMapper) {
+    public TaskController(TaskService taskService, TaskMapper taskMapper) {
         this.taskService = taskService;
         this.taskMapper = taskMapper;
     }

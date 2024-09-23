@@ -88,7 +88,7 @@ public class VerificationWorkController {
         if (bindingResult.hasErrors()) {
             return "works/new";
         }
-        verificationWorkService.addTasks(verificationWorkMapper.toVerificationWork(verificationWorkDTO),
+        verificationWorkService.fillTasks(verificationWorkMapper.toVerificationWork(verificationWorkDTO),
                 selectedTasksDtoId.stream().map(Integer::parseInt).map(taskService::findById).toList());
         return "redirect:/works";
     }
