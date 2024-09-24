@@ -5,7 +5,9 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.util.List;
-
+/**
+ * Модель сущности преподавателя
+ */
 @Entity
 @Table(name = "Tutor")
 @Getter

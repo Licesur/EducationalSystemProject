@@ -7,6 +7,9 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Transfer Object сущности студента
+ */
 @Getter
 @Setter
 @NoArgsConstructor

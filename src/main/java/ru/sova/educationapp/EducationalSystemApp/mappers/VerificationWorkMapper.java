@@ -6,6 +6,9 @@ import org.mapstruct.factory.Mappers;
 import ru.sova.educationapp.EducationalSystemApp.DTO.VerificationWorkDTO;
 import ru.sova.educationapp.EducationalSystemApp.models.VerificationWork;
 
+/**
+ * Маппер, предназначенный для перевода объекта сущности контрольной работы к DTO и обратно
+ */
 @Mapper(uses = {TaskMapper.class}, componentModel = "spring")
 public interface VerificationWorkMapper {
     VerificationWorkMapper INSTANCE = Mappers.getMapper(VerificationWorkMapper.class);

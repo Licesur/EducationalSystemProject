@@ -8,6 +8,9 @@ import ru.sova.educationapp.EducationalSystemApp.models.Task;
 
 import java.util.List;
 
+/**
+ * Маппер, предназначенный для перевода объекта сущности задачи к DTO и обратно
+ */
 @Mapper(componentModel = "spring")
 public interface TaskMapper {
 

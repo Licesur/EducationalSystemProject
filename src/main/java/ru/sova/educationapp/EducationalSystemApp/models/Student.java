@@ -6,6 +6,9 @@ import lombok.*;
 
 import java.util.List;
 
+/**
+ * Модель сущности студента
+ */
 @Entity
 @Table(name = "Student")
 @Getter

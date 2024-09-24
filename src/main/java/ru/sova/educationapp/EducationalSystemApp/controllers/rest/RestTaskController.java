@@ -15,6 +15,9 @@ import ru.sova.educationapp.EducationalSystemApp.exceptions.NotUpdatedException;
 
 import java.util.List;
 
+/**
+ * REST контроллер для работы с сущностью задачи
+ */
 @RestController
 @RequestMapping("/rest/tasks")
 public class RestTaskController {
@@ -22,12 +25,22 @@ public class RestTaskController {
     private final TaskService taskService;
     private final TaskMapper taskMapper;
 
+    /**
+     * Конструктор контроллера
+     * @param taskService сервис для работы с сущностью задачи.
+     * @param taskMapper маппер для трансформаций ТО сущности задачи.
+     */
     @Autowired
     public RestTaskController(TaskService taskService, TaskMapper taskMapper) {
         this.taskService = taskService;
         this.taskMapper = taskMapper;
     }
 
+    /**
+     * Метод, реалзиюущий get-запрос для получения списка всех задач.
+     * @return возвращает ответ, содержащий статус запроса, и если запрос прошел успешно, также возвращает
+     * список ТО задач.
+     */
     @GetMapping
     public ResponseEntity<List<TaskDTO>> getTasks() {
         final List<TaskDTO> tasks = taskService.findAll()
@@ -36,7 +49,11 @@ public class RestTaskController {
                 ? new ResponseEntity<>(tasks, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
+    /**
+     * Метод, реалзиюущий get-запрос для получения конкретной задачи.
+     * @return возвращает ответ, содержащий статус запроса, и если запрос прошел успешно, также возвращает
+     * ТО задачи.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<TaskDTO> getTask(@PathVariable("id") long id) {
         final TaskDTO taskDTO = taskMapper.toTaskDTO(taskService.findById(id));
@@ -44,7 +61,13 @@ public class RestTaskController {
                 ? new ResponseEntity<>(taskDTO, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
+    /**
+     * Метод, реалзиюущий post-запрос для создания новой задачи.
+     * @param taskDTO ТО сущности задачи, который содержит данные для создания новой задачи
+     * @param bindingResult объект, хранящий данные об ошибках полей создаваемого объекта
+     * @return при наличии ошибок пробрасывается исключение NotCreatedException, в случае если запрос
+     * содержит корректный ТО задачи, создает задачу и возвращает статус CREATED
+     */
     @PostMapping()
     public ResponseEntity<HttpStatus> createTask(@RequestBody @Valid TaskDTO taskDTO,
                                                  BindingResult bindingResult) {
@@ -61,7 +84,14 @@ public class RestTaskController {
         taskService.save(taskMapper.toTask(taskDTO));
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
-
+    /**
+     * Метод, реалзиюущий patch-запрос для обновления задачи.
+     * @param taskDTO ТО для обновления полй существующей задачи
+     * @param bindingResult объект, хранящий данные об ошибках полей создаваемого объекта
+     * @param id уникальный идентификатор обновляемой задачи
+     * @return при наличии ошибок пробрасывается исключение NotUpdatedException, в случае если запрос
+     * содержит корректный ТО задачи, обновляет задачу и возвращает статус OK
+     */
     @PatchMapping("/{id}")
     public ResponseEntity<HttpStatus> updateTask(@RequestBody @Valid TaskDTO taskDTO,
                                                  BindingResult bindingResult, @PathVariable("id") long id) {
@@ -78,7 +108,11 @@ public class RestTaskController {
         final boolean updated = taskService.update(id, taskMapper.toTask(taskDTO));
         return updated ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
-
+    /**
+     * Метод, реалзиюущий delete-запрос для удаления задачи.
+     * @param id уникальный идентификатор удаляемой задачи
+     * @return вовзращает статус OK при успешном удалении студента и статус NOT_MODIFIED если удаление не удалось.
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteTask(@PathVariable("id") long id) {
         Boolean deleted = taskService.deleteById(id);

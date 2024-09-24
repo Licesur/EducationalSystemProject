@@ -3,8 +3,11 @@ package ru.sova.educationapp.EducationalSystemApp.DTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.*;
-
 import java.util.List;
+
+/**
+ * Transfer Object сущности преподавателя
+ */
 @Getter
 @Setter
 @AllArgsConstructor

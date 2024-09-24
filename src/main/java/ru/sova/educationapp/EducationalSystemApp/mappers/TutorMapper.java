@@ -6,6 +6,9 @@ import org.mapstruct.factory.Mappers;
 import ru.sova.educationapp.EducationalSystemApp.DTO.TutorDTO;
 import ru.sova.educationapp.EducationalSystemApp.models.Tutor;
 
+/**
+ * Маппер, предназначенный для перевода объекта сущности преподавателя к DTO и обратно
+ */
 @Mapper(uses = StudentMapper.class, componentModel = "spring")
 public interface TutorMapper {
     TutorMapper INSTANCE = Mappers.getMapper(TutorMapper.class);

@@ -8,7 +8,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
+/**
+ * Модель сущности контрольной работы
+ */
 @Entity
 @Table(name = "verificationwork")
 @Getter

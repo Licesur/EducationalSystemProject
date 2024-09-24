@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+/**
+ * Transfer Object сущности задачи
+ */
 @Getter
 @Setter
 @ToString

@@ -6,7 +6,9 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.List;
-
+/**
+ * Модель сущности задачи
+ */
 @Entity
 @Table(name = "task")
 @Getter
