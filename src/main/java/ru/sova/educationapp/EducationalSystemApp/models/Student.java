@@ -5,7 +5,6 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Table(name = "Student")
@@ -49,7 +48,6 @@ public class Student {
 
     @EqualsAndHashCode.Exclude
     @ManyToMany(mappedBy = "students")
-//    @ToString.Exclude
     private List<VerificationWork> verificationWorks;
 
 }

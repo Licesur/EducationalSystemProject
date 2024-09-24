@@ -74,15 +74,13 @@ public class VerificationWorkController {
     public String newVerificationWork(@ModelAttribute("work") VerificationWorkDTO verificationWorkDTO,
                                       Model model) {
         model.addAttribute("tasksDTO", taskListMapper.taskListToTaskDTOList(taskService.findAll()));
-//        taskService.finAll().stream()
-//                .map(taskMapper::toTaskDTO).forEach(s -> System.out.println(s.getId()));
         return "works/new";
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("work") @Valid VerificationWorkDTO verificationWorkDTO,
-                         BindingResult bindingResult,
-                         @RequestParam(name = "selectedTasks") List<String> selectedTasksDtoId) {
+    public String createVerificationWork(@ModelAttribute("work") @Valid VerificationWorkDTO verificationWorkDTO,
+                                         BindingResult bindingResult,
+                                         @RequestParam(name = "selectedTasks") List<String> selectedTasksDtoId) {
 //        personValidator.validate(person, bindingResult);//todo
 
         if (bindingResult.hasErrors()) {
@@ -94,7 +92,7 @@ public class VerificationWorkController {
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") long id) {
+    public String editVerificationWork(Model model, @PathVariable("id") long id) {
         model.addAttribute("work", verificationWorkMapper
                 .toVerificationWorkDTO(verificationWorkService.findById(id)));
         model.addAttribute("tasks", taskService.findAll().stream()
@@ -103,9 +101,9 @@ public class VerificationWorkController {
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("work") @Valid VerificationWorkDTO workToUpdateDTO,
-                         BindingResult bindingResult, @PathVariable("id") long id,
-                         @RequestParam(name = "selectedTasks") List<String> selectedTasksDtoId) {
+    public String updateVerificationWork(@ModelAttribute("work") @Valid VerificationWorkDTO workToUpdateDTO,
+                                         BindingResult bindingResult, @PathVariable("id") long id,
+                                         @RequestParam(name = "selectedTasks") List<String> selectedTasksDtoId) {
 //        personValidator.validate(person, bindingResult);//todo
         if (bindingResult.hasErrors()) {
             return "works/edit";
@@ -125,9 +123,9 @@ public class VerificationWorkController {
     }
 
     @PatchMapping("/{id}/choose")
-    public String choose(@PathVariable("id") long id,
-                         @ModelAttribute("work") VerificationWorkDTO verificationWorkDTO,
-                         @ModelAttribute("student") StudentDTO studentDTO) {
+    public String chooseStudent(@PathVariable("id") long id,
+                                @ModelAttribute("work") VerificationWorkDTO verificationWorkDTO,
+                                @ModelAttribute("student") StudentDTO studentDTO) {
         studentService.addVerificationWork(verificationWorkService.findById(id),
                 studentMapper.toStudent(studentDTO));
         return "redirect:/works/" + id;

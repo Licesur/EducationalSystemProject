@@ -25,9 +25,9 @@ import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
-public class TaskControllerTest {
+public class RestTaskControllerTest {
     @InjectMocks
-    private TaskController taskController;
+    private RestTaskController restTaskController;
     @Mock
     private TaskService taskService;
     @Mock
@@ -48,7 +48,7 @@ public class TaskControllerTest {
         doReturn(taskDTO1).when(taskMapper).toTaskDTO(task1);
         doReturn(taskDTO2).when(taskMapper).toTaskDTO(task2);
 
-        ResponseEntity<List<TaskDTO>> responseEntity = taskController.getTasks();
+        ResponseEntity<List<TaskDTO>> responseEntity = restTaskController.getTasks();
 
         assertEquals(ResponseEntity.ok(taskDTOS), responseEntity);
     }
@@ -56,7 +56,7 @@ public class TaskControllerTest {
     public void testGetTasks_NotFoundAnyTasks(){
         doReturn(Collections.emptyList()).when(taskService).findAll();
 
-        ResponseEntity<List<TaskDTO>> responseEntity = taskController.getTasks();
+        ResponseEntity<List<TaskDTO>> responseEntity = restTaskController.getTasks();
 
         assertEquals(ResponseEntity.notFound().build(), responseEntity);
     }
@@ -67,7 +67,7 @@ public class TaskControllerTest {
         doReturn(task1).when(taskService).findById(ID);
         doReturn(taskDTO1).when(taskMapper).toTaskDTO(task1);
 
-        ResponseEntity<TaskDTO> responseEntity = taskController.getTask(ID);
+        ResponseEntity<TaskDTO> responseEntity = restTaskController.getTask(ID);
 
         assertEquals(ResponseEntity.ok(taskDTO1), responseEntity);
         verify(taskMapper, times(1)).toTaskDTO(task1);
@@ -78,28 +78,28 @@ public class TaskControllerTest {
         doReturn(null).when(taskService).findById(ID);
         doReturn(null).when(taskMapper).toTaskDTO(null);
 
-        ResponseEntity<TaskDTO> responseEntity = taskController.getTask(ID);
+        ResponseEntity<TaskDTO> responseEntity = restTaskController.getTask(ID);
 
         assertEquals(ResponseEntity.notFound().build(), responseEntity);
         verify(taskMapper, times(1)).toTaskDTO(null);
         verify(taskService, times(1)).findById(ID);
     }
     @Test
-    public void testCreate_Success(){
+    public void testCreateTask_Success(){
         Task task1 = mock(Task.class);
         TaskDTO taskDTO1 = mock(TaskDTO.class);
         BindingResult bindingResult = mock(BindingResult.class);
         doReturn(false).when(bindingResult).hasErrors();
         doReturn(task1).when(taskMapper).toTask(taskDTO1);
 
-        ResponseEntity<HttpStatus> responseEntity = taskController.create(taskDTO1, bindingResult);
+        ResponseEntity<HttpStatus> responseEntity = restTaskController.createTask(taskDTO1, bindingResult);
 
         assertEquals(ResponseEntity.ok(HttpStatus.CREATED),responseEntity );
         verify(taskMapper, times(1)).toTask(taskDTO1);
         verify(taskService, times(1)).save(task1);
     }
     @Test
-    public void testCreate_BindingResultHasErrors(){
+    public void testCreateTask_BindingResultHasErrors(){
         Task task1 = mock(Task.class);
         TaskDTO taskDTO1 = mock(TaskDTO.class);
         BindingResult bindingResult = mock(BindingResult.class);
@@ -110,7 +110,7 @@ public class TaskControllerTest {
         doReturn("defaultField1Message").when(fieldError).getDefaultMessage();
 
         Exception exception = assertThrows(NotCreatedException.class, () ->{
-            taskController.create(taskDTO1, bindingResult);
+            restTaskController.createTask(taskDTO1, bindingResult);
         });
 
         assertEquals("field1 - defaultField1Message;: the task wasn't created",exception.getMessage());
@@ -118,7 +118,7 @@ public class TaskControllerTest {
         verify(taskService, times(0)).update(ID, task1);
     }
     @Test
-    public void testUpdate_Success(){
+    public void testUpdateTask_Success(){
         Task task1 = mock(Task.class);
         TaskDTO taskDTO1 = mock(TaskDTO.class);
         BindingResult bindingResult = mock(BindingResult.class);
@@ -126,14 +126,14 @@ public class TaskControllerTest {
         doReturn(task1).when(taskMapper).toTask(taskDTO1);
         doReturn(true).when(taskService).update(ID, task1);
 
-        ResponseEntity<HttpStatus> responseEntity = taskController.update(taskDTO1, bindingResult, ID);
+        ResponseEntity<HttpStatus> responseEntity = restTaskController.updateTask(taskDTO1, bindingResult, ID);
 
         assertEquals(responseEntity, new ResponseEntity<>(HttpStatus.OK));
         verify(taskMapper, times(1)).toTask(taskDTO1);
         verify(taskService, times(1)).update(ID,task1);
     }
     @Test
-    public void testUpdate_NotSuccess(){
+    public void testUpdateTask_NotSuccess(){
         Task task1 = mock(Task.class);
         TaskDTO taskDTO1 = mock(TaskDTO.class);
         BindingResult bindingResult = mock(BindingResult.class);
@@ -141,14 +141,14 @@ public class TaskControllerTest {
         doReturn(task1).when(taskMapper).toTask(taskDTO1);
         doReturn(false).when(taskService).update(ID, task1);
 
-        ResponseEntity<HttpStatus> responseEntity = taskController.update(taskDTO1, bindingResult, ID);
+        ResponseEntity<HttpStatus> responseEntity = restTaskController.updateTask(taskDTO1, bindingResult, ID);
 
         assertEquals(responseEntity, new ResponseEntity<>(HttpStatus.NOT_MODIFIED));
         verify(taskMapper, times(1)).toTask(taskDTO1);
         verify(taskService, times(1)).update(ID,task1);
     }
     @Test
-    public void testUpdate_BindingResultHasErrors(){
+    public void testUpdateTask_BindingResultHasErrors(){
         Task task1 = mock(Task.class);
         TaskDTO taskDTO1 = mock(TaskDTO.class);
         BindingResult bindingResult = mock(BindingResult.class);
@@ -159,7 +159,7 @@ public class TaskControllerTest {
         doReturn("defaultField1Message").when(fieldError).getDefaultMessage();
 
         Exception exception = assertThrows(NotUpdatedException.class, () ->{
-            taskController.update(taskDTO1, bindingResult, ID);
+            restTaskController.updateTask(taskDTO1, bindingResult, ID);
         });
 
         assertEquals("field1 - defaultField1Message;: the task wasn't updated",exception.getMessage() );
@@ -167,19 +167,19 @@ public class TaskControllerTest {
         verify(taskService, times(0)).save(task1);
     }
     @Test
-    public void testDelete_Success(){
+    public void testDeleteTask_Success(){
         doReturn(true).when(taskService).deleteById(ID);
 
-        ResponseEntity<?> responseEntity = taskController.deleteTask(ID);
+        ResponseEntity<?> responseEntity = restTaskController.deleteTask(ID);
 
         assertEquals(HttpStatus.OK,responseEntity.getStatusCode());
         verify(taskService, times(1)).deleteById(ID);
     }
     @Test
-    public void testDelete_TaskNotDeleted(){
+    public void testDeleteTask_TaskNotDeleted(){
         doReturn(false).when(taskService).deleteById(ID);
 
-        ResponseEntity<?> responseEntity = taskController.deleteTask(ID);
+        ResponseEntity<?> responseEntity = restTaskController.deleteTask(ID);
 
         assertEquals(HttpStatus.NOT_MODIFIED,responseEntity.getStatusCode());
         verify(taskService, times(1)).deleteById(ID);

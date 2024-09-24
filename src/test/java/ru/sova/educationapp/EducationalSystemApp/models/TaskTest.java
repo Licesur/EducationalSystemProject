@@ -6,7 +6,6 @@ import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.sova.educationapp.EducationalSystemApp.DTO.TaskDTO;
 
 import java.util.ArrayList;
 import java.util.List;

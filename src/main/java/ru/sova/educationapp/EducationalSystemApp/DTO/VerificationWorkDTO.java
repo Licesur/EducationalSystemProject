@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import ru.sova.educationapp.EducationalSystemApp.models.Task;
 
 import java.util.List;
 @Getter

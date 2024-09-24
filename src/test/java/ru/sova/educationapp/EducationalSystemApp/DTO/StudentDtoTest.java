@@ -6,9 +6,6 @@ import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.sova.educationapp.EducationalSystemApp.models.Student;
-import ru.sova.educationapp.EducationalSystemApp.models.Tutor;
-import ru.sova.educationapp.EducationalSystemApp.models.VerificationWork;
 
 import java.util.ArrayList;
 import java.util.HashSet;

@@ -35,12 +35,12 @@ public class VerificationWorkServiceTest {
 
         final List<VerificationWork> verificationWorks = List.of(
                 new VerificationWork(ID, "test title1",
-                        LocalDateTime.of(20001, 01, 01, 0, 0, 0),
-                        LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                        LocalDateTime.of(20001, 1, 1, 0, 0, 0),
+                        LocalDateTime.of(20001, 1, 1, 0, 0, 0),
                         null, null),
                 new VerificationWork(2L, "test title2",
-                        LocalDateTime.of(20001, 01, 01, 0, 0, 0),
-                        LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                        LocalDateTime.of(20001, 1, 1, 0, 0, 0),
+                        LocalDateTime.of(20001, 1, 1, 0, 0, 0),
                         null, null));
 
         doReturn(verificationWorks).when(verificationWorkRepository).findAll();
@@ -106,8 +106,8 @@ public class VerificationWorkServiceTest {
     @Test
     public void testUpdate_Success() {
         VerificationWork verificationWork = new VerificationWork(0L, "test title",
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
                 Collections.emptyList(), Collections.emptyList());
         when(verificationWorkRepository.findById(ID)).thenReturn(Optional.of(verificationWork));
 
@@ -120,8 +120,8 @@ public class VerificationWorkServiceTest {
     @Test
     public void testUpdate_NotFoundStudent() {
         VerificationWork verificationWork = new VerificationWork(0L, "test title",
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
                 Collections.emptyList(), Collections.emptyList());
         when(verificationWorkRepository.findById(ID)).thenReturn(Optional.empty());
 
@@ -134,12 +134,12 @@ public class VerificationWorkServiceTest {
     @Test
     public void testUpdate_NotThatStudent() {
         VerificationWork verificationWork1 = new VerificationWork(0L, "test title1",
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
                 Collections.emptyList(), Collections.emptyList());
         VerificationWork verificationWork2 = new VerificationWork(1L, "test title2",
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
                 Collections.emptyList(), Collections.emptyList());
         doReturn(Optional.of(verificationWork2)).when(verificationWorkRepository).findById(ID);
 
@@ -153,8 +153,8 @@ public class VerificationWorkServiceTest {
     @Test
     public void fillTasks_shouldCallRepository() {
         final VerificationWork verificationWork = new VerificationWork(0L, "test title1",
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
                 Collections.emptyList(), Collections.emptyList());
         List<Task> tasks = List.of(mock(Task.class), mock(Task.class));
 

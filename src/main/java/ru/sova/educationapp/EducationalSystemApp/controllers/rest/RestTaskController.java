@@ -17,13 +17,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rest/tasks")
-public class TaskController {
+public class RestTaskController {
 
     private final TaskService taskService;
     private final TaskMapper taskMapper;
 
     @Autowired
-    public TaskController(TaskService taskService, TaskMapper taskMapper) {
+    public RestTaskController(TaskService taskService, TaskMapper taskMapper) {
         this.taskService = taskService;
         this.taskMapper = taskMapper;
     }
@@ -46,8 +46,8 @@ public class TaskController {
     }
 
     @PostMapping()
-    public ResponseEntity<HttpStatus> create(@RequestBody @Valid TaskDTO taskDTO,
-                                             BindingResult bindingResult) {
+    public ResponseEntity<HttpStatus> createTask(@RequestBody @Valid TaskDTO taskDTO,
+                                                 BindingResult bindingResult) {
 //        personValidator.validate(person, bindingResult);//todo
         if (bindingResult.hasErrors()) {
             StringBuilder errorMesssage = new StringBuilder();
@@ -63,8 +63,8 @@ public class TaskController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<HttpStatus> update(@RequestBody @Valid TaskDTO taskDTO,
-                                             BindingResult bindingResult, @PathVariable("id") long id) {
+    public ResponseEntity<HttpStatus> updateTask(@RequestBody @Valid TaskDTO taskDTO,
+                                                 BindingResult bindingResult, @PathVariable("id") long id) {
 //        personValidator.validate(person, bindingResult);//todo
         if (bindingResult.hasErrors()) {
             StringBuilder errorMesssage = new StringBuilder();

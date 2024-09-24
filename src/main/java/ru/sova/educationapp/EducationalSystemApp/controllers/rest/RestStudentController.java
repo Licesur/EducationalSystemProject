@@ -23,16 +23,16 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/rest/students")
-public class StudentController {
+public class RestStudentController {
 
     private final StudentService studentService;
     private final StudentMapper studentMapper;
     private final TaskListMapper taskListMapper;
 
     @Autowired
-    public StudentController(StudentService studentService,
-                             StudentMapper studentMapper,
-                             TaskListMapper taskListMapper) {
+    public RestStudentController(StudentService studentService,
+                                 StudentMapper studentMapper,
+                                 TaskListMapper taskListMapper) {
         this.studentService = studentService;
         this.studentMapper = studentMapper;
         this.taskListMapper = taskListMapper;
@@ -56,10 +56,10 @@ public class StudentController {
     }
 
     @PostMapping()
-    public ResponseEntity<HttpStatus> create(@RequestBody @Valid
+    public ResponseEntity<HttpStatus> createStudent(@RequestBody @Valid
                                              @Parameter(description = "student object you want to create",
                                                      required = true) StudentDTO studentDTO,
-                                             BindingResult bindingResult) {
+                                                    BindingResult bindingResult) {
 //        personValidator.validate(person, bindingResult);//todo
         if (bindingResult.hasErrors()) {
             StringBuilder errorMesssage = new StringBuilder();
@@ -75,8 +75,8 @@ public class StudentController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<HttpStatus> update(@RequestBody @Valid StudentDTO studentDTO,
-                                             BindingResult bindingResult, @PathVariable("id") long id) {
+    public ResponseEntity<HttpStatus> updateStudent(@RequestBody @Valid StudentDTO studentDTO,
+                                                    BindingResult bindingResult, @PathVariable("id") long id) {
 //        personValidator.validate(person, bindingResult);//todo
         if (bindingResult.hasErrors()) {
             StringBuilder errorMesssage = new StringBuilder();

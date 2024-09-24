@@ -30,7 +30,7 @@ import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
-public class TutorControllerTest {
+public class RestTutorControllerTest {
 
     @Mock
     private TutorService tutorService;
@@ -39,7 +39,7 @@ public class TutorControllerTest {
     @Mock
     private TutorMapper tutorMapper;
     @InjectMocks
-    private TutorController tutorController;
+    private RestTutorController restTutorController;
 
     private final long ID = 1;
 
@@ -56,7 +56,7 @@ public class TutorControllerTest {
         doReturn(tutorDTO1).when(tutorMapper).toTutorDTO(tutor1);
         doReturn(tutorDTO2).when(tutorMapper).toTutorDTO(tutor2);
 
-        ResponseEntity<List<TutorDTO>> responseEntity = tutorController.getTutors();
+        ResponseEntity<List<TutorDTO>> responseEntity = restTutorController.getTutors();
 
         assertEquals(ResponseEntity.ok(tutorDTOS), responseEntity);
     }
@@ -64,7 +64,7 @@ public class TutorControllerTest {
     public void testGetTutors_NotFoundAnyTutors(){
         doReturn(Collections.emptyList()).when(tutorService).findAll();
 
-        ResponseEntity<List<TutorDTO>> responseEntity = tutorController.getTutors();
+        ResponseEntity<List<TutorDTO>> responseEntity = restTutorController.getTutors();
 
         assertEquals(ResponseEntity.notFound().build(), responseEntity);
     }
@@ -76,7 +76,7 @@ public class TutorControllerTest {
         doReturn(tutor1).when(tutorService).findById(ID);
         doReturn(tutorDTO1).when(tutorMapper).toTutorDTO(tutor1);
 
-        ResponseEntity<TutorDTO> responseEntity = tutorController.getTutorById(ID);
+        ResponseEntity<TutorDTO> responseEntity = restTutorController.getTutor(ID);
 
         assertEquals(ResponseEntity.ok(tutorDTO1), responseEntity);
         verify(tutorMapper, times(1)).toTutorDTO(tutor1);
@@ -87,28 +87,28 @@ public class TutorControllerTest {
         doReturn(null).when(tutorService).findById(ID);
         doReturn(null).when(tutorMapper).toTutorDTO(null);
 
-        ResponseEntity<TutorDTO> responseEntity = tutorController.getTutorById(ID);
+        ResponseEntity<TutorDTO> responseEntity = restTutorController.getTutor(ID);
 
         assertEquals(ResponseEntity.notFound().build(), responseEntity);
         verify(tutorMapper, times(1)).toTutorDTO(null);
         verify(tutorService, times(1)).findById(ID);
     }
     @Test
-    public void testCreate_Success(){
+    public void testCreateTutor_Success(){
         Tutor tutor1 = mock(Tutor.class);
         TutorDTO tutorDTO1 = mock(TutorDTO.class);
         BindingResult bindingResult = mock(BindingResult.class);
         doReturn(false).when(bindingResult).hasErrors();
         doReturn(tutor1).when(tutorMapper).toTutor(tutorDTO1);
 
-        ResponseEntity<HttpStatus> responseEntity = tutorController.create(tutorDTO1, bindingResult);
+        ResponseEntity<HttpStatus> responseEntity = restTutorController.createTutor(tutorDTO1, bindingResult);
 
         assertEquals(ResponseEntity.ok(HttpStatus.CREATED),responseEntity );
         verify(tutorMapper, times(1)).toTutor(tutorDTO1);
         verify(tutorService, times(1)).save(tutor1);
     }
     @Test
-    public void testCreate_BindingResultHasErrors(){
+    public void testCreateTutor_BindingResultHasErrors(){
         Tutor tutor1 = mock(Tutor.class);
         TutorDTO tutorDTO1 = mock(TutorDTO.class);
         BindingResult bindingResult = mock(BindingResult.class);
@@ -119,7 +119,7 @@ public class TutorControllerTest {
         doReturn("defaultField1Message").when(fieldError).getDefaultMessage();
 
         Exception exception = assertThrows(NotCreatedException.class, () ->{
-            tutorController.create(tutorDTO1, bindingResult);
+            restTutorController.createTutor(tutorDTO1, bindingResult);
         });
 
         assertEquals("field1 - defaultField1Message;: the tutor wasn't created",exception.getMessage());
@@ -127,7 +127,7 @@ public class TutorControllerTest {
         verify(tutorService, times(0)).update(ID, tutor1);
     }
     @Test
-    public void testUpdate_Success(){
+    public void testUpdateTutor_Success(){
         Tutor tutor1 = mock(Tutor.class);
         TutorDTO tutorDTO1 = mock(TutorDTO.class);
         BindingResult bindingResult = mock(BindingResult.class);
@@ -135,14 +135,14 @@ public class TutorControllerTest {
         doReturn(tutor1).when(tutorMapper).toTutor(tutorDTO1);
         doReturn(true).when(tutorService).update(ID, tutor1);
 
-        ResponseEntity<HttpStatus> responseEntity = tutorController.update(tutorDTO1, bindingResult, ID);
+        ResponseEntity<HttpStatus> responseEntity = restTutorController.updateTutor(tutorDTO1, bindingResult, ID);
 
         assertEquals(responseEntity, new ResponseEntity<>(HttpStatus.OK));
         verify(tutorMapper, times(1)).toTutor(tutorDTO1);
         verify(tutorService, times(1)).update(ID,tutor1);
     }
     @Test
-    public void testUpdate_NotSuccess(){
+    public void testUpdateTutor_NotSuccess(){
         Tutor tutor1 = mock(Tutor.class);
         TutorDTO tutorDTO1 = mock(TutorDTO.class);
         BindingResult bindingResult = mock(BindingResult.class);
@@ -150,14 +150,14 @@ public class TutorControllerTest {
         doReturn(tutor1).when(tutorMapper).toTutor(tutorDTO1);
         doReturn(false).when(tutorService).update(ID, tutor1);
 
-        ResponseEntity<HttpStatus> responseEntity = tutorController.update(tutorDTO1, bindingResult, ID);
+        ResponseEntity<HttpStatus> responseEntity = restTutorController.updateTutor(tutorDTO1, bindingResult, ID);
 
         assertEquals(responseEntity, new ResponseEntity<>(HttpStatus.NOT_MODIFIED));
         verify(tutorMapper, times(1)).toTutor(tutorDTO1);
         verify(tutorService, times(1)).update(ID,tutor1);
     }
     @Test
-    public void testUpdate_BindingResultHasErrors(){
+    public void testUpdateTutor_BindingResultHasErrors(){
         Tutor tutor1 = mock(Tutor.class);
         TutorDTO tutorDTO1 = mock(TutorDTO.class);
         BindingResult bindingResult = mock(BindingResult.class);
@@ -168,7 +168,7 @@ public class TutorControllerTest {
         doReturn("defaultField1Message").when(fieldError).getDefaultMessage();
 
         Exception exception = assertThrows(NotUpdatedException.class, () ->{
-            tutorController.update(tutorDTO1, bindingResult, ID);
+            restTutorController.updateTutor(tutorDTO1, bindingResult, ID);
         });
 
         assertEquals("field1 - defaultField1Message;: the tutor wasn't updated",exception.getMessage() );
@@ -176,19 +176,19 @@ public class TutorControllerTest {
         verify(tutorService, times(0)).save(tutor1);
     }
     @Test
-    public void testDelete_Success(){
+    public void testDeleteTutor_Success(){
         doReturn(true).when(tutorService).deleteById(ID);
 
-        ResponseEntity<?> responseEntity = tutorController.deleteTutor(ID);
+        ResponseEntity<?> responseEntity = restTutorController.deleteTutor(ID);
 
         assertEquals(HttpStatus.OK,responseEntity.getStatusCode());
         verify(tutorService, times(1)).deleteById(ID);
     }
     @Test
-    public void testDelete_TutorNotDeleted(){
+    public void testDeleteTutor_TutorNotDeleted(){
         doReturn(false).when(tutorService).deleteById(ID);
 
-        ResponseEntity<?> responseEntity = tutorController.deleteTutor(ID);
+        ResponseEntity<?> responseEntity = restTutorController.deleteTutor(ID);
 
         assertEquals(HttpStatus.NOT_MODIFIED,responseEntity.getStatusCode());
         verify(tutorService, times(1)).deleteById(ID);
@@ -205,7 +205,7 @@ public class TutorControllerTest {
         doReturn(tutor1).when(tutorService).findById(ID);
         doReturn(true).when(tutorService).addStudent(student1,tutor1);
 
-        ResponseEntity<HttpStatus> responseEntity = tutorController.assignStudent(ID, studentDTO1, bindingResult);
+        ResponseEntity<HttpStatus> responseEntity = restTutorController.assignStudent(ID, studentDTO1, bindingResult);
 
         verify(tutorService, times(1)).addStudent(student1, tutor1);
         verify(tutorService, times(1)).findById(ID);
@@ -224,7 +224,7 @@ public class TutorControllerTest {
         doReturn(tutor1).when(tutorService).findById(ID);
         doReturn(false).when(tutorService).addStudent(student1,tutor1);
 
-        ResponseEntity<HttpStatus> responseEntity = tutorController.assignStudent(ID, studentDTO1, bindingResult);
+        ResponseEntity<HttpStatus> responseEntity = restTutorController.assignStudent(ID, studentDTO1, bindingResult);
 
         verify(tutorService, times(1)).addStudent(student1, tutor1);
         verify(tutorService, times(1)).findById(ID);
@@ -244,7 +244,7 @@ public class TutorControllerTest {
         doReturn("defaultField1Message").when(fieldError).getDefaultMessage();
 
         Exception exception = assertThrows(NotAssignedException.class, () ->{
-            tutorController.assignStudent(ID, studentDTO1, bindingResult);
+            restTutorController.assignStudent(ID, studentDTO1, bindingResult);
         });
 
         assertEquals("field1 - defaultField1Message;: the student wasn't assigned",exception.getMessage());
@@ -264,7 +264,7 @@ public class TutorControllerTest {
         doReturn(tutor1).when(tutorService).findById(ID);
         doReturn(true).when(tutorService).excludeStudent(student1,tutor1);
 
-        ResponseEntity<HttpStatus> responseEntity = tutorController.excludeStudent(ID, studentDTO1, bindingResult);
+        ResponseEntity<HttpStatus> responseEntity = restTutorController.excludeStudent(ID, studentDTO1, bindingResult);
 
         verify(tutorService, times(1)).excludeStudent(student1, tutor1);
         verify(tutorService, times(1)).findById(ID);
@@ -283,7 +283,7 @@ public class TutorControllerTest {
         doReturn(tutor1).when(tutorService).findById(ID);
         doReturn(false).when(tutorService).excludeStudent(student1,tutor1);
 
-        ResponseEntity<HttpStatus> responseEntity = tutorController.excludeStudent(ID, studentDTO1, bindingResult);
+        ResponseEntity<HttpStatus> responseEntity = restTutorController.excludeStudent(ID, studentDTO1, bindingResult);
 
         verify(tutorService, times(1)).excludeStudent(student1, tutor1);
         verify(tutorService, times(1)).findById(ID);
@@ -303,7 +303,7 @@ public class TutorControllerTest {
         doReturn("defaultField1Message").when(fieldError).getDefaultMessage();
 
         Exception exception = assertThrows(NotExcludedException.class, () ->{
-            tutorController.excludeStudent(ID, studentDTO1, bindingResult);
+            restTutorController.excludeStudent(ID, studentDTO1, bindingResult);
         });
 
         assertEquals("field1 - defaultField1Message;: the student wasn't excluded",exception.getMessage());

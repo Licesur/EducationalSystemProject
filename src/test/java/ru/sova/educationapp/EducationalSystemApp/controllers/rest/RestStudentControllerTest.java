@@ -26,10 +26,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class StudentControllerTest {
+public class RestStudentControllerTest {
 
     @InjectMocks
-    private StudentController studentController;
+    private RestStudentController restStudentController;
     @Mock
     private StudentService studentService;
     @Mock
@@ -51,7 +51,7 @@ public class StudentControllerTest {
         doReturn(studentDTO1).when(studentMapper).toStudentDTO(student1);
         doReturn(studentDTO2).when(studentMapper).toStudentDTO(student2);
 
-        ResponseEntity<List<StudentDTO>> responseEntity = studentController.getStudents();
+        ResponseEntity<List<StudentDTO>> responseEntity = restStudentController.getStudents();
 
         assertEquals(ResponseEntity.ok(studentDTOS), responseEntity);
     }
@@ -59,7 +59,7 @@ public class StudentControllerTest {
     public void testGetStudents_NotFoundAnyStudents(){
         doReturn(Collections.emptyList()).when(studentService).findAll();
 
-        ResponseEntity<List<StudentDTO>> responseEntity = studentController.getStudents();
+        ResponseEntity<List<StudentDTO>> responseEntity = restStudentController.getStudents();
 
         assertEquals(ResponseEntity.notFound().build(), responseEntity);
     }
@@ -71,7 +71,7 @@ public class StudentControllerTest {
         doReturn(student1).when(studentService).findById(ID);
         doReturn(studentDTO1).when(studentMapper).toStudentDTO(student1);
 
-        ResponseEntity<StudentDTO> responseEntity = studentController.getStudent(ID);
+        ResponseEntity<StudentDTO> responseEntity = restStudentController.getStudent(ID);
 
         assertEquals(ResponseEntity.ok(studentDTO1), responseEntity);
         verify(studentMapper, times(1)).toStudentDTO(student1);
@@ -82,28 +82,28 @@ public class StudentControllerTest {
         doReturn(null).when(studentService).findById(ID);
         doReturn(null).when(studentMapper).toStudentDTO(null);
 
-        ResponseEntity<StudentDTO> responseEntity = studentController.getStudent(ID);
+        ResponseEntity<StudentDTO> responseEntity = restStudentController.getStudent(ID);
 
         assertEquals(ResponseEntity.notFound().build(), responseEntity);
         verify(studentMapper, times(1)).toStudentDTO(null);
         verify(studentService, times(1)).findById(ID);
     }
     @Test
-    public void testCreate_Success(){
+    public void testCreateStudent_Success(){
         Student student1 = mock(Student.class);
         StudentDTO studentDTO1 = mock(StudentDTO.class);
         BindingResult bindingResult = mock(BindingResult.class);
         doReturn(false).when(bindingResult).hasErrors();
         doReturn(student1).when(studentMapper).toStudent(studentDTO1);
 
-        ResponseEntity<HttpStatus> responseEntity = studentController.create(studentDTO1, bindingResult);
+        ResponseEntity<HttpStatus> responseEntity = restStudentController.createStudent(studentDTO1, bindingResult);
 
         assertEquals(ResponseEntity.ok(HttpStatus.CREATED),responseEntity );
         verify(studentMapper, times(1)).toStudent(studentDTO1);
         verify(studentService, times(1)).save(student1);
     }
     @Test
-    public void testCreate_BindingResultHasErrors(){
+    public void testCreateStudent_BindingResultHasErrors(){
         Student student1 = mock(Student.class);
         StudentDTO studentDTO1 = mock(StudentDTO.class);
         BindingResult bindingResult = mock(BindingResult.class);
@@ -114,7 +114,7 @@ public class StudentControllerTest {
         doReturn("defaultField1Message").when(fieldError).getDefaultMessage();
 
         Exception exception = assertThrows(NotCreatedException.class, () ->{
-            studentController.create(studentDTO1, bindingResult);
+            restStudentController.createStudent(studentDTO1, bindingResult);
         });
 
         assertEquals("field1 - defaultField1Message;: the student wasn't created",exception.getMessage());
@@ -122,7 +122,7 @@ public class StudentControllerTest {
         verify(studentService, times(0)).update(ID, student1);
     }
     @Test
-    public void testUpdate_Success(){
+    public void testUpdateStudent_Success(){
         Student student1 = mock(Student.class);
         StudentDTO studentDTO1 = mock(StudentDTO.class);
         BindingResult bindingResult = mock(BindingResult.class);
@@ -130,14 +130,14 @@ public class StudentControllerTest {
         doReturn(student1).when(studentMapper).toStudent(studentDTO1);
         doReturn(true).when(studentService).update(ID, student1);
 
-        ResponseEntity<HttpStatus> responseEntity = studentController.update(studentDTO1, bindingResult, ID);
+        ResponseEntity<HttpStatus> responseEntity = restStudentController.updateStudent(studentDTO1, bindingResult, ID);
 
         assertEquals(responseEntity, new ResponseEntity<>(HttpStatus.OK));
         verify(studentMapper, times(1)).toStudent(studentDTO1);
         verify(studentService, times(1)).update(ID,student1);
     }
     @Test
-    public void testUpdate_NotSuccess(){
+    public void testUpdateStudent_NotSuccess(){
         Student student1 = mock(Student.class);
         StudentDTO studentDTO1 = mock(StudentDTO.class);
         BindingResult bindingResult = mock(BindingResult.class);
@@ -145,14 +145,14 @@ public class StudentControllerTest {
         doReturn(student1).when(studentMapper).toStudent(studentDTO1);
         doReturn(false).when(studentService).update(ID, student1);
 
-        ResponseEntity<HttpStatus> responseEntity = studentController.update(studentDTO1, bindingResult, ID);
+        ResponseEntity<HttpStatus> responseEntity = restStudentController.updateStudent(studentDTO1, bindingResult, ID);
 
         assertEquals(responseEntity, new ResponseEntity<>(HttpStatus.NOT_MODIFIED));
         verify(studentMapper, times(1)).toStudent(studentDTO1);
         verify(studentService, times(1)).update(ID,student1);
     }
     @Test
-    public void testUpdate_BindingResultHasErrors(){
+    public void testUpdateStudent_BindingResultHasErrors(){
         Student student1 = mock(Student.class);
         StudentDTO studentDTO1 = mock(StudentDTO.class);
         BindingResult bindingResult = mock(BindingResult.class);
@@ -163,7 +163,7 @@ public class StudentControllerTest {
         doReturn("defaultField1Message").when(fieldError).getDefaultMessage();
 
         Exception exception = assertThrows(NotUpdatedException.class, () ->{
-            studentController.update(studentDTO1, bindingResult, ID);
+            restStudentController.updateStudent(studentDTO1, bindingResult, ID);
         });
 
         assertEquals("field1 - defaultField1Message;: the student wasn't updated",exception.getMessage() );
@@ -171,19 +171,19 @@ public class StudentControllerTest {
         verify(studentService, times(0)).save(student1);
     }
     @Test
-    public void testDelete_Success(){
+    public void testDeleteStudent_Success(){
         doReturn(true).when(studentService).deleteById(ID);
 
-        ResponseEntity<?> responseEntity = studentController.deleteStudent(ID);
+        ResponseEntity<?> responseEntity = restStudentController.deleteStudent(ID);
 
         assertEquals(HttpStatus.OK,responseEntity.getStatusCode());
         verify(studentService, times(1)).deleteById(ID);
     }
     @Test
-    public void testDelete_StudentNotDeleted(){
+    public void testDeleteStudent_StudentNotDeleted(){
         doReturn(false).when(studentService).deleteById(ID);
 
-        ResponseEntity<?> responseEntity = studentController.deleteStudent(ID);
+        ResponseEntity<?> responseEntity = restStudentController.deleteStudent(ID);
 
         assertEquals(HttpStatus.NOT_MODIFIED,responseEntity.getStatusCode());
         verify(studentService, times(1)).deleteById(ID);
@@ -195,7 +195,7 @@ public class StudentControllerTest {
         doReturn(tasks).when(studentService).findTasksFromVerificationWork(ID,ID);
         doReturn(taskDTOS).when(taskListMapper).taskListToTaskDTOList(tasks);
 
-        ResponseEntity<?> responseEntity = studentController.getTasksFromVerificationWork(ID,ID);
+        ResponseEntity<?> responseEntity = restStudentController.getTasksFromVerificationWork(ID,ID);
 
         assertEquals(HttpStatus.OK,responseEntity.getStatusCode());
         verify(studentService, times(1)).findTasksFromVerificationWork(ID,ID);
@@ -206,7 +206,7 @@ public class StudentControllerTest {
         doReturn(Collections.emptyList()).when(studentService).findTasksFromVerificationWork(ID,ID);
         doReturn(Collections.emptyList()).when(taskListMapper).taskListToTaskDTOList(Collections.emptyList());
 
-        ResponseEntity<?> responseEntity = studentController.getTasksFromVerificationWork(ID,ID);
+        ResponseEntity<?> responseEntity = restStudentController.getTasksFromVerificationWork(ID,ID);
 
         assertEquals(HttpStatus.NOT_FOUND,responseEntity.getStatusCode());
         verify(studentService, times(1)).findTasksFromVerificationWork(ID,ID);
@@ -220,7 +220,7 @@ public class StudentControllerTest {
         solutions.put(2L, true);
         doReturn(solutions).when(studentService).checkAnswers(ID,answers);
 
-        ResponseEntity<?> responseEntity = studentController.getSolutionStatus(ID,ID,answers);
+        ResponseEntity<?> responseEntity = restStudentController.getSolutionStatus(ID,ID,answers);
 
         assertEquals(HttpStatus.OK,responseEntity.getStatusCode());
         assertEquals(solutions,responseEntity.getBody());
@@ -231,7 +231,7 @@ public class StudentControllerTest {
         List<TaskDTO> answers = List.of(mock(TaskDTO.class), mock(TaskDTO.class));
         doReturn(Collections.emptyMap()).when(studentService).checkAnswers(ID,answers);
 
-        ResponseEntity<?> responseEntity = studentController.getSolutionStatus(ID,ID,answers);
+        ResponseEntity<?> responseEntity = restStudentController.getSolutionStatus(ID,ID,answers);
 
         assertEquals(HttpStatus.NOT_ACCEPTABLE,responseEntity.getStatusCode());
         verify(studentService, times(1)).checkAnswers(ID,answers);

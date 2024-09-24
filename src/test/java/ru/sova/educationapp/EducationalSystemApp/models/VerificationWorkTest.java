@@ -6,8 +6,6 @@ import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.sova.educationapp.EducationalSystemApp.DTO.StudentDTO;
-import ru.sova.educationapp.EducationalSystemApp.DTO.TutorDTO;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,16 +30,16 @@ public class VerificationWorkTest {
         List<Student> students = new ArrayList<>();
         List<Task> tasks = new ArrayList<>();
         VerificationWork verificationWork = new VerificationWork(1L, "testVerificationWorkTitle1",
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
                 tasks, students);
 
         assertEquals("testVerificationWorkTitle1", verificationWork.getTitle());
         assertEquals(students, verificationWork.getStudents());
         assertEquals(tasks, verificationWork.getTasks());
-        assertEquals(LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+        assertEquals(LocalDateTime.of(20001, 1, 1, 0, 0, 0),
                 verificationWork.getDeadline());
-        assertEquals(LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+        assertEquals(LocalDateTime.of(20001, 1, 1, 0, 0, 0),
                 verificationWork.getAssignationDatetime());
     }
 
@@ -52,8 +50,8 @@ public class VerificationWorkTest {
 
         VerificationWork verificationWork = new VerificationWork(1L, "test verification work title " +
                 "// test verification work title // test verification work title // test verification work title",
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
                 tasks, students);
         Set<ConstraintViolation<VerificationWork>> violations = validator.validate(verificationWork);
 
@@ -62,8 +60,8 @@ public class VerificationWorkTest {
                 violations.iterator().next().getMessage());
 
         verificationWork = new VerificationWork(1L, "?",
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
                 tasks, students);
         violations = validator.validate(verificationWork);
 
@@ -79,8 +77,8 @@ public class VerificationWorkTest {
         List<Task> tasks = new ArrayList<>();
 
         VerificationWork verificationWork = new VerificationWork(1L, null,
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
                 tasks, students);
         Set<ConstraintViolation<VerificationWork>> violations = validator.validate(verificationWork);
 

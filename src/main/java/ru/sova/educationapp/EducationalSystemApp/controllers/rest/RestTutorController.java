@@ -21,16 +21,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rest/tutors")
-public class TutorController {
+public class RestTutorController {
 
     private final TutorService tutorService;
     private final StudentService studentService;
     private final TutorMapper tutorMapper;
 
     @Autowired
-    public TutorController(TutorService tutorService,
-                           StudentService studentService,
-                           TutorMapper tutorMapper) {
+    public RestTutorController(TutorService tutorService,
+                               StudentService studentService,
+                               TutorMapper tutorMapper) {
         this.tutorService = tutorService;
         this.studentService = studentService;
         this.tutorMapper = tutorMapper;
@@ -46,7 +46,7 @@ public class TutorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TutorDTO> getTutorById(@PathVariable("id") long id) {
+    public ResponseEntity<TutorDTO> getTutor(@PathVariable("id") long id) {
         final TutorDTO tutorDTO = tutorMapper.toTutorDTO(tutorService.findById(id));
         return tutorDTO != null
                 ? new ResponseEntity<>(tutorDTO, HttpStatus.OK)
@@ -54,8 +54,8 @@ public class TutorController {
     }
 
     @PostMapping()
-    public ResponseEntity<HttpStatus> create(@RequestBody @Valid TutorDTO tutorDTO,
-                                             BindingResult bindingResult) {
+    public ResponseEntity<HttpStatus> createTutor(@RequestBody @Valid TutorDTO tutorDTO,
+                                                  BindingResult bindingResult) {
 //        personValidator.validate(person, bindingResult);//todo
         if (bindingResult.hasErrors()) {
             StringBuilder errorMesssage = new StringBuilder();
@@ -72,8 +72,8 @@ public class TutorController {
 
 
     @PatchMapping("/{id}")
-    public ResponseEntity<HttpStatus> update(@RequestBody @Valid TutorDTO tutorDTO,
-                                             BindingResult bindingResult, @PathVariable("id") long id) {
+    public ResponseEntity<HttpStatus> updateTutor(@RequestBody @Valid TutorDTO tutorDTO,
+                                                  BindingResult bindingResult, @PathVariable("id") long id) {
 //        personValidator.validate(person, bindingResult);//todo
         if (bindingResult.hasErrors()) {
             StringBuilder errorMesssage = new StringBuilder();

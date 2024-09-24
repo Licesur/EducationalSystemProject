@@ -49,8 +49,6 @@ public class StudentController {
     public String getStudent(@PathVariable("id") long id, Model model,
                              @ModelAttribute("work") VerificationWorkDTO verificationWorkDTO) {
         model.addAttribute("student", studentMapper.toStudentDTO(studentService.findById(id)));
-        System.out.println(studentService.findById(id));
-        System.out.println(studentMapper.toStudentDTO(studentService.findById(id)));
 
         model.addAttribute("tutors", studentService.findById(id).getTutors()
                         .stream().map(tutorMapper::toTutorDTO).collect(Collectors.toList()));
@@ -63,7 +61,7 @@ public class StudentController {
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("student") @Valid StudentDTO studentDTO, BindingResult bindingResult) {
+    public String createStudent(@ModelAttribute("student") @Valid StudentDTO studentDTO, BindingResult bindingResult) {
 //        personValidator.validate(person, bindingResult);//todo
 
         if (bindingResult.hasErrors()) {
@@ -74,14 +72,14 @@ public class StudentController {
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") long id) {
+    public String editStudent(Model model, @PathVariable("id") long id) {
         model.addAttribute("student", studentMapper.toStudentDTO(studentService.findById(id)));
         return "students/edit";
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("student") @Valid StudentDTO studentDTO,
-                         BindingResult bindingResult, @PathVariable("id") long id) {
+    public String updateStudent(@ModelAttribute("student") @Valid StudentDTO studentDTO,
+                                BindingResult bindingResult, @PathVariable("id") long id) {
 //        personValidator.validate(person, bindingResult);//todo
 
         if (bindingResult.hasErrors()) {

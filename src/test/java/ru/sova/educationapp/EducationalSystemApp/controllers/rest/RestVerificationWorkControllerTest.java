@@ -9,11 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import ru.sova.educationapp.EducationalSystemApp.DTO.StudentDTO;
-import ru.sova.educationapp.EducationalSystemApp.DTO.TutorDTO;
 import ru.sova.educationapp.EducationalSystemApp.DTO.VerificationWorkDTO;
 import ru.sova.educationapp.EducationalSystemApp.exceptions.NotAssignedException;
 import ru.sova.educationapp.EducationalSystemApp.exceptions.NotCreatedException;
@@ -21,7 +17,6 @@ import ru.sova.educationapp.EducationalSystemApp.exceptions.NotUpdatedException;
 import ru.sova.educationapp.EducationalSystemApp.mappers.StudentMapper;
 import ru.sova.educationapp.EducationalSystemApp.mappers.VerificationWorkMapper;
 import ru.sova.educationapp.EducationalSystemApp.models.Student;
-import ru.sova.educationapp.EducationalSystemApp.models.Tutor;
 import ru.sova.educationapp.EducationalSystemApp.models.VerificationWork;
 import ru.sova.educationapp.EducationalSystemApp.services.StudentService;
 import ru.sova.educationapp.EducationalSystemApp.services.VerificationWorkService;
@@ -35,7 +30,7 @@ import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
-public class VerificationWorkControllerTest {
+public class RestVerificationWorkControllerTest {
     @Mock
     private VerificationWorkService verificationWorkService;
     @Mock
@@ -45,7 +40,7 @@ public class VerificationWorkControllerTest {
     @Mock
     private StudentMapper studentMapper;
     @InjectMocks
-    private VerificationWorkController verificationWorkController;
+    private RestVerificationWorkController restVerificationWorkController;
 
     private final long ID = 1;
 
@@ -61,7 +56,7 @@ public class VerificationWorkControllerTest {
         doReturn(verificationWorkDTO1).when(verificationWorkMapper).toVerificationWorkDTO(verificationWork1);
         doReturn(verificationWorkDTO2).when(verificationWorkMapper).toVerificationWorkDTO(verificationWork2);
 
-        ResponseEntity<List<VerificationWorkDTO>> responseEntity = verificationWorkController.getVerificationWorks();
+        ResponseEntity<List<VerificationWorkDTO>> responseEntity = restVerificationWorkController.getVerificationWorks();
 
         assertEquals(ResponseEntity.ok(verificationWorkDTOS), responseEntity);
     }
@@ -69,7 +64,7 @@ public class VerificationWorkControllerTest {
     public void testGetVerificationWorks_NotFoundAnyVerificationWorks(){
         doReturn(Collections.emptyList()).when(verificationWorkService).findAll();
 
-        ResponseEntity<List<VerificationWorkDTO>> responseEntity = verificationWorkController.getVerificationWorks();
+        ResponseEntity<List<VerificationWorkDTO>> responseEntity = restVerificationWorkController.getVerificationWorks();
 
         assertEquals(ResponseEntity.notFound().build(), responseEntity);
     }
@@ -81,7 +76,7 @@ public class VerificationWorkControllerTest {
         doReturn(verificationWork1).when(verificationWorkService).findById(ID);
         doReturn(verificationWorkDTO1).when(verificationWorkMapper).toVerificationWorkDTO(verificationWork1);
 
-        ResponseEntity<VerificationWorkDTO> responseEntity = verificationWorkController.getVerificationWork(ID);
+        ResponseEntity<VerificationWorkDTO> responseEntity = restVerificationWorkController.getVerificationWork(ID);
 
         assertEquals(ResponseEntity.ok(verificationWorkDTO1), responseEntity);
         verify(verificationWorkMapper, times(1)).toVerificationWorkDTO(verificationWork1);
@@ -92,14 +87,14 @@ public class VerificationWorkControllerTest {
         doReturn(null).when(verificationWorkService).findById(ID);
         doReturn(null).when(verificationWorkMapper).toVerificationWorkDTO(null);
 
-        ResponseEntity<VerificationWorkDTO> responseEntity = verificationWorkController.getVerificationWork(ID);
+        ResponseEntity<VerificationWorkDTO> responseEntity = restVerificationWorkController.getVerificationWork(ID);
 
         assertEquals(ResponseEntity.notFound().build(), responseEntity);
         verify(verificationWorkMapper, times(1)).toVerificationWorkDTO(null);
         verify(verificationWorkService, times(1)).findById(ID);
     }
     @Test
-    public void testCreate_Success(){
+    public void testCreateVerificationWork_Success(){
         VerificationWork verificationWork1 = mock(VerificationWork.class);
         VerificationWorkDTO verificationWorkDTO1 = mock(VerificationWorkDTO.class);
         BindingResult bindingResult = mock(BindingResult.class);
@@ -107,14 +102,14 @@ public class VerificationWorkControllerTest {
         doReturn(verificationWork1).when(verificationWorkMapper).toVerificationWork(verificationWorkDTO1);
 
         ResponseEntity<HttpStatus> responseEntity =
-                verificationWorkController.create(verificationWorkDTO1, bindingResult);
+                restVerificationWorkController.createVerificationWork(verificationWorkDTO1, bindingResult);
 
         assertEquals(ResponseEntity.ok(HttpStatus.CREATED),responseEntity );
         verify(verificationWorkMapper, times(1)).toVerificationWork(verificationWorkDTO1);
         verify(verificationWorkService, times(1)).save(verificationWork1);
     }
     @Test
-    public void testCreate_BindingResultHasErrors(){
+    public void testCreateVerificationWork_BindingResultHasErrors(){
         VerificationWork verificationWork1 = mock(VerificationWork.class);
         VerificationWorkDTO verificationWorkDTO1 = mock(VerificationWorkDTO.class);
         BindingResult bindingResult = mock(BindingResult.class);
@@ -125,7 +120,7 @@ public class VerificationWorkControllerTest {
         doReturn("defaultField1Message").when(fieldError).getDefaultMessage();
 
         Exception exception = assertThrows(NotCreatedException.class, () ->{
-            verificationWorkController.create(verificationWorkDTO1, bindingResult);
+            restVerificationWorkController.createVerificationWork(verificationWorkDTO1, bindingResult);
         });
 
         assertEquals("field1 - defaultField1Message;: work wasn't created",exception.getMessage());
@@ -133,7 +128,7 @@ public class VerificationWorkControllerTest {
         verify(verificationWorkService, times(0)).update(ID, verificationWork1);
     }
     @Test
-    public void testUpdate_Success(){
+    public void testUpdateVerificationWork_Success(){
         VerificationWork verificationWork1 = mock(VerificationWork.class);
         VerificationWorkDTO verificationWorkDTO1 = mock(VerificationWorkDTO.class);
         BindingResult bindingResult = mock(BindingResult.class);
@@ -142,14 +137,14 @@ public class VerificationWorkControllerTest {
         doReturn(true).when(verificationWorkService).update(ID, verificationWork1);
 
         ResponseEntity<HttpStatus> responseEntity =
-                verificationWorkController.update(verificationWorkDTO1, bindingResult, ID);
+                restVerificationWorkController.updateVerificationWork(verificationWorkDTO1, bindingResult, ID);
 
         assertEquals(responseEntity, new ResponseEntity<>(HttpStatus.OK));
         verify(verificationWorkMapper, times(1)).toVerificationWork(verificationWorkDTO1);
         verify(verificationWorkService, times(1)).update(ID,verificationWork1);
     }
     @Test
-    public void testUpdate_NotSuccess(){
+    public void testUpdateVerificationWork_NotSuccess(){
         VerificationWork verificationWork1 = mock(VerificationWork.class);
         VerificationWorkDTO verificationWorkDTO1 = mock(VerificationWorkDTO.class);
         BindingResult bindingResult = mock(BindingResult.class);
@@ -158,14 +153,14 @@ public class VerificationWorkControllerTest {
         doReturn(false).when(verificationWorkService).update(ID, verificationWork1);
 
         ResponseEntity<HttpStatus> responseEntity =
-                verificationWorkController.update(verificationWorkDTO1, bindingResult, ID);
+                restVerificationWorkController.updateVerificationWork(verificationWorkDTO1, bindingResult, ID);
 
         assertEquals(responseEntity, new ResponseEntity<>(HttpStatus.NOT_MODIFIED));
         verify(verificationWorkMapper, times(1)).toVerificationWork(verificationWorkDTO1);
         verify(verificationWorkService, times(1)).update(ID,verificationWork1);
     }
     @Test
-    public void testUpdate_BindingResultHasErrors(){
+    public void testUpdateVerificationWork_BindingResultHasErrors(){
         VerificationWork verificationWork1 = mock(VerificationWork.class);
         VerificationWorkDTO verificationWorkDTO1 = mock(VerificationWorkDTO.class);
         BindingResult bindingResult = mock(BindingResult.class);
@@ -176,7 +171,7 @@ public class VerificationWorkControllerTest {
         doReturn("defaultField1Message").when(fieldError).getDefaultMessage();
 
         Exception exception = assertThrows(NotUpdatedException.class, () ->{
-            verificationWorkController.update(verificationWorkDTO1, bindingResult, ID);
+            restVerificationWorkController.updateVerificationWork(verificationWorkDTO1, bindingResult, ID);
         });
 
         assertEquals("field1 - defaultField1Message;: the chosen work wasn't updated",exception.getMessage() );
@@ -184,19 +179,19 @@ public class VerificationWorkControllerTest {
         verify(verificationWorkService, times(0)).save(verificationWork1);
     }
     @Test
-    public void testDelete_Success(){
+    public void testDeleteVerificationWork_Success(){
         doReturn(true).when(verificationWorkService).deleteById(ID);
 
-        ResponseEntity<?> responseEntity = verificationWorkController.deleteVerificationWork(ID);
+        ResponseEntity<?> responseEntity = restVerificationWorkController.deleteVerificationWork(ID);
 
         assertEquals(HttpStatus.OK,responseEntity.getStatusCode());
         verify(verificationWorkService, times(1)).deleteById(ID);
     }
     @Test
-    public void testDelete_VerificationWorkNotDeleted(){
+    public void testDeleteVerificationWork_VerificationWorkNotDeleted(){
         doReturn(false).when(verificationWorkService).deleteById(ID);
 
-        ResponseEntity<?> responseEntity = verificationWorkController.deleteVerificationWork(ID);
+        ResponseEntity<?> responseEntity = restVerificationWorkController.deleteVerificationWork(ID);
 
         assertEquals(HttpStatus.NOT_MODIFIED,responseEntity.getStatusCode());
         verify(verificationWorkService, times(1)).deleteById(ID);
@@ -212,7 +207,7 @@ public class VerificationWorkControllerTest {
         doReturn(student1).when(studentMapper).toStudent(studentDTO1);
         doReturn(true).when(studentService).addVerificationWork(verificationWork1,student1);
 
-        ResponseEntity<HttpStatus> responseEntity = verificationWorkController.assignToStudent(ID, studentDTO1, bindingResult);
+        ResponseEntity<HttpStatus> responseEntity = restVerificationWorkController.assignToStudent(ID, studentDTO1, bindingResult);
 
         verify(studentService, times(1)).addVerificationWork(verificationWork1, student1);
         verify(verificationWorkService, times(1)).findById(ID);
@@ -230,7 +225,7 @@ public class VerificationWorkControllerTest {
         doReturn(student1).when(studentMapper).toStudent(studentDTO1);
         doReturn(false).when(studentService).addVerificationWork(verificationWork1,student1);
 
-        ResponseEntity<HttpStatus> responseEntity = verificationWorkController.assignToStudent(ID, studentDTO1, bindingResult);
+        ResponseEntity<HttpStatus> responseEntity = restVerificationWorkController.assignToStudent(ID, studentDTO1, bindingResult);
 
         verify(studentService, times(1)).addVerificationWork(verificationWork1, student1);
         verify(verificationWorkService, times(1)).findById(ID);
@@ -250,7 +245,7 @@ public class VerificationWorkControllerTest {
         doReturn("defaultField1Message").when(fieldError).getDefaultMessage();
 
         Exception exception = assertThrows(NotAssignedException.class, () ->{
-            verificationWorkController.assignToStudent(ID, studentDTO1, bindingResult);
+            restVerificationWorkController.assignToStudent(ID, studentDTO1, bindingResult);
         });
 
         assertEquals("field1 - defaultField1Message;: work wasn't assigned to the chosen student",exception.getMessage());

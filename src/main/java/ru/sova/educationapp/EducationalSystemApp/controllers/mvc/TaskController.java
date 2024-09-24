@@ -41,7 +41,7 @@ public class TaskController {
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("task") @Valid TaskDTO taskDTO, BindingResult bindingResult) {
+    public String createTask(@ModelAttribute("task") @Valid TaskDTO taskDTO, BindingResult bindingResult) {
 //        personValidator.validate(person, bindingResult);//todo
 
         if (bindingResult.hasErrors()) {
@@ -52,14 +52,14 @@ public class TaskController {
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") long id) {
+    public String editTask(Model model, @PathVariable("id") long id) {
         model.addAttribute("task", taskMapper.toTaskDTO(taskService.findById(id)));
         return "tasks/edit";
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("task") @Valid TaskDTO taskDTO,
-                         BindingResult bindingResult, @PathVariable("id") long id) {
+    public String updateTask(@ModelAttribute("task") @Valid TaskDTO taskDTO,
+                             BindingResult bindingResult, @PathVariable("id") long id) {
 //        personValidator.validate(person, bindingResult);//todo
 
         if (bindingResult.hasErrors()) {

@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rest/works")
-public class VerificationWorkController {
+public class RestVerificationWorkController {
 
     private final VerificationWorkService verificationWorkService;
     private final StudentService studentService;
@@ -27,10 +27,10 @@ public class VerificationWorkController {
     private final StudentMapper studentMapper;
 
     @Autowired
-    public VerificationWorkController(VerificationWorkService verificationWorkService,
-                                      StudentService studentService,
-                                      VerificationWorkMapper verificationWorkMapper,
-                                      StudentMapper studentMapper) {
+    public RestVerificationWorkController(VerificationWorkService verificationWorkService,
+                                          StudentService studentService,
+                                          VerificationWorkMapper verificationWorkMapper,
+                                          StudentMapper studentMapper) {
         this.verificationWorkService = verificationWorkService;
         this.studentService = studentService;
         this.verificationWorkMapper = verificationWorkMapper;
@@ -56,8 +56,8 @@ public class VerificationWorkController {
     }
 
     @PostMapping()
-    public ResponseEntity<HttpStatus> create(@RequestBody @Valid VerificationWorkDTO verificationWorkDTO,
-                                             BindingResult bindingResult) {
+    public ResponseEntity<HttpStatus> createVerificationWork(@RequestBody @Valid VerificationWorkDTO verificationWorkDTO,
+                                                             BindingResult bindingResult) {
 //        personValidator.validate(person, bindingResult);//todo
         if (bindingResult.hasErrors()) {
             StringBuilder errorMesssage = new StringBuilder();
@@ -73,8 +73,8 @@ public class VerificationWorkController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<HttpStatus> update(@RequestBody @Valid VerificationWorkDTO workToUpdateDTO,
-                                             BindingResult bindingResult, @PathVariable("id") long id) {
+    public ResponseEntity<HttpStatus> updateVerificationWork(@RequestBody @Valid VerificationWorkDTO workToUpdateDTO,
+                                                             BindingResult bindingResult, @PathVariable("id") long id) {
 //        personValidator.validate(person, bindingResult);//todo
         if (bindingResult.hasErrors()) {
             StringBuilder errorMesssage = new StringBuilder();

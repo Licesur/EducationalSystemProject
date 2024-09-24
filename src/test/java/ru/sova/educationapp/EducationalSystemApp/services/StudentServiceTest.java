@@ -1,11 +1,9 @@
 package ru.sova.educationapp.EducationalSystemApp.services;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.sova.educationapp.EducationalSystemApp.DTO.TaskDTO;
 import ru.sova.educationapp.EducationalSystemApp.models.Student;
@@ -14,12 +12,10 @@ import ru.sova.educationapp.EducationalSystemApp.models.Tutor;
 import ru.sova.educationapp.EducationalSystemApp.models.VerificationWork;
 import ru.sova.educationapp.EducationalSystemApp.repositories.StudentRepository;
 
-import java.sql.ResultSet;
 import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -95,8 +91,8 @@ public class StudentServiceTest {
     @Test
     public void testAddVerificationWork_VerificationWorkDoesNotHaveStudent(){
         VerificationWork verificationWork = new VerificationWork(ID, "test title",
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
                 null, null);
         Student student = new Student(1L, "test name 1", "test password 1",
                 "test@mail.ru", 30, null, null);
@@ -116,8 +112,8 @@ public class StudentServiceTest {
         Student student2 = new Student(2L, "test name 1", "test password 1",
                 "test@mail.ru", 30, null, null);
         VerificationWork verificationWork = new VerificationWork(ID, "test title",
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
                 null, List.of(student1, student2));
 
         doReturn(Optional.of(student1)).when(studentRepository).findById(ID);
@@ -141,8 +137,8 @@ public class StudentServiceTest {
         List<Student> students = new ArrayList<>();
         students.add(student2);
         VerificationWork verificationWork = new VerificationWork(ID, "test title",
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
                 null, students);
         doReturn(Optional.of(student1)).when(studentRepository).findById(ID);
 
@@ -338,8 +334,8 @@ public class StudentServiceTest {
                 "test1@email.ru", 16, List.of(mock(Tutor.class)),
                 verificationWorks);
         VerificationWork verificationWork = new VerificationWork(ID, "test title",
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
                 null, students);
         students.add(student);
         verificationWorks.add(verificationWork);
@@ -366,8 +362,8 @@ public class StudentServiceTest {
         tasks.add(task1);
         tasks.add(task2);
         VerificationWork verificationWork = new VerificationWork(ID, "test title",
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
                 tasks, null);
         doReturn(verificationWork).when(verificationWorkService).findById(ID);
         doReturn(task1).when(taskService).findById(1L);
@@ -391,8 +387,8 @@ public class StudentServiceTest {
         tasks.add(task1);
         tasks.add(task2);
         VerificationWork verificationWork = new VerificationWork(ID, "test title",
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
                 tasks, null);
         doReturn(verificationWork).when(verificationWorkService).findById(ID);
         doReturn(task1).when(taskService).findById(1L);
@@ -415,8 +411,8 @@ public class StudentServiceTest {
         tasks.add(task1);
         tasks.add(task2);
         VerificationWork verificationWork = new VerificationWork(ID, "test title",
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
                 tasks, null);
         doReturn(verificationWork).when(verificationWorkService).findById(ID);
         doReturn(task1).when(taskService).findById(1L);
@@ -431,8 +427,8 @@ public class StudentServiceTest {
     @Test
     public void findTasksFromVerificationWork_foundSomeTasks() {
         VerificationWork verificationWork = new VerificationWork(ID, "test title",
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
                 List.of(mock(Task.class)), null);
         Student student = new Student(ID,"testName1", "testPassword1",
                 "test1@email.ru", 16, List.of(mock(Tutor.class)),
@@ -447,8 +443,8 @@ public class StudentServiceTest {
     @Test
     public void findTasksFromVerificationWork_NotFoundTasks() {
         VerificationWork verificationWork = new VerificationWork(2L, "test title",
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
-                LocalDateTime.of(20001, 01, 01, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
+                LocalDateTime.of(20001, 1, 1, 0, 0, 0),
                 List.of(mock(Task.class)), null);
         Student student = new Student(ID,"testName1", "testPassword1",
                 "test1@email.ru", 16, List.of(mock(Tutor.class)),

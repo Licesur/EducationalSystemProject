@@ -41,8 +41,8 @@ public class TutorController {
     }
 
     @GetMapping("/{id}")
-    public String getTutorById(@PathVariable("id") long id, Model model,
-                               @ModelAttribute("student") StudentDTO studentDTO) {
+    public String getTutor(@PathVariable("id") long id, Model model,
+                           @ModelAttribute("student") StudentDTO studentDTO) {
         Tutor tutor = tutorService.findById(id);
         model.addAttribute("tutor", tutorMapper.toTutorDTO(tutor));
         model.addAttribute("studentsOfTheTutor", tutorService.findById(id).getStudents());
@@ -60,7 +60,7 @@ public class TutorController {
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("tutor") @Valid TutorDTO tutorDTO, BindingResult bindingResult) {
+    public String createTutor(@ModelAttribute("tutor") @Valid TutorDTO tutorDTO, BindingResult bindingResult) {
 //        personValidator.validate(person, bindingResult);
 
         if (bindingResult.hasErrors()) {
@@ -71,14 +71,14 @@ public class TutorController {
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") long id) {
+    public String editTutor(Model model, @PathVariable("id") long id) {
         model.addAttribute("tutor", tutorMapper.toTutorDTO(tutorService.findById(id)));
         return "tutors/edit";
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("tutor") @Valid TutorDTO tutorDTO,
-                         BindingResult bindingResult, @PathVariable("id") long id) {
+    public String updateTutor(@ModelAttribute("tutor") @Valid TutorDTO tutorDTO,
+                              BindingResult bindingResult, @PathVariable("id") long id) {
 //        personValidator.validate(person, bindingResult);
 
         if (bindingResult.hasErrors()) {
@@ -89,14 +89,14 @@ public class TutorController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteBook(@PathVariable("id") long id) {
+    public String deleteTutor(@PathVariable("id") long id) {
         tutorService.deleteById(id);
         return "redirect:/tutors";
     }
 
     @PatchMapping("/{id}/choose")
-    public String choose(@PathVariable("id") long id, @ModelAttribute("tutor") Tutor tutor,
-                         @ModelAttribute("student") StudentDTO studentDTO) {
+    public String chooseStudent(@PathVariable("id") long id, @ModelAttribute("tutor") Tutor tutor,
+                                @ModelAttribute("student") StudentDTO studentDTO) {
         tutorService.addStudent(studentService.findById(studentMapper.toStudent(studentDTO).getId()),
                 tutorService.findById(id));
         return "redirect:/tutors/" + id;
