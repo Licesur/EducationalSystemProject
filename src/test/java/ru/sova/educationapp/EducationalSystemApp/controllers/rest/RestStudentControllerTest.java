@@ -113,9 +113,8 @@ public class RestStudentControllerTest {
         doReturn("field1").when(fieldError).getField();
         doReturn("defaultField1Message").when(fieldError).getDefaultMessage();
 
-        Exception exception = assertThrows(NotCreatedException.class, () ->{
-            restStudentController.createStudent(studentDTO1, bindingResult);
-        });
+        Exception exception = assertThrows(NotCreatedException.class, () ->
+                restStudentController.createStudent(studentDTO1, bindingResult));
 
         assertEquals("field1 - defaultField1Message;: the student wasn't created",exception.getMessage());
         verify(studentMapper, times(0)).toStudent(studentDTO1);
@@ -162,9 +161,8 @@ public class RestStudentControllerTest {
         doReturn("field1").when(fieldError).getField();
         doReturn("defaultField1Message").when(fieldError).getDefaultMessage();
 
-        Exception exception = assertThrows(NotUpdatedException.class, () ->{
-            restStudentController.updateStudent(studentDTO1, bindingResult, ID);
-        });
+        Exception exception = assertThrows(NotUpdatedException.class, () ->
+                restStudentController.updateStudent(studentDTO1, bindingResult, ID));
 
         assertEquals("field1 - defaultField1Message;: the student wasn't updated",exception.getMessage() );
         verify(studentMapper, times(0)).toStudent(studentDTO1);

@@ -124,18 +124,19 @@ public class RestStudentController {
                                                @RequestBody @Valid
                                                @Schema(description =
                                                        "Введите ответы в формате списка задач",
-                                                       example = "[\n" +
-                                                               "    {\n" +
-                                                               "        \"id\": 1,\n" +
-                                                               "        \"definition\":\"\",\n" +
-                                                               "        \"answer\": \"5\"\n" +
-                                                               "    },\n" +
-                                                               "    {\n" +
-                                                               "        \"id\": 2,\n" +
-                                                               "        \"definition\":\"\",\n" +
-                                                               "        \"answer\": \"1\"\n" +
-                                                               "    }\n" +
-                                                               "]")
+                                                       example = """
+                                                               [
+                                                                   {
+                                                                       "id": 1,
+                                                                       "definition":"",
+                                                                       "answer": "5"
+                                                                   },
+                                                                   {
+                                                                       "id": 2,
+                                                                       "definition":"",
+                                                                       "answer": "1"
+                                                                   }
+                                                               ]""")
                                                List<TaskDTO> answers) {
 
         Map<Long, Boolean> solution = studentService.checkAnswers(workId, answers);

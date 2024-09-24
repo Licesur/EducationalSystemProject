@@ -109,9 +109,8 @@ public class RestTaskControllerTest {
         doReturn("field1").when(fieldError).getField();
         doReturn("defaultField1Message").when(fieldError).getDefaultMessage();
 
-        Exception exception = assertThrows(NotCreatedException.class, () ->{
-            restTaskController.createTask(taskDTO1, bindingResult);
-        });
+        Exception exception = assertThrows(NotCreatedException.class, () ->
+                restTaskController.createTask(taskDTO1, bindingResult));
 
         assertEquals("field1 - defaultField1Message;: the task wasn't created",exception.getMessage());
         verify(taskMapper, times(0)).toTask(taskDTO1);
@@ -158,9 +157,8 @@ public class RestTaskControllerTest {
         doReturn("field1").when(fieldError).getField();
         doReturn("defaultField1Message").when(fieldError).getDefaultMessage();
 
-        Exception exception = assertThrows(NotUpdatedException.class, () ->{
-            restTaskController.updateTask(taskDTO1, bindingResult, ID);
-        });
+        Exception exception = assertThrows(NotUpdatedException.class, () ->
+                restTaskController.updateTask(taskDTO1, bindingResult, ID));
 
         assertEquals("field1 - defaultField1Message;: the task wasn't updated",exception.getMessage() );
         verify(taskMapper, times(0)).toTask(taskDTO1);

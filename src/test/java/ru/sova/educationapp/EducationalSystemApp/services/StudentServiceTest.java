@@ -374,7 +374,7 @@ public class StudentServiceTest {
 
         Map<Long, Boolean> result = studentService.checkAnswers(ID, answers);
 
-        result.entrySet().stream().forEach(entry -> assertTrue(entry.getValue()));
+        result.forEach((key, value) -> assertTrue(value));
     }
 
     @Test
@@ -399,7 +399,7 @@ public class StudentServiceTest {
 
         Map<Long, Boolean> result = studentService.checkAnswers(ID, answers);
 
-        result.entrySet().stream().forEach(entry -> assertFalse(entry.getValue()));
+        result.forEach((key, value) -> assertFalse(value));
     }
     @Test
     public void testCheckAnswers_WithoutAnswers() {
@@ -421,7 +421,7 @@ public class StudentServiceTest {
 
         Map<Long, Boolean> result = studentService.checkAnswers(ID, answers);
 
-        result.entrySet().stream().forEach(entry -> assertFalse(entry.getValue()));
+        result.forEach((key, value) -> assertFalse(value));
     }
 
     @Test
@@ -451,9 +451,8 @@ public class StudentServiceTest {
                 List.of(verificationWork));
         doReturn(Optional.of(student)).when(studentRepository).findById(ID);
 
-        Exception exception = assertThrows(NoSuchElementException.class, () -> {
-            studentService.findTasksFromVerificationWork(ID, ID);
-        });
+        Exception exception = assertThrows(NoSuchElementException.class, () ->
+                studentService.findTasksFromVerificationWork(ID, ID));
 
         assertEquals(exception.getMessage(), "No value present");
 

@@ -123,7 +123,6 @@ public class TaskControllerTest {
 
     @Test
     public void testDeleteTask() throws Exception {
-        Task task1 = mock(Task.class);
         doReturn(true).when(taskService).deleteById(ID);
 
         //Выполнение delete запроса

@@ -17,6 +17,4 @@ public interface VerificationWorkMapper {
     @Mapping(source = "id", target = "id")
     VerificationWork toVerificationWork(VerificationWorkDTO verificationWorkDTO);
 
-    @Mapping(source = "verificationWorkDTO.tasks", target = "verificationWorkDTOToBeUpdated.tasks")
-    void updateDTO(VerificationWorkDTO verificationWorkDTO, @MappingTarget VerificationWorkDTO verificationWorkDTOToBeUpdated);
 }

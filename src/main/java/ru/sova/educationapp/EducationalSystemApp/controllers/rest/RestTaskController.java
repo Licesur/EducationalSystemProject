@@ -73,7 +73,7 @@ public class RestTaskController {
                 errorMesssage.append(fieldError.getField()).append(" - ")
                         .append(fieldError.getDefaultMessage()).append(";");
             }
-            throw new NotUpdatedException(errorMesssage.toString() + ": the task wasn't updated");
+            throw new NotUpdatedException(errorMesssage+ ": the task wasn't updated");
         }
         final boolean updated = taskService.update(id, taskMapper.toTask(taskDTO));
         return updated ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);

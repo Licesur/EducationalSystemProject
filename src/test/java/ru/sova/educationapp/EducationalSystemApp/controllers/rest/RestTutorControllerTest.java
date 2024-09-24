@@ -118,9 +118,8 @@ public class RestTutorControllerTest {
         doReturn("field1").when(fieldError).getField();
         doReturn("defaultField1Message").when(fieldError).getDefaultMessage();
 
-        Exception exception = assertThrows(NotCreatedException.class, () ->{
-            restTutorController.createTutor(tutorDTO1, bindingResult);
-        });
+        Exception exception = assertThrows(NotCreatedException.class, () ->
+                restTutorController.createTutor(tutorDTO1, bindingResult));
 
         assertEquals("field1 - defaultField1Message;: the tutor wasn't created",exception.getMessage());
         verify(tutorMapper, times(0)).toTutor(tutorDTO1);
@@ -167,9 +166,8 @@ public class RestTutorControllerTest {
         doReturn("field1").when(fieldError).getField();
         doReturn("defaultField1Message").when(fieldError).getDefaultMessage();
 
-        Exception exception = assertThrows(NotUpdatedException.class, () ->{
-            restTutorController.updateTutor(tutorDTO1, bindingResult, ID);
-        });
+        Exception exception = assertThrows(NotUpdatedException.class, () ->
+                restTutorController.updateTutor(tutorDTO1, bindingResult, ID));
 
         assertEquals("field1 - defaultField1Message;: the tutor wasn't updated",exception.getMessage() );
         verify(tutorMapper, times(0)).toTutor(tutorDTO1);
@@ -243,9 +241,8 @@ public class RestTutorControllerTest {
         doReturn("field1").when(fieldError).getField();
         doReturn("defaultField1Message").when(fieldError).getDefaultMessage();
 
-        Exception exception = assertThrows(NotAssignedException.class, () ->{
-            restTutorController.assignStudent(ID, studentDTO1, bindingResult);
-        });
+        Exception exception = assertThrows(NotAssignedException.class, () ->
+                restTutorController.assignStudent(ID, studentDTO1, bindingResult));
 
         assertEquals("field1 - defaultField1Message;: the student wasn't assigned",exception.getMessage());
         verify(tutorService, times(0)).addStudent(student1, tutor1);
@@ -302,9 +299,8 @@ public class RestTutorControllerTest {
         doReturn("field1").when(fieldError).getField();
         doReturn("defaultField1Message").when(fieldError).getDefaultMessage();
 
-        Exception exception = assertThrows(NotExcludedException.class, () ->{
-            restTutorController.excludeStudent(ID, studentDTO1, bindingResult);
-        });
+        Exception exception = assertThrows(NotExcludedException.class, () ->
+                restTutorController.excludeStudent(ID, studentDTO1, bindingResult));
 
         assertEquals("field1 - defaultField1Message;: the student wasn't excluded",exception.getMessage());
         verify(tutorService, times(0)).excludeStudent(student1, tutor1);

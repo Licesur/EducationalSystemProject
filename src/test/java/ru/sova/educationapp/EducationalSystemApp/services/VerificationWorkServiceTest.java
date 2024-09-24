@@ -81,7 +81,7 @@ public class VerificationWorkServiceTest {
         doNothing().when(verificationWorkRepository).deleteById(ID);
         when(verificationWorkRepository.findById(ID)).thenReturn(Optional.empty());
 
-        Boolean result = verificationWorkService.deleteById(ID);
+        boolean result = verificationWorkService.deleteById(ID);
 
         assertTrue(result);
         verify(verificationWorkRepository, times(1)).deleteById(ID);
@@ -95,7 +95,7 @@ public class VerificationWorkServiceTest {
         when(verificationWorkRepository.findById(ID)).thenReturn(Optional.of(new VerificationWork())); // запись найдена
 
         // Мы не должны вызывать deleteById, следовательно, результат должно быть false
-        Boolean result = verificationWorkService.deleteById(ID);
+        boolean result = verificationWorkService.deleteById(ID);
 
         // Проверяем, что метод не должен был быть успешно вызван
         verify(verificationWorkRepository, times(1)).deleteById(ID);
@@ -111,7 +111,7 @@ public class VerificationWorkServiceTest {
                 Collections.emptyList(), Collections.emptyList());
         when(verificationWorkRepository.findById(ID)).thenReturn(Optional.of(verificationWork));
 
-        Boolean result = verificationWorkService.update(ID, verificationWork);
+        boolean result = verificationWorkService.update(ID, verificationWork);
 
         assertTrue(result);
         verify(verificationWorkRepository, times(2)).findById(ID);
@@ -125,7 +125,7 @@ public class VerificationWorkServiceTest {
                 Collections.emptyList(), Collections.emptyList());
         when(verificationWorkRepository.findById(ID)).thenReturn(Optional.empty());
 
-        Boolean result = verificationWorkService.update(ID, verificationWork);
+        boolean result = verificationWorkService.update(ID, verificationWork);
 
         assertFalse(result);
         verify(verificationWorkRepository, times(1)).findById(ID);
@@ -143,7 +143,7 @@ public class VerificationWorkServiceTest {
                 Collections.emptyList(), Collections.emptyList());
         doReturn(Optional.of(verificationWork2)).when(verificationWorkRepository).findById(ID);
 
-        Boolean result = verificationWorkService.update(ID, verificationWork1);
+        boolean result = verificationWorkService.update(ID, verificationWork1);
 
         assertFalse(result);
         verify(verificationWorkRepository, times(2)).findById(ID);

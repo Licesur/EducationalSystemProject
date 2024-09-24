@@ -119,9 +119,8 @@ public class RestVerificationWorkControllerTest {
         doReturn("field1").when(fieldError).getField();
         doReturn("defaultField1Message").when(fieldError).getDefaultMessage();
 
-        Exception exception = assertThrows(NotCreatedException.class, () ->{
-            restVerificationWorkController.createVerificationWork(verificationWorkDTO1, bindingResult);
-        });
+        Exception exception = assertThrows(NotCreatedException.class, () ->
+                restVerificationWorkController.createVerificationWork(verificationWorkDTO1, bindingResult));
 
         assertEquals("field1 - defaultField1Message;: work wasn't created",exception.getMessage());
         verify(verificationWorkMapper, times(0)).toVerificationWork(verificationWorkDTO1);
@@ -170,9 +169,8 @@ public class RestVerificationWorkControllerTest {
         doReturn("field1").when(fieldError).getField();
         doReturn("defaultField1Message").when(fieldError).getDefaultMessage();
 
-        Exception exception = assertThrows(NotUpdatedException.class, () ->{
-            restVerificationWorkController.updateVerificationWork(verificationWorkDTO1, bindingResult, ID);
-        });
+        Exception exception = assertThrows(NotUpdatedException.class, () ->
+                restVerificationWorkController.updateVerificationWork(verificationWorkDTO1, bindingResult, ID));
 
         assertEquals("field1 - defaultField1Message;: the chosen work wasn't updated",exception.getMessage() );
         verify(verificationWorkMapper, times(0)).toVerificationWork(verificationWorkDTO1);
@@ -244,9 +242,8 @@ public class RestVerificationWorkControllerTest {
         doReturn("field1").when(fieldError).getField();
         doReturn("defaultField1Message").when(fieldError).getDefaultMessage();
 
-        Exception exception = assertThrows(NotAssignedException.class, () ->{
-            restVerificationWorkController.assignToStudent(ID, studentDTO1, bindingResult);
-        });
+        Exception exception = assertThrows(NotAssignedException.class, () ->
+                restVerificationWorkController.assignToStudent(ID, studentDTO1, bindingResult));
 
         assertEquals("field1 - defaultField1Message;: work wasn't assigned to the chosen student",exception.getMessage());
         verify(studentService, times(0)).addVerificationWork(verificationWork1, student1);
